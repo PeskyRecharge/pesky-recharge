@@ -1,0 +1,116 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 500px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.balance-box {
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+select, input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+button:disabled {
+  background: #6c757d;
+  cursor: wait;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 7px;
+  vertical-align: -2px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+#message {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.deposit-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 15px;
+  background: #28a745;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.deposit-btn:hover {
+  background: #218838;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
+.btn-history {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-history:hover {
+  background-color: #0056b3;
+}

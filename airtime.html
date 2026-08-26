@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy Airtime - PESKY RECHARGE</title>
+  <link rel="stylesheet" href="css/airtime.css">
+</head>
+<body>
+  <main class="airtime-shell">
+    <section class="airtime-card" aria-labelledby="pageTitle">
+      <a class="back-link" href="dashboard.html">Back to dashboard</a>
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">PESKY RECHARGE</p>
+          <h1 id="pageTitle">Buy airtime</h1>
+          <p class="subheading">Top up any Nigerian mobile number instantly.</p>
+        </div>
+        <div class="balance-pill">Balance <strong id="balance">₦0.00</strong></div>
+      </div>
+
+      <form id="airtimeForm" novalidate>
+        <label class="field-label" for="phone">Phone number</label>
+        <div class="phone-field">
+          <span class="country-code">+234</span>
+          <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="801 234 5678" maxlength="13" required>
+        </div>
+        <p id="phoneHint" class="field-hint">Enter an 11-digit Nigerian number.</p>
+
+        <div class="network-heading">
+          <span class="field-label">Network</span>
+          <span id="detectedNetwork" class="detected-network">Waiting for number</span>
+        </div>
+        <div class="network-grid" role="radiogroup" aria-label="Select network">
+          <label class="network-option mtn"><input type="radio" name="network" value="MTN"><span>MTN</span></label>
+          <label class="network-option glo"><input type="radio" name="network" value="GLO"><span>Glo</span></label>
+          <label class="network-option airtel"><input type="radio" name="network" value="AIRTEL"><span>Airtel</span></label>
+          <label class="network-option mobile"><input type="radio" name="network" value="9MOBILE"><span>9mobile</span></label>
+        </div>
+
+        <label class="field-label" for="amount">Amount</label>
+        <div class="amount-grid" role="radiogroup" aria-label="Select airtime amount">
+          <label class="amount-option"><input type="radio" name="amount" value="100"><span>₦100</span></label>
+          <label class="amount-option"><input type="radio" name="amount" value="200"><span>₦200</span></label>
+          <label class="amount-option"><input type="radio" name="amount" value="500"><span>₦500</span></label>
+          <label class="amount-option"><input type="radio" name="amount" value="1000"><span>₦1,000</span></label>
+          <label class="amount-option"><input type="radio" name="amount" value="2000"><span>₦2,000</span></label>
+          <label class="amount-option"><input type="radio" name="amount" value="5000"><span>₦5,000</span></label>
+        </div>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+        <button id="buyAirtimeBtn" class="buy-button" type="submit">Buy airtime</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="javascript/airtime.js"></script>
+</body>
+</html>

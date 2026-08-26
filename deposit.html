@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Deposit - PESKY RECHARGE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/deposit.css">
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Paystack Inline Script -->
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+  <div class="container">
+    <section class="balance-section">
+      <h2>My Balance (NGN)</h2>
+      <p id="balance">₦0.00</p>
+
+      <button id="depositBtn" class="btn">Deposit</button>
+
+      <div id="amountSection" class="hidden">
+        <p class="message">How much do you want to deposit?</p>
+        <input type="number" id="depositAmount" placeholder="Enter amount" min="100" />
+        <button id="confirmDepositBtn" class="btn">Confirm Deposit</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Load JS last so DOM is ready -->
+  <script src="javascript/deposit.js"></script>
+</body>
+</html>

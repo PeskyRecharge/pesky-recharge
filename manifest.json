@@ -1,0 +1,23 @@
+{
+  "id": "/index.html",
+  "name": "Pesky Recharge",
+  "short_name": "Pesky Recharge",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#008000",
+  "icons": [
+    {
+      "src": "img/peskydd.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "img/peskycc.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

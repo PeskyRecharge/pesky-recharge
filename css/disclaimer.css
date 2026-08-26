@@ -1,0 +1,93 @@
+/* Ensure borders and padding fit neatly */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f7fb;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+header {
+  background: #000;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.5rem;   /* very big header */
+  font-weight: bold;
+}
+
+/* Disclaimer container */
+.disclaimer {
+  margin: 20px;
+}
+
+/* Each item */
+.disclaimer-item {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-left: 6px solid #0078d7; /* thicker vertical border */
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Alternate subtle colors */
+.disclaimer-item:nth-child(odd) {
+  background: #f9fbfd;
+}
+.disclaimer-item:nth-child(even) {
+  background: #eef3f9;
+}
+
+/* Titles */
+.disclaimer-item h3 {
+  color: #0078d7;
+  font-size: 1.8rem;   /* bigger section titles */
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* Paragraphs */
+.disclaimer-item p {
+  font-size: 1.4rem;   /* larger paragraph text */
+  line-height: 1.6;
+  font-weight: bold;   /* bold for visibility */
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 15px;
+  background: #000;
+  color: #fff;
+  margin-top: 20px;
+  font-size: 1.2rem;   /* bigger footer text */
+  font-weight: bold;
+}
+
+/* ✅ Responsive adjustments */
+@media (max-width: 768px) {
+  header h1 { font-size: 2rem; }
+  .disclaimer { margin: 12px; }
+  .disclaimer-item { padding: 16px; margin-bottom: 14px; }
+  .disclaimer-item h3 { font-size: 1.5rem; }
+  .disclaimer-item p { font-size: 1.2rem; }
+  .footer { font-size: 1rem; padding: 12px; }
+}
+
+@media (max-width: 480px) {
+  header h1 { font-size: 1.6rem; }
+  .disclaimer { margin: 10px; }
+  .disclaimer-item { padding: 14px; margin-bottom: 12px; }
+  .disclaimer-item h3 { font-size: 1.3rem; }
+  .disclaimer-item p { font-size: 1.1rem; }
+  .footer { font-size: 0.9rem; padding: 10px; }
+}

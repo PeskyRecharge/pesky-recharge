@@ -1,0 +1,77 @@
+/* Ensure borders and padding fit neatly */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f7fb;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* Container */
+.container {
+  max-width: 800px;       /* allow bigger content */
+  margin: auto;
+  padding: 20px;
+}
+
+/* Header */
+header {
+  background: #000;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 6px;
+}
+
+header h2 {
+  font-size: 2.5rem;      /* very big header */
+  font-weight: bold;
+}
+
+/* History section */
+.history {
+  margin-top: 25px;
+}
+
+/* History list */
+#historyList {
+  list-style: none;
+  padding: 0;
+}
+
+#historyList li {
+  background: #fff;
+  border-left: 6px solid #0078d7; /* thicker vertical border */
+  margin-bottom: 15px;
+  padding: 18px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-weight: bold;
+  font-size: 1.4rem;      /* larger text */
+}
+
+#historyList li span {
+  display: block;
+  font-size: 1.1rem;      /* bigger subtext */
+  color: #555;
+  margin-top: 6px;
+}
+
+/* ✅ Responsive adjustments */
+@media (max-width: 768px) {
+  .container { padding: 15px; }
+  header h2 { font-size: 2rem; }
+  #historyList li { font-size: 1.2rem; padding: 14px; }
+  #historyList li span { font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 12px; }
+  header h2 { font-size: 1.6rem; }
+  #historyList li { font-size: 1.1rem; padding: 12px; }
+  #historyList li span { font-size: 0.95rem; }
+}

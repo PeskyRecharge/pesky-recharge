@@ -1,0 +1,119 @@
+* { box-sizing: border-box; }
+
+:root {
+  --ink: #10243e;
+  --muted: #6b7788;
+  --line: #dce3eb;
+  --paper: #ffffff;
+  --canvas: #f3f7fb;
+  --accent: #0b7a75;
+  --accent-dark: #075b58;
+  --danger: #b42318;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: radial-gradient(circle at 80% 0%, #dff2ef 0, transparent 34%), var(--canvas);
+}
+
+.airtime-shell {
+  width: min(100% - 32px, 560px);
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+.airtime-card {
+  padding: 28px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(16, 36, 62, 0.1);
+}
+
+.back-link {
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.back-link:hover { color: var(--accent); }
+
+.page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 22px 0 28px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+h1 { margin: 0; font-size: 32px; letter-spacing: 0; }
+.subheading { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+
+.balance-pill {
+  flex-shrink: 0;
+  padding: 9px 11px;
+  border: 1px solid #cce3df;
+  border-radius: 9px;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: right;
+}
+
+.balance-pill strong { display: block; color: var(--ink); font-size: 14px; }
+.field-label { display: block; margin: 0 0 8px; font-size: 13px; font-weight: 700; }
+
+.phone-field {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  overflow: hidden;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.phone-field:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(11, 122, 117, .12); }
+.country-code { padding: 13px 12px; color: var(--muted); font-size: 15px; background: #f6f8fa; border-right: 1px solid var(--line); }
+.phone-field input { width: 100%; padding: 13px 12px; border: 0; outline: 0; color: var(--ink); font: inherit; font-size: 15px; }
+.field-hint { min-height: 17px; margin: 6px 0 22px; color: var(--muted); font-size: 12px; }
+.field-hint.error, .message.error { color: var(--danger); }
+
+.network-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.network-heading .field-label { margin: 0; }
+.detected-network { color: var(--accent); font-size: 12px; font-weight: 600; }
+.network-grid, .amount-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+.amount-grid { grid-template-columns: repeat(3, 1fr); margin-bottom: 26px; }
+.network-option, .amount-option { position: relative; cursor: pointer; }
+.network-option input, .amount-option input { position: absolute; opacity: 0; }
+.network-option span, .amount-option span { display: block; padding: 12px 6px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); font-size: 12px; font-weight: 700; text-align: center; transition: .2s; }
+.network-option input:checked + span, .amount-option input:checked + span { color: #fff; border-color: var(--accent); background: var(--accent); }
+.network-option input:focus-visible + span, .amount-option input:focus-visible + span { outline: 3px solid rgba(11, 122, 117, .2); }
+.network-option.mtn input:checked + span { background: #e5aa00; border-color: #e5aa00; color: #16212b; }
+.network-option.glo input:checked + span { background: #168a3d; border-color: #168a3d; }
+.network-option.airtel input:checked + span { background: #d52b32; border-color: #d52b32; }
+.network-option.mobile input:checked + span { background: #087bca; border-color: #087bca; }
+
+.message { min-height: 22px; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
+.buy-button { width: 100%; padding: 14px; border: 0; border-radius: 9px; color: #fff; background: var(--accent); font: inherit; font-weight: 700; cursor: pointer; }
+.buy-button:hover { background: var(--accent-dark); }
+.buy-button:disabled { background: #91aaa8; cursor: wait; }
+.spinner { display: inline-block; width: 14px; height: 14px; margin-right: 7px; vertical-align: -2px; border: 2px solid rgba(255,255,255,.45); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; }
+.hidden { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 520px) {
+  .airtime-shell { width: min(100% - 20px, 560px); padding-top: 10px; }
+  .airtime-card { padding: 20px; }
+  .page-heading { display: block; }
+  .balance-pill { display: inline-block; margin-top: 14px; text-align: left; }
+}

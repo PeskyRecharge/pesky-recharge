@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #000000;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.balance-section h2 {
+  color: gold;
+  margin-bottom: 10px;
+}
+
+#balance {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.message {
+  margin-bottom: 10px;
+  color: gold;
+}
+
+#depositAmount {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+}
+
+.btn {
+  background: gold;
+  color: #0f172a;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.btn:hover {
+  background: white;
+  color: #0f172a;
+}
+
+.hidden {
+  display: none;
+}

@@ -1,0 +1,88 @@
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Container */
+.container {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Title */
+.title {
+  font-size: 26px;
+  font-weight: bold;
+  color: #0a1f44;
+  margin-bottom: 20px;
+}
+
+/* Form */
+.form { display: flex; flex-direction: column; gap: 15px; }
+.form-group { display: flex; flex-direction: column; text-align: left; }
+.form-group label { font-size: 14px; margin-bottom: 5px; color: #333; }
+.form-group input, .form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Button */
+.btn {
+  background: #0a1f44;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.btn:hover { background: #142d5c; }
+
+.btn:disabled {
+  background: #68758a;
+  cursor: wait;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 7px;
+  vertical-align: -2px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* OTP Section */
+.otp-section { margin-top: 20px; }
+.hidden { display: none; }
+.message { margin-bottom: 10px; color: #333; }
+
+/* Success Message */
+.success {
+  margin-top: 15px;
+  color: green;
+  font-weight: bold;
+}

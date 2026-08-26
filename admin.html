@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PESKY RECHARGE Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <!-- Login Section -->
+  <div id="loginSection">
+    <h2>Admin Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button id="loginBtn">Login</button>
+    <p id="loginError" style="color:red;"></p>
+  </div>
+
+  <!-- Dashboard (hidden until login) -->
+  <div id="dashboardWrapper" class="hidden">
+    <!-- Top Bar -->
+    <header class="admin-header">
+      <h1>Admin Dashboard</h1>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Menu</h2>
+      <ul>
+        <li><a href="#" id="usersLink">Users</a></li>
+        <li><a href="#" id="depositsLink">Deposits</a></li>
+        <li><a href="#" id="purchasesLink">Purchases</a></li>
+        <li><a href="#" id="settingsLink">Settings</a></li>
+        <li><a href="admin-chat.html">Admin Chat</a></li>
+        <li><a href="customers.html">Customers</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <section id="dashboardSection">
+        <h2>Welcome, Admin</h2>
+        <p>Use the menu to manage PESKY RECHARGE.</p>
+      </section>
+
+      <section id="usersSection" class="hidden">
+        <h2>Registered Users</h2>
+        <table id="usersTable">
+          <thead>
+            <tr><th>Surname</th><th>Other Name</th><th>Email</th><th>Balance</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section id="depositsSection" class="hidden">
+        <h2>Deposit Records</h2>
+        <ul id="depositsList"></ul>
+      </section>
+
+      <section id="purchasesSection" class="hidden">
+        <h2>Purchase Records</h2>
+        <ul id="purchasesList"></ul>
+      </section>
+
+      <section id="settingsSection" class="hidden">
+        <h2>System Settings</h2>
+        <p>Configure admin options here.</p>
+      </section>
+    </main>
+  </div>
+
+  <script src="javascript/admin.js"></script>
+</body>
+</html>

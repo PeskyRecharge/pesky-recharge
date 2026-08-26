@@ -1,0 +1,111 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #0f172a;          /* page background */
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Full screen solid black container */
+.container {
+  background: #000000;          /* solid black */
+  border-radius: 12px;          /* rounded corners */
+  width: 95%;                   /* responsive width */
+  max-width: 1400px;            /* allow bigger content */
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;                /* more breathing space */
+  box-sizing: border-box;
+  margin: auto;
+}
+
+/* Intro section inside container */
+.intro {
+  text-align: center;
+  width: 100%;
+  max-width: 800px;             /* bigger content area */
+  padding: 20px;
+}
+
+/* Logo */
+.logo-large {
+  width: 100%;
+  max-width: 600px;             /* very big logo */
+  height: auto;
+  margin-bottom: 40px;
+}
+
+/* Text */
+.welcome {
+  font-size: 2rem;              /* larger welcome text */
+  font-weight: normal;
+  margin-bottom: 12px;
+}
+.headline {
+  font-size: 3rem;              /* bold headline */
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.btn {
+  background: gold;
+  color: #0f172a;
+  padding: 18px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.4rem;            /* bigger button text */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 25px;
+  width: 100%;
+  max-width: 320px;
+}
+.btn:hover {
+  background: white;
+  color: #0f172a;
+}
+
+.white-btn {
+  background: #ffffff;
+  color: #000;
+}
+.white-btn:hover { background: #e6e6e6; }
+
+/* Hidden options */
+.hidden { display: none; }
+
+/* Trusted text */
+.trusted {
+  margin-top: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ccc;
+}
+
+/* ✅ Responsive adjustments */
+@media (max-width: 768px) {
+  .logo-large { max-width: 400px; }
+  .headline { font-size: 2.2rem; }
+  .welcome { font-size: 1.6rem; }
+  .btn { font-size: 1.2rem; padding: 16px; }
+}
+
+@media (max-width: 480px) {
+  .container {
+    border-radius: 0;       /* full screen on phones */
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .logo-large { max-width: 300px; }
+  .headline { font-size: 1.8rem; }
+  .welcome { font-size: 1.4rem; }
+  .btn { font-size: 1.1rem; padding: 14px; }
+}

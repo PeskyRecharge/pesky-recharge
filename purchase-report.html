@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Purchase Report</title>
+   <link rel="stylesheet" href="css/purchase-report.css">
+</head>
+<body>
+  <div class="report-container">
+    <h1>PESKY RECHARGE - Purchase Report</h1>
+    <p>User: <span id="userName"></span></p>
+    <p>Date: <span id="reportDate"></span></p>
+
+    <!-- ✅ Only cards remain -->
+    <div id="cardsContainer" class="cards-container"></div>
+  </div>
+
+  <div class="buttons">
+    <button onclick="window.print()" class="print-btn">Print Report</button>
+    <button id="downloadBtn" class="print-btn">Download PDF</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="javascript/purchase-report.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PESKY RECHARGE Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#008000">
+
+</head>
+<body>
+  <!-- Sticky Top Bar -->
+  <header class="header">
+    <div class="header-left">
+      <img src="img/pesky4.png" alt="Pesky Logo" class="logo-left">
+    </div>
+    <div class="header-center">
+      <h1>PESKY RECHARGE</h1>
+    </div>
+    <div class="header-right">
+      <div class="balance-mini" id="balanceMini">
+        <span id="dashboardBalance">₦0</span>
+        <span class="balance-icon">👤</span>
+      </div>
+      <div class="menu-toggle" id="menuToggle">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+<!-- Hero Section with Slider -->
+<section class="hero">
+  <div class="hero-slider">
+    <img src="img/peskya.jpg" alt="Pesky Hero 1" class="slide active">
+    <img src="img/pesky2.png" alt="Pesky Hero 2" class="slide">
+    <img src="img/peskyd.jpg" alt="Pesky Hero 3" class="slide">
+    <img src="img/peskyc.jpg" alt="Pesky Hero 4" class="slide">
+  </div>
+</section>
+
+  <!-- Network Cards -->
+  <main class="network-grid">
+    <a href="purchase.html" class="card mtn"><h2>MTN</h2></a>
+    <a href="purchase.html" class="card glo"><h2>Glo</h2></a>
+    <a href="purchase.html" class="card airtel"><h2>Airtel</h2></a>
+    <a href="purchase.html" class="card nmobile"><h2>9mobile</h2></a>
+  </main>
+
+  <!-- Static Image Section -->
+<section class="promo">
+  <img src="img/peskyb.jpg" alt="Pesky Promo" class="promo-img">
+</section>
+
+
+  <!-- Sticky Bottom Bar -->
+  <div class="bottom-bar">
+    <div class="me-section" id="meSection">
+      <span class="me-icon">👤</span>
+      <span class="me-text">Me</span>
+    </div>
+  </div>
+
+  <!--  Drawer -->
+  <div class="drawer" id="drawer">
+    <div class="drawer-content">
+      <h3>Menu</h3>
+      <ul>
+        
+        <li><a href="purchase-report.html">Your Purchase History</a></li>
+        <li><a href="help.html">Help & Support</a></li>
+        <li><a href="deposite-history.html">Deposit History</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="live-chat.html">Live Chat</a></li>
+        <li><button id="logoutBtn" class="logout-btn">Logout</button></li>
+        <!-- you can add more links here -->
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- Footer Section -->
+<footer class="footer">
+  <div class="footer-links">
+    <ul>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="disclaimer.html">Disclaimer</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="refund.html">Refund Policy</a></li>
+      <li><a href="terms.html">Terms & Conditions</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </div>
+  <p>©2026 PESKY RECHARGE</p>
+</footer>
+
+
+  <!-- ✅ Load Supabase SDK first -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- ✅ Then load your dashboard logic -->
+  <script src="javascript/dashboard.js"></script>
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
+  }
+</script>
+
+</body>
+</html>
