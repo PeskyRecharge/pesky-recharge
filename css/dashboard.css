@@ -3,7 +3,7 @@
 html, body { height: 100%; width: 100%; overflow-x: hidden; }
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #f4f7fb;
+  background: #0b1220;
   color: #333;
   display: flex;
   flex-direction: column;
