@@ -8,19 +8,12 @@
 
   function confirmExit() {
     if (!shouldConfirm()) return true;
-    return window.confirm("Do you want to exit this page?");
+    return window.confirm("Do you want to leave the dashboard?");
   }
 
   document.addEventListener("click", event => {
     const link = event.target.closest("a[href]");
     if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
-
-    const destination = new URL(link.href, window.location.href);
-    if (destination.origin !== window.location.origin || destination.href === window.location.href) return;
-    if (!confirmExit()) {
-      event.preventDefault();
-      return;
-    }
     allowExit = true;
   }, true);
 
