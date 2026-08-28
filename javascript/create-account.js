@@ -99,9 +99,7 @@ verifyBtn.addEventListener("click", async function () {
     successMessage.classList.remove("hidden");
     otpSection.classList.add("hidden");
 
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 2000);
+      window.location.href = "dashboard.html";
     } else {
       alert("Invalid code. Please try again.");
     }
