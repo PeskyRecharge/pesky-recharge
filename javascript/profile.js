@@ -60,6 +60,8 @@ async function loadProfile() {
   if (error) { setStatus("We could not load your profile details.", true); return; }
   customer = data;
   renderProfile();
+  document.getElementById("notificationToggle").checked = notificationsEnabled(currentUser.id, "activity");
+  document.getElementById("loginNotificationToggle").checked = notificationsEnabled(currentUser.id, "login");
   document.getElementById("currentEmailInput").value = customer.email || currentUser.email || "";
   document.getElementById("loginActivity").textContent = `Current session active since ${new Date(currentUser.last_sign_in_at || Date.now()).toLocaleString()}.`;
   checkMfa();
@@ -206,9 +208,11 @@ document.getElementById("verifyTotpBtn").addEventListener("click", async event =
 
 async function requestNotifications(toggle) {
   if (!("Notification" in window)) { toggle.checked = false; setStatus("This browser does not support notifications.", true); return; }
+  const type = toggle.id === "loginNotificationToggle" ? "login" : "activity";
+  if (!toggle.checked) { setNotificationsEnabled(currentUser.id, type, false); setStatus("Notifications disabled on this device."); return; }
   const permission = await Notification.requestPermission();
-  if (permission !== "granted") { toggle.checked = false; setStatus("Notification permission was not granted.", true); return; }
-  localStorage.setItem(`pesky-notifications-${currentUser.id}`, "enabled"); setStatus("Notifications enabled on this device.");
+  if (permission !== "granted") { toggle.checked = false; setNotificationsEnabled(currentUser.id, type, false); setStatus("Notification permission was not granted.", true); return; }
+  setNotificationsEnabled(currentUser.id, type, true); setStatus("Notifications enabled on this device.");
 }
 document.getElementById("notificationToggle").addEventListener("change", event => requestNotifications(event.target));
 document.getElementById("loginNotificationToggle").addEventListener("change", event => requestNotifications(event.target));

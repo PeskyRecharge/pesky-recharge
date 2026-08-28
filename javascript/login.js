@@ -71,6 +71,9 @@ verifyBtn.addEventListener("click", async function() {
     }
 
     if (data?.user) {
+      if (notificationsEnabled(data.user.id, "login")) {
+        showAccountNotification("Pesky Recharge login", { body: "Your account was accessed successfully." });
+      }
       successMessage.classList.remove("hidden")
       otpSection.classList.add("hidden")
 

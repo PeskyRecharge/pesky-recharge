@@ -97,8 +97,8 @@ document.addEventListener("click", (event) => {
 //  Logout button logic
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
-  logoutBtn.addEventListener("click", () => {
-    // supabaseClient.auth.signOut();  // optional sign out
+  logoutBtn.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut({ scope: "global" });
     window.location.href = "index.html";
   });
 }

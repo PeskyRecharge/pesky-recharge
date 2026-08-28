@@ -123,6 +123,9 @@ purchaseForm.addEventListener("submit", async (e) => {
     const result = await res.json();
 
     if (result.success) {
+      if (notificationsEnabled(userData.user.id, "activity")) {
+        showAccountNotification("Purchase successful", { body: `${quantity} PIN(s) purchased for ${formatCurrency(totalCost)}.` });
+      }
       purchaseForm.classList.add("hidden");
       document.querySelector(".balance-box").classList.add("hidden");
 

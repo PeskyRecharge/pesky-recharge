@@ -87,6 +87,9 @@ confirmDepositBtn.addEventListener("click", () => {
         .then((res) => res.json())
         .then(async (result) => {
           if (result.success) {
+            if (notificationsEnabled(currentUser.id, "activity")) {
+              showAccountNotification("Deposit successful", { body: `₦${amount.toFixed(2)} was added to your balance.` });
+            }
             //  Update balance display
             if (typeof result.newBalance !== "undefined") {
               balanceEl.textContent = `₦${Number(result.newBalance).toFixed(2)}`;
