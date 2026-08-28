@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d6b57">
+  <title>My Profile - PESKY RECHARGE</title>
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+  <header class="profile-header">
+    <a class="back-link" href="dashboard.html" aria-label="Back to dashboard">&#8592;</a>
+    <div>
+      <p class="eyebrow">PESKY RECHARGE</p>
+      <h1>My Profile</h1>
+    </div>
+    <a class="header-action" href="dashboard.html">Dashboard</a>
+  </header>
+
+  <main class="profile-shell">
+    <section class="profile-hero" aria-labelledby="profileHeading">
+      <div class="avatar-wrap">
+        <div class="avatar" id="avatarPreview" aria-label="Profile picture">?</div>
+        <label class="avatar-edit" for="avatarInput" title="Change profile picture">+</label>
+        <input id="avatarInput" type="file" accept="image/*" hidden>
+      </div>
+      <div>
+        <p class="eyebrow">Account overview</p>
+        <h2 id="profileHeading">Loading your profile...</h2>
+        <p id="profileEmail" class="muted profile-email">Please wait a moment</p>
+      </div>
+    </section>
+
+    <p id="statusMessage" class="status" role="status" aria-live="polite"></p>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">Personal details</p><h2>Your information</h2></div>
+        <button id="editProfileBtn" class="outline-button" type="button">Edit Profile</button>
+      </div>
+      <form id="profileForm" class="details-grid" hidden>
+        <label>Surname<input id="surnameInput" type="text" required></label>
+        <label>Other name<input id="otherNameInput" type="text" required></label>
+        <label>Phone number<input id="phoneInput" type="tel" required></label>
+        <div class="form-actions"><button id="cancelEditBtn" class="quiet-button" type="button">Cancel</button><button class="primary-button" type="submit">Save changes</button></div>
+      </form>
+      <dl id="detailsList" class="details-list"></dl>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><p class="eyebrow">Email address</p><h2>Change email</h2></div></div>
+      <form id="emailForm" class="inline-form">
+        <div id="currentEmailStep">
+          <label for="currentEmailInput">Current email</label>
+          <div class="input-row"><input id="currentEmailInput" type="email" readonly><button id="sendCurrentCodeBtn" class="primary-button" type="button">Send verification code</button></div>
+          <div id="currentCodeStep" class="verification-step" hidden>
+            <label for="currentCodeInput">Code from your current email</label>
+            <div class="input-row"><input id="currentCodeInput" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Enter 6-digit code"><button id="verifyCurrentCodeBtn" class="primary-button" type="button">Verify current email</button></div>
+          </div>
+        </div>
+        <div id="newEmailStep" class="verification-step" hidden>
+          <label for="emailInput">New email address</label>
+          <div class="input-row"><input id="emailInput" type="email" required placeholder="you@example.com"><button id="sendNewEmailBtn" class="primary-button" type="submit">Send verification code</button></div>
+          <div id="newCodeStep" class="verification-step" hidden>
+            <label for="newCodeInput">Code from your new email</label>
+            <div class="input-row"><input id="newCodeInput" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Enter 6-digit code"><button id="verifyNewEmailBtn" class="primary-button" type="button">Verify new email</button></div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <section class="settings-list panel">
+      <div class="section-heading"><div><p class="eyebrow">Preferences</p><h2>Notifications</h2></div></div>
+      <label class="setting-row"><span><strong>Purchase and deposit alerts</strong><small>Allow this device to show account activity notifications.</small></span><input id="notificationToggle" type="checkbox"></label>
+      <label class="setting-row"><span><strong>Login alerts</strong><small>Keep a reminder when your account is accessed.</small></span><input id="loginNotificationToggle" type="checkbox"></label>
+    </section>
+
+    <section class="panel security-panel">
+      <div class="section-heading"><div><p class="eyebrow">Security</p><h2>Protect your account</h2></div></div>
+      <div class="security-row"><div><strong>Two-factor authentication</strong><p id="mfaStatus">Checking Supabase security options...</p></div><button id="mfaBtn" class="outline-button" type="button">Set up 2FA</button></div>
+      <div id="mfaSetup" class="mfa-setup" hidden>
+        <div class="mfa-methods"><button id="totpMethodBtn" class="outline-button" type="button">Authenticator App 2FA</button></div>
+        <div id="totpSetup" hidden><img id="mfaQr" class="mfa-qr" alt="Authenticator setup QR code"><label for="totpCodeInput">6-digit authenticator code</label><div class="input-row"><input id="totpCodeInput" type="text" inputmode="numeric" maxlength="6" placeholder="Enter code"><button id="verifyTotpBtn" class="primary-button" type="button">Verify app</button></div></div>
+        <div class="mfa-help">
+          <h3>How to use 2FA</h3>
+          <ol>
+            <li>Install <strong>Google Authenticator</strong> from the Google Play Store or Apple App Store on your phone.</li>
+            <li>Open Google Authenticator and tap the <strong>+</strong> button.</li>
+            <li>Choose <strong>Scan a QR code</strong>, then scan the QR code shown above.</li>
+            <li>Google Authenticator will show a 6-digit code that changes every 30 seconds.</li>
+            <li>Enter the current 6-digit code here and click <strong>Verify app</strong>.</li>
+            <li>Keep Google Authenticator on your phone. Use its new 6-digit code whenever PESKY RECHARGE asks for your 2FA code.</li>
+          </ol>
+        </div>
+        <button id="cancelMfaBtn" class="quiet-button mfa-cancel" type="button">Cancel</button>
+      </div>
+      <div class="activity"><h3>Login security activity</h3><p id="loginActivity">Current session is being checked...</p><button id="signOutBtn" class="danger-button" type="button">Sign out everywhere</button></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="javascript/profile.js"></script>
+  <script src="javascript/exit-guard.js"></script>
+</body>
+</html>
