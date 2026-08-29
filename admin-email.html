@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Users - PESKY RECHARGE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/admin-email.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <main class="email-shell">
+    <header class="email-header">
+      <a href="admin.html">Back to Admin</a>
+      <h1>Email Users</h1>
+    </header>
+
+    <section class="email-panel">
+      <p>Send one email individually to every registered customer.</p>
+      <label for="emailSubject">Subject</label>
+      <input id="emailSubject" type="text" maxlength="150" placeholder="Email subject">
+      <label for="emailMessage">Message</label>
+      <textarea id="emailMessage" rows="10" maxlength="10000" placeholder="Write your message..."></textarea>
+      <button id="sendEmailBtn" type="button">Send email to all users</button>
+      <p id="emailStatus" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+  <script src="javascript/admin-email.js"></script>
+</body>
+</html>
