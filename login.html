@@ -7,26 +7,46 @@
   <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-  <div class="container">
-    <h1 class="title">PESKY RECHARGE</h1>
+  <div class="background-decoration"></div>
+  
+  <div class="login-container">
+    <!-- Padlock Icon in Circle -->
+    <div class="padlock-circle">
+      <span class="padlock-icon">🔒</span>
+    </div>
+
+    <h1 class="title">Welcome Back</h1>
+    <p class="subtitle">Sign in to your PESKY RECHARGE account</p>
 
     <form id="loginForm" class="form">
       <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="email" placeholder="Enter your email" required>
+        <label for="email">Email Address</label>
+        <div class="input-wrapper">
+          <input type="email" id="email" placeholder="Enter your email" required>
+          <span class="input-icon">✉️</span>
+        </div>
       </div>
-      <button type="submit" class="btn">Login</button>
+      <button type="submit" class="btn btn-primary">Sign In</button>
     </form>
 
     <!-- OTP Section (hidden initially) -->
     <div id="otpSection" class="otp-section hidden">
-      <p class="message">OTP sent to your email. Enter code below:</p>
-      <input type="text" id="code" placeholder="Enter verification code">
-      <button id="verifyBtn" class="btn">Verify OTP</button>
+      <p class="message">🔐 OTP sent to your email</p>
+      <div class="form-group">
+        <label for="code">Verification Code</label>
+        <input type="text" id="code" placeholder="Enter 6-digit code" maxlength="6">
+      </div>
+      <button id="verifyBtn" class="btn btn-primary">Verify OTP</button>
+      <button id="resendBtn" class="btn btn-secondary">Resend Code</button>
     </div>
 
     <!-- Success Message -->
-    <p id="successMessage" class="success hidden">Login successful!</p>
+    <p id="successMessage" class="success hidden">✓ Login successful! Redirecting...</p>
+
+    <!-- Footer Link -->
+    <div class="footer-link">
+      <p>Don't have an account? <a href="create-account.html">Sign up here</a></p>
+    </div>
   </div>
 
   <!-- ✅ Load Supabase library first -->

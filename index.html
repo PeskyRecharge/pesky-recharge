@@ -2,31 +2,102 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PESKY RECHARGE</title>
+  <title>PESKY RECHARGE - Secure Card Pin Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Secure and reliable card PIN management platform. Trusted by thousands.">
   <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-  <!-- Full screen black container -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <img src="img/pesky4.png" alt="Pesky Logo" class="nav-logo">
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
   <div class="container">
-    <section class="intro">
-      <img src="img/pesky4.png" alt="Pesky Logo" class="logo-large">
+    <section class="hero">
+      <div class="hero-content">
+        <img src="img/pesky4.png" alt="Pesky Logo" class="logo-large">
+        
+        <h1 class="headline">Secure Card PIN Management</h1>
+        <p class="subheadline">Your trusted platform for safe and easy card PIN management</p>
 
-      <p class="welcome">Welcome:</p>
-      <p class="headline">Secure Card Pin</p>
-      <p class="headline">Management</p>
+        <div class="cta-buttons">
+          <button id="signupBtn" class="btn btn-primary">Get Started</button>
+          <button onclick="location.href='login.html'" class="btn btn-secondary">Login</button>
+        </div>
 
-      <button id="signupBtn" class="btn white-btn">Sign Up</button>
-
-      <div id="options" class="hidden">
-        <button onclick="location.href='create-account.html'" class="btn">Create Account</button>
-        <button onclick="location.href='login.html'" class="btn">Login</button>
+        <div id="options" class="hidden">
+          <button onclick="location.href='create-account.html'" class="btn btn-primary">Create Account</button>
+          <button onclick="location.href='login.html'" class="btn btn-secondary">Login to Existing Account</button>
+        </div>
       </div>
 
-      <!-- Trusted by Paystack with padlock -->
-      <p class="trusted">🔒 Trusted by Paystack</p>
+      <!-- Decorative element -->
+      <div class="hero-decoration"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <h2>Why Choose PESKY?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Maximum Security</h3>
+          <p>Your data is encrypted and protected with industry-leading security standards</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Fast & Reliable</h3>
+          <p>Process transactions instantly with our optimized platform</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💳</div>
+          <h3>Easy to Use</h3>
+          <p>Simple interface designed for everyone, no technical knowledge needed</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>24/7 Support</h3>
+          <p>Our dedicated support team is always ready to help you</p>
+        </div>
+      </div>
+
+      <!-- Trust Indicators Below Cards -->
+      <div class="trust-indicators-bottom">
+        <div class="trust-item-bottom">
+          <span class="trust-icon-bottom">🔒</span>
+          <span class="trust-text-bottom">Bank-Level Security</span>
+        </div>
+        <div class="trust-item-bottom">
+          <span class="trust-icon-bottom">✓</span>
+          <span class="trust-text-bottom">Trusted by Paystack</span>
+        </div>
+        <div class="trust-item-bottom">
+          <span class="trust-icon-bottom">⚡</span>
+          <span class="trust-text-bottom">Instant Processing</span>
+        </div>
+      </div>
     </section>
   </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2024 PESKY RECHARGE. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+    </div>
+  </footer>
 
   <script src="javascript/index.js"></script>
 </body>

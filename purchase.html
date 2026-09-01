@@ -3,46 +3,46 @@
 <head>
    <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
   <title>Purchase Airtime PINs</title>
   <link rel="stylesheet" href="css/purchase.css">
 </head>
 <body>
   <div class="container">
-    <h1>Buy Airtime PINs</h1>
+    <h1>💳 Buy Airtime PINs</h1>
 
     <div class="balance-box">
-      Current Balance: <span id="balance">₦0.00</span>
+      <span>Current Balance</span>
+      <span id="balance">₦0.00</span>
     </div>
 
     <form id="purchaseForm">
-      <label for="network">Select Network:</label>
+      <label for="network">Select Network</label>
       <select id="network" required>
-        <option value="">--Choose--</option>
+        <option value="">--Choose Network--</option>
         <option value="MTN">MTN</option>
         <option value="GLO">GLO</option>
         <option value="AIRTEL">Airtel</option>
         <option value="9MOBILE">9Mobile</option>
       </select>
 
-      <label for="denomination">Select PIN Value:</label>
+      <label for="denomination">Select PIN Value</label>
       <select id="denomination" required>
-        <option value="">--Choose--</option>
+        <option value="">--Choose Amount--</option>
         <option value="100">₦100</option>
         <option value="200">₦200</option>
         <option value="500">₦500</option>
         <option value="1000">₦1000</option>
       </select>
 
-      <label for="quantity">Number of PINs:</label>
-      <input type="number" id="quantity" min="1" required>
+      <label for="quantity">Number of PINs</label>
+      <input type="number" id="quantity" min="1" placeholder="Enter quantity" required>
 
       <button type="submit" id="purchaseBtn">Purchase PINs</button>
     </form>
 
     <div id="message"></div>
     <div id="depositRedirect" class="hidden">
-      <p>Insufficient balance. Please deposit.</p>
+      <p>Insufficient balance. Please deposit to continue.</p>
       <a href="deposit.html" class="deposit-btn">Deposit Now</a>
     </div>
   </div>

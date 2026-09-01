@@ -1,8 +1,3 @@
-//  Redirect when clicking Me icon (bottom bar)
-document.getElementById("meSection").addEventListener("click", () => {
-  window.location.href = "deposit.html";
-});
-
 //  Redirect when clicking mini balance (top bar)
 document.getElementById("balanceMini").addEventListener("click", () => {
   window.location.href = "deposit.html";

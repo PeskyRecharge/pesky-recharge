@@ -3,11 +3,12 @@
 html, body { height: 100%; width: 100%; overflow-x: hidden; }
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #0b1220;
+  background: #000000;          /* whole page black */
   color: #333;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  padding-bottom: 90px; /* space for fixed bottom bar */
 }
 
 /* Header grid layout */
@@ -62,10 +63,12 @@ body {
   transition: transform 0.3s, box-shadow 0.3s;
   height: 200px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  
+  gap: 10px;
 }
+.card-icon { font-size: 28px; display: block; }
 .card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
 .card.mtn { background: #ffcb05; color: #000; }
 .card.mtn:hover { background: #e6b800; }
@@ -82,14 +85,16 @@ body {
   bottom: 0;
   width: 100%;
   background: #222;
-  display: flex;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   padding: 10px 20px;
-  height: 60px;
+  height: 70px;
   z-index: 999;
+  border-top: 3px solid #ffd700;
+  left: 0;
 }
-.me-section {
+.nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -97,11 +102,16 @@ body {
   color: white;
   padding: 8px 12px;
   border-radius: 6px;
-  transition: background 0.3s;
+  transition: background 0.3s, color 0.3s;
+  text-decoration: none;
+  gap: 3px;
 }
-.me-section:hover { background: rgba(255,255,255,0.1); }
-.me-icon { font-size: 22px; margin-bottom: 3px; }
-.me-text { font-size: 12px; }
+.nav-item:hover { background: rgba(255, 215, 0, 0.2); color: #ffd700; }
+.nav-icon { font-size: 22px; }
+.nav-text { font-size: 12px; font-weight: bold; }
+.nav-left { justify-self: start; }
+.nav-center { justify-self: center; }
+.nav-right { justify-self: end; }
 
 /* Drawer */
 .drawer { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: #fff; box-shadow: -2px 0 5px rgba(0,0,0,0.3); transition: right 0.3s ease; z-index: 2000; }
@@ -121,21 +131,22 @@ body {
   text-align: center;
   position: relative;
   z-index: 10;
-  margin-bottom: 60px; /* ensures footer sits above bottom bar */
+  margin-bottom: 0;
+  border-top: 3px solid #ffd700;
 }
 .footer-links ul {
   list-style: none;
   padding: 0;
   margin: 0 0 10px 0;
-  display: grid;
-  grid-template-columns: repeat(3, auto); /* 3 per row */
+  display: flex;
   justify-content: center;
-  gap: 10px 20px;
+  gap: 30px;
+  flex-wrap: wrap;
 }
-.footer-links li { margin: 5px 0; }
-.footer-links a { color: #fff; text-decoration: none; font-weight: bold; }
-.footer-links a:hover { text-decoration: underline; }
-.footer p { margin-top: 10px; font-size: 14px; }
+.footer-links li { margin: 0; }
+.footer-links a { color: #ffd700; text-decoration: none; font-weight: bold; font-size: 14px; transition: color 0.3s; }
+.footer-links a:hover { color: #fff; }
+.footer p { margin-top: 10px; font-size: 12px; color: rgba(255, 255, 255, 0.7); }
 
 /* Logout button styling */
 .logout-btn {
