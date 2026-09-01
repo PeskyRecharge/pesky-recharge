@@ -8,6 +8,25 @@ const supabaseUrl = "https://beyykzogvaemjvecbzkf.supabase.co";
 const supabaseKey = "sb_publishable_JDxS16gwlyg9SxF0T2owYg_KKZqE9Gy";
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+const dashboardGreetingKey = "pesky-dashboard-greeting-done";
+
+function hasDashboardGreetingAlreadyPlayed() {
+  try {
+    return sessionStorage.getItem(dashboardGreetingKey) === "true";
+  } catch (error) {
+    console.warn("Session storage unavailable:", error);
+    return false;
+  }
+}
+
+function markDashboardGreetingPlayed() {
+  try {
+    sessionStorage.setItem(dashboardGreetingKey, "true");
+  } catch (error) {
+    console.warn("Unable to store greeting state:", error);
+  }
+}
+
 //  Speak helper using Web Speech API
 function speak(text) {
   const msg = new SpeechSynthesisUtterance(text);
@@ -44,23 +63,27 @@ async function loadDashboardData() {
         balanceEl.textContent = `₦${data.balance || 0}`;
       }
 
-      //  Speak greeting, sales pitch, and balance
+      //  Speak greeting, sales pitch, and balance once per login session
       const name = data.other_name || "Friend";
       const balance = data.balance || 0;
 
-      // Greeting
-      speak(`Welcome to your dashboard, ${name}.`);
+      if (!hasDashboardGreetingAlreadyPlayed()) {
+        // Greeting
+        speak(`Welcome to your dashboard, ${name}.`);
 
-      // Sales pitch
-      speak(
-        "We sell recharge card pins for all networks: MTN, Glo, Airtel, and 9mobile, at affordable prices. " +
-        "Our offers are: 100 naira recharge card for 98 point 50 kobo, 200 naira for 197  kobo, " +
-        "500 naira for 492 point 5 kobo, and 1000 naira for 985  kobo. " +
-        "Thank you for using Pesky Recharge. You can chat with us anytime for clarification."
-      );
+        // Sales pitch
+        speak(
+          "We sell recharge card pins for all networks: MTN, Glo, Airtel, and 9mobile, at affordable prices. " +
+          "Our offers are: 100 naira recharge card for 98 point 50 kobo, 200 naira for 197  kobo, " +
+          "500 naira for 492 point 5 kobo, and 1000 naira for 985  kobo. " +
+          "Thank you for using Pesky Recharge. You can chat with us anytime for clarification."
+        );
 
-      // Current balance
-      speak(`Your current balance is ₦${balance}.`);
+        // Current balance
+        speak(`Your current balance is ₦${balance}.`);
+
+        markDashboardGreetingPlayed();
+      }
     }
   } catch (err) {
     console.error("Unexpected error loading dashboard data:", err);
@@ -93,6 +116,12 @@ document.addEventListener("click", (event) => {
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async () => {
+    try {
+      sessionStorage.removeItem(dashboardGreetingKey);
+    } catch (error) {
+      console.warn("Unable to clear greeting state:", error);
+    }
+
     await supabaseClient.auth.signOut({ scope: "global" });
     window.location.href = "index.html";
   });

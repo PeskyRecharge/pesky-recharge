@@ -29,15 +29,34 @@ h1 {
 }
 
 .print-btn {
-  background: #0078d7;
-  color: #fff;
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
+  font-weight: 600;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
-.print-btn:hover { background: #005a9e; }
+
+.print-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.96;
+}
+
+.print-primary {
+  background: #0078d7;
+  color: #fff;
+}
+
+.print-primary:hover { background: #005a9e; }
+
+.print-secondary {
+  background: #e8f4ff;
+  color: #0a4f9c;
+  border: 1px solid #b7d9ff;
+}
+
+.print-secondary:hover { background: #d7ebff; }
 
 .buttons {
   text-align: center;
