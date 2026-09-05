@@ -1,0 +1,199 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f2f2f2;
+  color: #333;
+}
+
+.report-container {
+  background: #fff;
+  padding: 5px 8px 8px;
+  width: min(900px, calc(100% - 24px));
+  box-sizing: border-box;
+  margin: 10px auto;
+  box-shadow: 0 0 8px rgba(0,0,0,0.15);
+  border-radius: 6px;
+}
+
+h1 {
+  text-align: center;
+  margin: 0 0 2px;
+  font-size: 13px;
+  color: #0078d7;
+}
+
+.report-container > p {
+  margin: 1px 0;
+  font-size: 9px;
+}
+
+.print-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.print-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.96;
+}
+
+.print-primary {
+  background: #0078d7;
+  color: #fff;
+}
+
+.print-primary:hover { background: #005a9e; }
+
+.buttons {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.cards-container {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 15px;
+  align-items: start;
+}
+
+.recharge-card {
+  border: 1px solid #777;
+  border-radius: 3px;
+  background: #fff;
+  padding: 4px 6px;
+  min-width: 0;
+  height: fit-content;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  font-size: 9px;
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1px;
+}
+
+.reference {
+  font-weight: bold;
+  font-size: 9px;
+  color: #2e7d32;
+}
+
+.card-branding {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.network-logo {
+  width: 19px;
+  height: auto;
+}
+
+.amount {
+  color: #0078d7;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.pin {
+  font-size: 11px;
+  font-weight: bold;
+  color: #d32f2f;
+  background: #e0e0e0;
+  padding: 3px 2px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.card-detail {
+  margin: 1px 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Responsiveness */
+@media (max-width: 900px) {
+  .cards-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+
+  .recharge-card {
+    font-size: 10px;
+  }
+
+  .pin {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .report-container {
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .buttons {
+    display: none;
+  }
+
+  h1 {
+    margin: 0 0 1px;
+    font-size: 11px;
+  }
+
+  .report-container > p {
+    display: block;
+    margin: 1px 0;
+    font-size: 8px;
+  }
+
+  .cards-container {
+    margin-top: 6px;
+    gap: 5px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-flow: row;
+  }
+
+  .recharge-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

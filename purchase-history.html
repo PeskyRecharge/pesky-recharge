@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Purchase History - Pesky Recharge</title>
+  <link rel="stylesheet" href="css/history.css">
+</head>
+<body>
+  <header>
+    <h1>Pesky Recharge - Purchase History</h1>
+    <p id="userName"></p>
+    <p id="reportDate"></p>
+  </header>
+
+  <main>
+    <div id="historyContainer" class="history-container">
+      Loading your purchase history...
+    </div>
+  </main>
+
+  <footer>
+    <button id="downloadBtn">Download / Print</button>
+    <a href="index.html">Back to Dashboard</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+   <script src="javascript/history.js"></script>
+</body>
+</html>

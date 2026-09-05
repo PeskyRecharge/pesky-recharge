@@ -4,7 +4,7 @@ const supabaseKey = "sb_publishable_JDxS16gwlyg9SxF0T2owYg_KKZqE9Gy";
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 // DOM references
-const cardsContainer = document.getElementById("cardsContainer");
+const historyContainer = document.getElementById("historyContainer");
 document.getElementById("reportDate").textContent = new Date().toLocaleString();
 document.getElementById("downloadBtn").addEventListener("click", () => {
   window.print();
@@ -23,69 +23,56 @@ function formatPin(pin) {
   return digits ? digits.replace(/(.{4})/g, "$1-").replace(/-$/, "") : "N/A";
 }
 
-// Speak helper using Web Speech API
-function speak(text) {
-  const msg = new SpeechSynthesisUtterance(text);
-  msg.lang = "en-US";
-  msg.pitch = 1;
-  msg.rate = 1;
-  window.speechSynthesis.speak(msg);
-}
-
-// Load the latest purchase for the logged-in customer.
-async function loadLatestPurchase() {
+// Load all purchases for the logged-in customer
+async function loadPurchaseReports() {
   const { data: userData, error: userError } = await supabaseClient.auth.getUser();
   if (userError || !userData?.user) {
-    cardsContainer.textContent = "Redirecting to login...";
+    historyContainer.textContent = "Redirecting to login...";
     window.location.href = "login.html";
     return;
   }
 
   document.getElementById("userName").textContent = userData.user.email || "Customer";
 
-  // Fetch customer other_name
-  const { data: customerData, error: customerError } = await supabaseClient
-    .from("customers")
-    .select("other_name")
-    .eq("auth_id", userData.user.id)
-    .single();
-
-  const otherName = customerData?.other_name || "Friend";
-
-  // Always fetch the latest purchase
   const { data, error } = await supabaseClient
     .from("pin_purchases")
     .select("network, denomination, quantity, total_cost, pins, created_at")
     .eq("auth_id", userData.user.id)
-    .order("created_at", { ascending: false })
-    .limit(1);
+    .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Error loading purchase:", error);
-    cardsContainer.textContent = "Unable to load your purchase report.";
+    console.error("Error loading reports:", error);
+    historyContainer.textContent = "Unable to load your purchase reports.";
     return;
   }
   if (!data || data.length === 0) {
-    cardsContainer.textContent = "No purchases found.";
+    historyContainer.textContent = "No purchases found.";
     return;
   }
 
-  // Speak instructions and thank user
-  speak(`Hello ${otherName}, please print the first purchase before making another purchase. Otherwise the new purchase will replace the old one.`);
-  speak(`Thank you ${otherName}, for using Pesky Recharge.`);
-
-  renderPurchases(data);
+  renderReports(data);
 }
 
-// Render card(s) using your actual table columns
-function renderPurchases(purchases) {
-  cardsContainer.innerHTML = "";
+// Render each purchase as its own report-container
+function renderReports(purchases) {
+  historyContainer.innerHTML = "";
 
   purchases.forEach((purchase) => {
     let pinsArray = purchase.pins;
     if (typeof pinsArray === "string") {
       try { pinsArray = JSON.parse(pinsArray); } catch { pinsArray = []; }
     }
+
+    const report = document.createElement("div");
+    report.className = "report-container";
+
+    // Optional heading per purchase
+    const heading = document.createElement("h1");
+    heading.textContent = `Purchase Report - ${new Date(purchase.created_at).toLocaleDateString()}`;
+    report.appendChild(heading);
+
+    const cardsContainer = document.createElement("div");
+    cardsContainer.className = "cards-container";
 
     if (Array.isArray(pinsArray) && pinsArray.length > 0) {
       pinsArray.forEach((pinObj) => {
@@ -110,20 +97,11 @@ function renderPurchases(purchases) {
     } else {
       cardsContainer.textContent = "This purchase has no PIN details.";
     }
+
+    report.appendChild(cardsContainer);
+    historyContainer.appendChild(report);
   });
 }
 
-// Subscribe to realtime inserts
-supabaseClient
-  .channel('realtime-purchases')
-  .on(
-    'postgres_changes',
-    { event: 'INSERT', schema: 'public', table: 'pin_purchases' },
-    () => {
-      loadLatestPurchase(); // refresh immediately
-    }
-  )
-  .subscribe();
-
 // Initialize
-loadLatestPurchase();
+loadPurchaseReports();
