@@ -1,4 +1,4 @@
-// Supabase project settings
+// Supabase setup
 const supabaseUrl = "https://beyykzogvaemjvecbzkf.supabase.co";
 const supabaseKey = "sb_publishable_JDxS16gwlyg9SxF0T2owYg_KKZqE9Gy";
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
@@ -6,11 +6,8 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 // DOM references
 const historyContainer = document.getElementById("historyContainer");
 document.getElementById("reportDate").textContent = new Date().toLocaleString();
-document.getElementById("downloadBtn").addEventListener("click", () => {
-  window.print();
-});
+document.getElementById("downloadBtn").addEventListener("click", () => window.print());
 
-// Logo mapping
 const logos = {
   "MTN": "mtn1.png",
   "GLO": "glo2.png",
@@ -23,39 +20,41 @@ function formatPin(pin) {
   return digits ? digits.replace(/(.{4})/g, "$1-").replace(/-$/, "") : "N/A";
 }
 
-// Load all purchases for the logged-in customer
-async function loadPurchaseReports() {
-  const { data: userData, error: userError } = await supabaseClient.auth.getUser();
-  if (userError || !userData?.user) {
-    historyContainer.textContent = "Redirecting to login...";
-    window.location.href = "login.html";
-    return;
-  }
-
-  document.getElementById("userName").textContent = userData.user.email || "Customer";
+// Load purchases by email
+async function loadPurchaseReportsByEmail(email, button) {
+  historyContainer.textContent = "Loading purchases...";
+  button.classList.add("loading");
 
   const { data, error } = await supabaseClient
     .from("pin_purchases")
     .select("network, denomination, quantity, total_cost, pins, created_at")
-    .eq("auth_id", userData.user.id)
+    .eq("user_email", email) // adjust column name if different
     .order("created_at", { ascending: false });
+
+  button.classList.remove("loading");
 
   if (error) {
     console.error("Error loading reports:", error);
-    historyContainer.textContent = "Unable to load your purchase reports.";
+    historyContainer.textContent = "Unable to load purchase reports.";
     return;
   }
   if (!data || data.length === 0) {
-    historyContainer.textContent = "No purchases found.";
+    historyContainer.textContent = "No purchases found for this email.";
     return;
   }
 
-  renderReports(data);
+  // Hide the email form once we have results
+  document.getElementById("emailForm").style.display = "none";
+
+  renderReports(data, email);
 }
 
-// Render each purchase as its own report-container
-function renderReports(purchases) {
+// Render reports
+function renderReports(purchases, email) {
   historyContainer.innerHTML = "";
+  const userHeading = document.createElement("h2");
+  userHeading.textContent = `Showing purchases for: ${email}`;
+  historyContainer.appendChild(userHeading);
 
   purchases.forEach((purchase) => {
     let pinsArray = purchase.pins;
@@ -66,10 +65,13 @@ function renderReports(purchases) {
     const report = document.createElement("div");
     report.className = "report-container";
 
-    // Optional heading per purchase
-    const heading = document.createElement("h1");
+    const heading = document.createElement("h3");
     heading.textContent = `Purchase Report - ${new Date(purchase.created_at).toLocaleDateString()}`;
     report.appendChild(heading);
+
+    const summary = document.createElement("p");
+    summary.textContent = `Quantity: ${purchase.quantity || 0}, Total Cost: ₦${purchase.total_cost || 0}`;
+    report.appendChild(summary);
 
     const cardsContainer = document.createElement("div");
     cardsContainer.className = "cards-container";
@@ -89,19 +91,5 @@ function renderReports(purchases) {
           </div>
           <p class="card-detail">S/N: ${pinObj.serial || "N/A"}</p>
           <p class="card-detail pin">PIN: ${formatPin(pinObj.pin)}</p>
-          <p class="card-detail">Dial *311*PIN#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${new Date(purchase.created_at).toLocaleTimeString()}.</p>
-          <p class="card-detail">Date: ${new Date(purchase.created_at).toLocaleDateString()}</p>
-        `;
-        cardsContainer.appendChild(card);
-      });
-    } else {
-      cardsContainer.textContent = "This purchase has no PIN details.";
-    }
-
-    report.appendChild(cardsContainer);
-    historyContainer.appendChild(report);
-  });
-}
-
-// Initialize
-loadPurchaseReports();
+          <p class="card-detail">Dial *311*PIN# — ${new Date(purchase.created_at).toLocaleTimeString()}</p>
+          <p class="card-detail">Date: ${

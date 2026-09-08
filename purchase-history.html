@@ -8,22 +8,32 @@
 <body>
   <header>
     <h1>Pesky Recharge - Purchase History</h1>
-    <p id="userName"></p>
     <p id="reportDate"></p>
   </header>
 
   <main>
+    <section class="lookup-section">
+      <form id="emailForm" class="email-form">
+        <label for="emailInput">Customer Email</label>
+        <input type="email" id="emailInput" placeholder="user@example.com" required>
+        <button id="viewPurchasesBtn" type="submit" class="btn-with-spinner">
+          <span class="btn-text">View Purchases</span>
+          <span class="spinner"></span>
+        </button>
+      </form>
+    </section>
+
     <div id="historyContainer" class="history-container">
-      Loading your purchase history...
+      Enter an email above to view purchase history.
     </div>
   </main>
 
   <footer>
-    <button id="downloadBtn">Download / Print</button>
+    <button id="downloadBtn" class="print-btn print-primary">Download / Print</button>
     <a href="index.html">Back to Dashboard</a>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-   <script src="javascript/history.js"></script>
+  <script src="javascript/history.js"></script>
 </body>
 </html>
