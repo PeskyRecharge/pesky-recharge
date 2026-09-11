@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buy Airtime - PESKY RECHARGE</title>
-  <link rel="stylesheet" href="css/airtime.css">
+  <title>Buy Data - PESKY RECHARGE</title>
+  <link rel="stylesheet" href="css/data.css">
 </head>
 <body>
-  <main class="airtime-shell">
-    <section class="airtime-card" aria-labelledby="pageTitle">
+  <main class="data-shell">
+    <section class="data-card" aria-labelledby="pageTitle">
       <a class="back-link" href="dashboard.html">Back to dashboard</a>
+
       <div class="page-heading">
         <div>
           <p class="eyebrow">PESKY RECHARGE</p>
-          <h1 id="pageTitle">Buy airtime</h1>
-          <p class="subheading">Top up any Nigerian mobile number instantly.</p>
+          <h1 id="pageTitle">Buy data</h1>
+          <p class="subheading">Choose a bundle and send it instantly to any Nigerian number.</p>
         </div>
         <div class="balance-pill">Balance <strong id="balance">₦0.00</strong></div>
       </div>
 
-      <form id="airtimeForm" novalidate>
+      <form id="dataForm" novalidate>
         <label class="field-label" for="phone">Phone number</label>
         <div class="phone-field">
           <span class="country-code">+234</span>
@@ -38,33 +39,38 @@
           <label class="network-option mobile"><input type="radio" name="network" value="9MOBILE"><span>9mobile</span></label>
         </div>
 
-        <label class="field-label" for="amount">Amount</label>
-        <div class="amount-grid" role="radiogroup" aria-label="Select airtime amount">
-          <label class="amount-option"><input type="radio" name="amount" value="100"><span>₦100<small>Pay ₦98.00</small></span></label>
-          <label class="amount-option"><input type="radio" name="amount" value="200"><span>₦200<small>Pay ₦196.00</small></span></label>
-          <label class="amount-option"><input type="radio" name="amount" value="500"><span>₦500<small>Pay ₦490.00</small></span></label>
-          <label class="amount-option"><input type="radio" name="amount" value="1000"><span>₦1,000<small>Pay ₦980.00</small></span></label>
-          <label class="amount-option"><input type="radio" name="amount" value="2000"><span>₦2,000<small>Pay ₦1,960.00</small></span></label>
-          <label class="amount-option"><input type="radio" name="amount" value="5000"><span>₦5,000<small>Pay ₦4,900.00</small></span></label>
-        </div>
+        <nav class="bundle-tabs" aria-label="Bundle categories">
+          <button class="bundle-tab active" type="button" data-bundle-tab="standard">Standard bundles</button>
+          <button class="bundle-tab" type="button" data-bundle-tab="glo">Glo plans</button>
+        </nav>
+
+        <section id="standardBundles" class="bundle-section" aria-labelledby="standardBundlesTitle">
+          <label id="standardBundlesTitle" class="field-label">Choose a data bundle</label>
+          <div id="bundleGrid" class="bundle-grid" role="radiogroup" aria-label="Select data bundle"></div>
+        </section>
+
+        <section id="gloPlans" class="bundle-section hidden" aria-labelledby="gloPlansTitle">
+          <label id="gloPlansTitle" class="field-label">Choose a live Glo plan</label>
+          <p class="section-hint">These plans come directly from the data provider and may include gifting, night, and social bundles.</p>
+          <div id="gloPlanGrid" class="bundle-grid" role="radiogroup" aria-label="Select Glo plan"></div>
+          <p id="gloPlansStatus" class="section-hint">Select Glo to load available plans.</p>
+        </section>
 
         <div id="message" class="message" role="status" aria-live="polite"></div>
-        <button id="buyAirtimeBtn" class="buy-button" type="submit">Buy airtime</button>
+        <button id="buyDataBtn" class="buy-button" type="submit">Buy data</button>
       </form>
 
       <section id="successPanel" class="success-panel hidden" role="status" aria-live="polite" aria-labelledby="successTitle">
         <div class="success-icon" aria-hidden="true">&#10003;</div>
         <p class="success-label">Transaction complete</p>
-        <h2 id="successTitle">Airtime purchase successful</h2>
-        <p id="successDetails">Your airtime has been sent successfully.</p>
-        <div class="success-actions">
-          <button id="successOkButton" class="success-ok" type="button">OK</button>
-        </div>
+        <h2 id="successTitle">Data purchase successful</h2>
+        <p id="successDetails">Your data bundle has been sent successfully.</p>
+        <button id="successOkButton" class="success-ok" type="button">OK</button>
       </section>
     </section>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="javascript/airtime.js"></script>
+  <script src="javascript/data.js"></script>
 </body>
 </html>

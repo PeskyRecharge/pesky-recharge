@@ -2,35 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Purchase History - Pesky Recharge</title>
   <link rel="stylesheet" href="css/history.css">
 </head>
 <body>
-  <header>
-    <h1>Pesky Recharge - Purchase History</h1>
-    <p id="reportDate"></p>
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">PESKY RECHARGE</p>
+      <h1>Purchase history</h1>
+      <p id="reportDate"></p>
+    </div>
+    <a class="back-link" href="admin.html">Back to admin</a>
   </header>
 
   <main>
     <section class="lookup-section">
       <form id="emailForm" class="email-form">
-        <label for="emailInput">Customer Email</label>
+        <label for="emailInput">Customer email</label>
         <input type="email" id="emailInput" placeholder="user@example.com" required>
         <button id="viewPurchasesBtn" type="submit" class="btn-with-spinner">
-          <span class="btn-text">View Purchases</span>
+          <span class="btn-text">View purchases</span>
           <span class="spinner"></span>
         </button>
       </form>
     </section>
 
     <div id="historyContainer" class="history-container">
-      Enter an email above to view purchase history.
+      Enter a customer email to view purchase batches.
     </div>
   </main>
 
-  <footer>
-    <button id="downloadBtn" class="print-btn print-primary">Download / Print</button>
-    <a href="index.html">Back to Dashboard</a>
+  <footer class="page-footer">
+    <a href="admin.html">Back to admin</a>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

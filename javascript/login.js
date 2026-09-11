@@ -4,93 +4,71 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey)
 
 const form = document.getElementById("loginForm")
 const loginBtn = form.querySelector('button[type="submit"]')
-const otpSection = document.getElementById("otpSection")
-const verifyBtn = document.getElementById("verifyBtn")
 const successMessage = document.getElementById("successMessage")
 
-function setButtonLoading(button, text) {
-  button.disabled = true
-  button.classList.add("loading")
-  button.innerHTML = `<span class="spinner" aria-hidden="true"></span>${text}`
+function setButtonLoading(isLoading) {
+  loginBtn.disabled = isLoading
+  loginBtn.classList.toggle("loading", isLoading)
+  loginBtn.innerHTML = isLoading
+    ? '<span class="spinner" aria-hidden="true"></span>Signing in...'
+    : "Sign In"
 }
 
-function resetButton(button, text) {
-  button.disabled = false
-  button.classList.remove("loading")
-  button.textContent = text
+function normalizePhone(value) {
+  const digits = value.replace(/\D/g, "")
+  return digits.startsWith("234") ? `0${digits.slice(3)}` : digits
 }
 
 form.addEventListener("submit", async function(e) {
   e.preventDefault()
-  console.log("Login form submitted")
 
-  const email = document.getElementById("email").value.trim()
-  setButtonLoading(loginBtn, "Sending OTP...")
+  const phone = normalizePhone(document.getElementById("phone").value.trim())
+  const password = document.getElementById("password").value
+
+  if (!/^0[789][01]\d{8}$/.test(phone)) {
+    alert("Enter a valid Nigerian phone number.")
+    return
+  }
+
+  if (!password) {
+    alert("Enter your password.")
+    return
+  }
+
+  setButtonLoading(true)
 
   try {
-    // Send OTP for login (Supabase will error if user doesn't exist)
-    const { error } = await supabaseClient.auth.signInWithOtp({
-      email: email,
-      options: {
-        shouldCreateUser: false // login only
-      }
-    })
+    const { data: lookup, error: lookupError } = await supabaseClient
+      .rpc("get_login_email_by_phone", { phone_value: phone })
 
-    if (error) {
-      alert("Email doesn't exist. Please sign up first.")
-      return
+    if (lookupError || !lookup) {
+      throw new Error("Phone number or password is incorrect.")
     }
 
-    // Show OTP section
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: lookup,
+      password
+    })
+
+    if (error || !data?.user) {
+      throw new Error("Phone number or password is incorrect.")
+    }
+
+    try {
+      if (notificationsEnabled(data.user.id, "login")) {
+        showAccountNotification("Pesky Recharge login", { body: "Your account was accessed successfully." });
+      }
+    } catch (notificationError) {
+      console.warn("Login notification failed:", notificationError)
+    }
+
+    successMessage.classList.remove("hidden")
     form.classList.add("hidden")
-    otpSection.classList.remove("hidden")
+    window.location.href = "dashboard.html"
   } catch (err) {
-    console.error("Error sending login OTP:", err)
-    alert("Unable to send OTP. Please try again.")
+    console.error("Login error:", err)
+    alert(err.message || "Unable to sign in. Please try again.")
   } finally {
-    resetButton(loginBtn, "Login")
+    setButtonLoading(false)
   }
 })
-
-verifyBtn.addEventListener("click", async function() {
-  const code = document.getElementById("code").value.trim()
-  const email = document.getElementById("email").value.trim()
-  setButtonLoading(verifyBtn, "Verifying...")
-
-  try {
-    // Verify OTP
-    const { data, error } = await supabaseClient.auth.verifyOtp({
-      email: email,
-      token: code,
-      type: "email"
-    })
-
-    if (error) {
-      alert("Error verifying: " + error.message)
-      return
-    }
-
-    if (data?.user) {
-      try {
-        if (notificationsEnabled(data.user.id, "login")) {
-          showAccountNotification("Pesky Recharge login", { body: "Your account was accessed successfully." });
-        }
-      } catch (notificationError) {
-        console.warn("Login notification failed:", notificationError)
-      }
-
-      successMessage.classList.remove("hidden")
-      otpSection.classList.add("hidden")
-
-      window.location.href = "dashboard.html"
-    } else {
-      alert("Invalid code. Please try again.")
-    }
-  } catch (err) {
-    console.error("Error verifying login:", err)
-    alert("Unable to verify login. Please try again.")
-  } finally {
-    resetButton(verifyBtn, "Verify OTP")
-  }
-  }
-)

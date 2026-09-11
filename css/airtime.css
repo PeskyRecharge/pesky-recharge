@@ -96,7 +96,9 @@ h1 { margin: 0; font-size: 32px; letter-spacing: 0; }
 .network-option, .amount-option { position: relative; cursor: pointer; }
 .network-option input, .amount-option input { position: absolute; opacity: 0; }
 .network-option span, .amount-option span { display: block; padding: 12px 6px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); font-size: 12px; font-weight: 700; text-align: center; transition: .2s; }
+.amount-option small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; font-weight: 600; }
 .network-option input:checked + span, .amount-option input:checked + span { color: #fff; border-color: var(--accent); background: var(--accent); }
+.amount-option input:checked + span small { color: rgba(255,255,255,.85); }
 .network-option input:focus-visible + span, .amount-option input:focus-visible + span { outline: 3px solid rgba(11, 122, 117, .2); }
 .network-option.mtn input:checked + span { background: #e5aa00; border-color: #e5aa00; color: #16212b; }
 .network-option.glo input:checked + span { background: #168a3d; border-color: #168a3d; }
@@ -107,9 +109,18 @@ h1 { margin: 0; font-size: 32px; letter-spacing: 0; }
 .buy-button { width: 100%; padding: 14px; border: 0; border-radius: 9px; color: #fff; background: var(--accent); font: inherit; font-weight: 700; cursor: pointer; }
 .buy-button:hover { background: var(--accent-dark); }
 .buy-button:disabled { background: #91aaa8; cursor: wait; }
+.success-panel { padding: 30px 22px; border: 1px solid #b8e3d4; border-radius: 12px; background: linear-gradient(145deg, #f4fffb, #e8f8f1); text-align: center; animation: successReveal .35s ease-out; }
+.success-icon { display: grid; width: 52px; height: 52px; margin: 0 auto 16px; place-items: center; border-radius: 50%; color: #fff; background: #168a61; font-size: 28px; font-weight: 700; }
+.success-label { margin-bottom: 7px; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; }
+.success-panel h2 { margin: 0 0 9px; font-size: 23px; }
+.success-panel p:not(.success-label) { margin-bottom: 20px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.success-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+.success-ok { background: #163d63; }
+.success-ok:hover { background: #102f4d; }
 .spinner { display: inline-block; width: 14px; height: 14px; margin-right: 7px; vertical-align: -2px; border: 2px solid rgba(255,255,255,.45); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; }
 .hidden { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
+@keyframes successReveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (max-width: 520px) {
   .airtime-shell { width: min(100% - 20px, 560px); padding-top: 10px; }
