@@ -27,8 +27,12 @@ const dashboardWrapper = document.getElementById("dashboardWrapper");
 
 //  Login
 document.getElementById("loginBtn").addEventListener("click", async () => {
+  const loginButton = document.getElementById("loginBtn");
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
+
+  loginButton.disabled = true;
+  loginButton.innerHTML = '<span class="login-spinner" aria-hidden="true"></span>Signing in...';
 
   const { data, error } = await supabaseClient.auth.signInWithPassword({
     email,
@@ -37,6 +41,8 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
 
   if (error) {
     document.getElementById("loginError").textContent = "Login failed: " + error.message;
+    loginButton.disabled = false;
+    loginButton.textContent = "Login";
     return;
   }
 

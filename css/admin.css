@@ -137,6 +137,27 @@ ul li {
   margin-top: 10px;
 }
 
+#loginBtn:disabled {
+  cursor: wait;
+  opacity: 0.82;
+}
+
+.login-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: -3px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: admin-login-spin 0.75s linear infinite;
+}
+
+@keyframes admin-login-spin {
+  to { transform: rotate(360deg); }
+}
+
 #loginBtn:hover {
   background: #005fa3;
 }

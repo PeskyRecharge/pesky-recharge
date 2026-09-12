@@ -5,6 +5,7 @@ const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 const statusMessage = document.getElementById("statusMessage");
 let currentUser;
 let customer;
+let passwordEmailVerified = false;
 const buttonLabels = new Map();
 
 function setButtonLoading(button, loadingText) {
@@ -63,6 +64,7 @@ async function loadProfile() {
   document.getElementById("notificationToggle").checked = notificationsEnabled(currentUser.id, "activity");
   document.getElementById("loginNotificationToggle").checked = notificationsEnabled(currentUser.id, "login");
   document.getElementById("currentEmailInput").value = customer.email || currentUser.email || "";
+  document.getElementById("passwordEmailInput").value = customer.email || currentUser.email || "";
   document.getElementById("loginActivity").textContent = `Current session active since ${new Date(currentUser.last_sign_in_at || Date.now()).toLocaleString()}.`;
   checkMfa();
 }
@@ -142,6 +144,58 @@ document.getElementById("verifyNewEmailBtn").addEventListener("click", async eve
   document.getElementById("newEmailStep").hidden = true;
   document.getElementById("currentEmailStep").hidden = false;
   setStatus("Your email address has been changed successfully.");
+  resetButton(button);
+});
+
+document.getElementById("sendPasswordCodeBtn").addEventListener("click", async event => {
+  const button = event.currentTarget;
+  const email = document.getElementById("passwordEmailInput").value.trim();
+  if (!email) { setStatus("Your account email is not available. Please refresh and try again.", true); return; }
+  setButtonLoading(button, "Sending...");
+  const { error } = await supabaseClient.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  if (error) { setStatus(error.message, true); resetButton(button); return; }
+  document.getElementById("passwordCodeStep").hidden = false;
+  button.hidden = true;
+  setStatus("A verification code was sent to your account email.");
+  button.disabled = false;
+  button.classList.remove("is-loading");
+});
+
+document.getElementById("verifyPasswordCodeBtn").addEventListener("click", async event => {
+  const button = event.currentTarget;
+  const email = document.getElementById("passwordEmailInput").value.trim();
+  const code = document.getElementById("passwordCodeInput").value.trim();
+  if (!code) { setStatus("Enter the code sent to your account email.", true); return; }
+  setButtonLoading(button, "Verifying...");
+  const { data, error } = await supabaseClient.auth.verifyOtp({ email, token: code, type: "email" });
+  if (error) { setStatus(error.message, true); resetButton(button); return; }
+  if (!data?.user || data.user.id !== currentUser.id) { setStatus("That code did not verify this account. Please try again.", true); resetButton(button); return; }
+  passwordEmailVerified = true;
+  document.getElementById("passwordCodeStep").hidden = true;
+  document.getElementById("passwordVerificationStep").hidden = true;
+  document.getElementById("passwordForm").hidden = false;
+  setStatus("Email verified. You can now choose a new password.");
+  resetButton(button);
+});
+
+document.getElementById("passwordForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!passwordEmailVerified) { setStatus("Verify your email before changing your password.", true); return; }
+  const password = document.getElementById("newPasswordInput").value;
+  const confirmation = document.getElementById("confirmPasswordInput").value;
+  const button = event.submitter;
+  if (password.length < 8) { setStatus("Your new password must be at least 8 characters.", true); return; }
+  if (password !== confirmation) { setStatus("The passwords do not match.", true); return; }
+  setButtonLoading(button, "Updating...");
+  const { error } = await supabaseClient.auth.updateUser({ password });
+  if (error) { setStatus(error.message, true); resetButton(button); return; }
+  passwordEmailVerified = false;
+  document.getElementById("passwordForm").reset();
+  document.getElementById("passwordForm").hidden = true;
+  document.getElementById("passwordVerificationStep").hidden = false;
+  document.getElementById("passwordCodeStep").hidden = true;
+  document.getElementById("sendPasswordCodeBtn").hidden = false;
+  setStatus("Your password has been changed successfully.");
   resetButton(button);
 });
 

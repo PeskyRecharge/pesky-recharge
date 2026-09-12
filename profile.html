@@ -69,6 +69,28 @@
       </form>
     </section>
 
+    <section class="panel password-panel">
+      <div class="section-heading"><div><p class="eyebrow">Account security</p><h2>Change password</h2></div><span class="security-badge">Email verification required</span></div>
+      <p class="helper-text password-intro">For your protection, confirm your email address before choosing a new password.</p>
+      <div id="passwordVerificationStep" class="password-verification-step">
+        <label for="passwordEmailInput">Account email</label>
+        <div class="input-row"><input id="passwordEmailInput" type="email" readonly><button id="sendPasswordCodeBtn" class="primary-button" type="button">Send verification code</button></div>
+        <div id="passwordCodeStep" class="verification-step" hidden>
+          <label for="passwordCodeInput">Verification code</label>
+          <div class="input-row"><input id="passwordCodeInput" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Enter 6-digit code"><button id="verifyPasswordCodeBtn" class="primary-button" type="button">Verify email</button></div>
+          <p class="helper-text">We sent a six-digit code to your account email.</p>
+        </div>
+      </div>
+      <form id="passwordForm" class="password-form" hidden>
+        <div class="password-fields">
+          <label for="newPasswordInput">New password<input id="newPasswordInput" type="password" minlength="8" autocomplete="new-password" required placeholder="At least 8 characters"></label>
+          <label for="confirmPasswordInput">Confirm new password<input id="confirmPasswordInput" type="password" minlength="8" autocomplete="new-password" required placeholder="Re-enter your new password"></label>
+        </div>
+        <p class="password-guidance">Use at least 8 characters. A mix of letters, numbers, and symbols makes your password stronger.</p>
+        <button class="primary-button" type="submit">Update password</button>
+      </form>
+    </section>
+
     <section class="settings-list panel">
       <div class="section-heading"><div><p class="eyebrow">Preferences</p><h2>Notifications</h2></div></div>
       <label class="setting-row"><span><strong>Purchase and deposit alerts</strong><small>Allow this device to show account activity notifications.</small></span><input id="notificationToggle" type="checkbox"></label>
