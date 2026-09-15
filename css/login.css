@@ -198,6 +198,49 @@ body {
   transform: none;
 }
 
+.forgot-password-link {
+  display: block;
+  margin: -0.5rem auto 0;
+  padding: 0.25rem;
+  border: 0;
+  color: #9a7400;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.forgot-password-link:hover {
+  color: #6f5400;
+  text-decoration: underline;
+}
+
+.reset-title {
+  margin-bottom: 0.5rem;
+  color: #0f172a;
+  font-size: 1.35rem;
+}
+
+.reset-form {
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.reset-cancel {
+  border: 0;
+  color: #666;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.reset-cancel:hover {
+  color: #0f172a;
+  text-decoration: underline;
+}
+
 .btn-secondary {
   background: rgba(255, 215, 0, 0.1);
   color: #ffd700;

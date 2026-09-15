@@ -61,7 +61,7 @@ h1 { margin-bottom: 6px; font-size: clamp(28px, 4vw, 42px); }
 .network-logo { width: 19px; height: auto; }
 .amount { display: inline-block; color: #0078d7; font-size: 14px; font-weight: 700; white-space: nowrap; }
 .card-detail { margin: 1px 0; color: #333; font-size: 12px; overflow-wrap: anywhere; }
-.pin { display: block; width: 100%; box-sizing: border-box; margin: 1px 0; padding: 3px 2px; color: #d32f2f; background: #e0e0e0; border-radius: 3px; font-size: 40px; line-height: 1.25; font-weight: 700; letter-spacing: .5px; overflow-wrap: anywhere; }
+.pin { display: block; width: 100%; box-sizing: border-box; margin: 1px 0; padding: 3px 2px; color: #d32f2f; background: #e0e0e0; border-radius: 3px; font-size: 11px; line-height: 1.25; font-weight: 700; letter-spacing: .5px; overflow-wrap: anywhere; }
 .empty-batch { color: var(--muted); font-size: 13px; }
 .page-footer { padding: 0 0 36px; }
 
@@ -69,10 +69,10 @@ h1 { margin-bottom: 6px; font-size: clamp(28px, 4vw, 42px); }
 .history-container .report-container h1 { margin: 0 0 2px; text-align: center; font-size: 13px; color: #0078d7; }
 .history-container .report-container > p { margin: 1px 0; font-size: 9px; }
 .history-container .report-container .cards-container { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 15px; }
-.history-container .report-container .recharge-card { padding: 4px 6px; font-size: 12px; line-height: 1.25; }
-.history-container .report-container .reference { margin-bottom: 0; font-size: 12px; }
+.history-container .report-container .recharge-card { padding: 4px 6px; font-size: 9px; line-height: 1; }
+.history-container .report-container .reference { margin-bottom: 0; font-size: 9px; }
 .history-container .report-container .card-detail { margin: 1px 0; font-size: 12px; }
-.history-container .report-container .pin { display: block; width: 100%; box-sizing: border-box; margin: 1px 0; padding: 3px 2px; font-size: 40px; line-height: 1.25; letter-spacing: .5px; }
+.history-container .report-container .pin { margin: 1px 0; padding: 3px 2px; font-size: 11px; letter-spacing: .5px; }
 .report-actions { margin-top: 15px; text-align: center; }
 .report-actions .print-btn { border: 0; padding: 10px 20px; border-radius: 6px; color: #0a4f9c; background: #e8f4ff; border: 1px solid #b7d9ff; font-size: .9rem; font-weight: 600; cursor: pointer; }
 
@@ -84,7 +84,7 @@ h1 { margin-bottom: 6px; font-size: clamp(28px, 4vw, 42px); }
   .results-heading { display: block; }
   .results-heading .muted { margin-top: 6px; }
   .batch { padding: 15px; }
-  .cards-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cards-container { grid-template-columns: 1fr; }
   .batch-header { align-items: stretch; flex-direction: column; }
   .pdf-button { width: 100%; }
   .history-container .report-container .cards-container { grid-template-columns: 1fr; }
@@ -101,6 +101,12 @@ h1 { margin-bottom: 6px; font-size: clamp(28px, 4vw, 42px); }
   .report-actions { display: none; }
   .history-container .report-container { max-width: none; width: 100%; margin: 0; padding: 0; box-shadow: none; }
   .history-container .report-container .cards-container { margin-top: 6px; gap: 5px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .history-container .report-container .recharge-card { font-size: 11px; }
+  .history-container .report-container .reference { font-size: 11px; }
+  .history-container .report-container .amount { font-size: 14px; }
+  .history-container .report-container .card-detail { font-size: 11px; }
+  .history-container .pin { font-size: 16px; line-height: 1.1; font-weight: 700; }
+  .history-container .report-container .pin { display: block; width: 100%; box-sizing: border-box; margin: 3px 0; padding: 3px 4px; border: 1px solid #c8cdd3; background: #f1f3f5; font-size: 16px; line-height: 1.1; font-weight: 700; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .purchase-batch-report { break-after: page; page-break-after: always; }
   .purchase-batch-report:last-of-type { break-after: auto; page-break-after: auto; }
 }
