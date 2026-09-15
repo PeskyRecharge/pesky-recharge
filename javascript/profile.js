@@ -35,12 +35,16 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[character]));
 }
 
+function getSavedAvatar() {
+  return currentUser.user_metadata?.avatar_data || localStorage.getItem(`pesky-avatar-${currentUser.id}`);
+}
+
 function renderProfile() {
   const fullName = `${displayValue(customer.surname, "")} ${displayValue(customer.other_name, "")}`.trim() || "Your profile";
   document.getElementById("profileHeading").textContent = fullName;
   document.getElementById("profileEmail").textContent = displayValue(customer.email, currentUser.email);
   const initials = fullName.split(" ").filter(Boolean).slice(0, 2).map(name => name[0]).join("").toUpperCase() || "?";
-  const savedAvatar = localStorage.getItem(`pesky-avatar-${currentUser.id}`);
+  const savedAvatar = getSavedAvatar();
   document.getElementById("avatarPreview").innerHTML = savedAvatar ? `<img src="${escapeHtml(savedAvatar)}" alt="${escapeHtml(fullName)} profile picture">` : escapeHtml(initials);
   document.getElementById("detailsList").innerHTML = `
     <div><dt>Surname</dt><dd>${escapeHtml(displayValue(customer.surname))}</dd></div>
@@ -199,9 +203,18 @@ document.getElementById("passwordForm").addEventListener("submit", async event =
   resetButton(button);
 });
 
-document.getElementById("avatarInput").addEventListener("change", event => {
+document.getElementById("avatarInput").addEventListener("change", async event => {
   const file = event.target.files[0]; if (!file || !file.type.startsWith("image/")) return;
-  const reader = new FileReader(); reader.onload = () => { localStorage.setItem(`pesky-avatar-${currentUser.id}`, reader.result); renderProfile(); setStatus("Profile picture updated on this device."); }; reader.readAsDataURL(file);
+  const reader = new FileReader();
+  reader.onload = async () => {
+    const { data, error } = await supabaseClient.auth.updateUser({ data: { avatar_data: reader.result } });
+    if (error) { setStatus("Unable to save your profile picture. Please try again.", true); return; }
+    currentUser = data.user;
+    localStorage.setItem(`pesky-avatar-${currentUser.id}`, reader.result);
+    renderProfile();
+    setStatus("Profile picture updated successfully.");
+  };
+  reader.readAsDataURL(file);
 });
 
 async function checkMfa() {

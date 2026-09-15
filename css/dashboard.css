@@ -85,8 +85,6 @@ body {
 .card.airtime:hover { background: #12578e; }
 .card.data { background: #f1f3f5; color: #4d5660; }
 .card.data:hover { background: #f1f3f5; }
-.card.coming-soon { cursor: default; opacity: .84; }
-.card.coming-soon .card-action { color: #8a5a00; opacity: 1; }
 
 /* Bottom Bar */
 .bottom-bar {

@@ -3,70 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buy Data - PESKY RECHARGE</title>
+  <title>PESKY RECHARGE - Buy Data</title>
   <link rel="stylesheet" href="css/data.css">
 </head>
 <body>
   <main class="data-shell">
-    <section class="data-card" aria-labelledby="pageTitle">
-      <a class="back-link" href="dashboard.html">Back to dashboard</a>
+    <section class="data-card">
+      <a class="back-link" href="dashboard.html">← Back to dashboard</a>
 
-      <div class="page-heading">
+      <header class="page-heading">
         <div>
           <p class="eyebrow">PESKY RECHARGE</p>
-          <h1 id="pageTitle">Buy data</h1>
+          <h1>Buy Data</h1>
           <p class="subheading">Choose a bundle and send it instantly to any Nigerian number.</p>
         </div>
         <div class="balance-pill">Balance <strong id="balance">₦0.00</strong></div>
-      </div>
+      </header>
 
       <form id="dataForm" novalidate>
+        <!-- Phone -->
         <label class="field-label" for="phone">Phone number</label>
         <div class="phone-field">
           <span class="country-code">+234</span>
-          <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="801 234 5678" maxlength="13" required>
+          <input id="phone" name="phone" type="tel" placeholder="801 234 5678" maxlength="13" required>
         </div>
         <p id="phoneHint" class="field-hint">Enter an 11-digit Nigerian number.</p>
 
+        <!-- Network -->
         <div class="network-heading">
           <span class="field-label">Network</span>
           <span id="detectedNetwork" class="detected-network">Waiting for number</span>
         </div>
         <div class="network-grid" role="radiogroup" aria-label="Select network">
-          <label class="network-option mtn"><input type="radio" name="network" value="MTN"><span>MTN</span></label>
-          <label class="network-option glo"><input type="radio" name="network" value="GLO"><span>Glo</span></label>
-          <label class="network-option airtel"><input type="radio" name="network" value="AIRTEL"><span>Airtel</span></label>
-          <label class="network-option mobile"><input type="radio" name="network" value="9MOBILE"><span>9mobile</span></label>
+          <label class="network-option"><input type="radio" name="network" value="MTN"><span>MTN</span></label>
+          <label class="network-option"><input type="radio" name="network" value="GLO"><span>Glo</span></label>
+          <label class="network-option"><input type="radio" name="network" value="AIRTEL"><span>Airtel</span></label>
+          <label class="network-option"><input type="radio" name="network" value="9MOBILE"><span>9mobile</span></label>
         </div>
 
-        <nav class="bundle-tabs" aria-label="Bundle categories">
-          <button class="bundle-tab active" type="button" data-bundle-tab="standard">Standard bundles</button>
-          <button class="bundle-tab" type="button" data-bundle-tab="glo">Glo plans</button>
-        </nav>
-
-        <section id="standardBundles" class="bundle-section" aria-labelledby="standardBundlesTitle">
-          <label id="standardBundlesTitle" class="field-label">Choose a data bundle</label>
-          <div id="bundleGrid" class="bundle-grid" role="radiogroup" aria-label="Select data bundle"></div>
+        <!-- Bundles -->
+        <section id="bundleSection" class="bundle-section" aria-labelledby="bundleLabel">
+          <div class="bundle-heading">
+            <span id="bundleLabel" class="field-label">Choose a data bundle</span>
+            <span id="planCount" class="plan-count"></span>
+          </div>
+          <label class="plan-search-label" for="planSearch">Search plans</label>
+          <input id="planSearch" class="plan-search" type="search" placeholder="Search by size, type or validity" autocomplete="off">
+          <div id="bundleGrid" class="bundle-grid"></div>
         </section>
 
-        <section id="gloPlans" class="bundle-section hidden" aria-labelledby="gloPlansTitle">
-          <label id="gloPlansTitle" class="field-label">Choose a live Glo plan</label>
-          <p class="section-hint">These plans come directly from the data provider and may include gifting, night, and social bundles.</p>
-          <div id="gloPlanGrid" class="bundle-grid" role="radiogroup" aria-label="Select Glo plan"></div>
-          <p id="gloPlansStatus" class="section-hint">Select Glo to load available plans.</p>
-        </section>
-
-        <div id="message" class="message" role="status" aria-live="polite"></div>
-        <button id="buyDataBtn" class="buy-button" type="submit">Buy data</button>
+        <!-- Error + Button -->
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+        <button id="buyDataBtn" type="submit" class="buy-button">Buy data</button>
       </form>
 
-      <section id="successPanel" class="success-panel hidden" role="status" aria-live="polite" aria-labelledby="successTitle">
-        <div class="success-icon" aria-hidden="true">&#10003;</div>
+      <!-- Success -->
+      <div id="successPanel" class="success-panel hidden">
+        <div class="success-icon">&#10003;</div>
         <p class="success-label">Transaction complete</p>
-        <h2 id="successTitle">Data purchase successful</h2>
-        <p id="successDetails">Your data bundle has been sent successfully.</p>
+        <h2>Data purchase successful</h2>
+        <p id="successDetails"></p>
         <button id="successOkButton" class="success-ok" type="button">OK</button>
-      </section>
+      </div>
     </section>
   </main>
 

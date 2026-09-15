@@ -54,14 +54,14 @@ h1 { margin-bottom: 6px; font-size: clamp(28px, 4vw, 42px); }
 .batch-summary { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 13px 0 4px; }
 .summary-item { color: var(--muted); font-size: 12px; }
 .cards-container { display: grid; width: 100%; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 15px; align-items: start; }
-.recharge-card { min-width: 0; height: fit-content; padding: 4px 6px; border: 1px solid #777; border-radius: 3px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); font-size: 9px; line-height: 1; }
-.reference { display: block; margin-bottom: 4px; color: #2e7d32; font-size: 9px; font-weight: 700; }
+.recharge-card { min-width: 0; height: fit-content; padding: 4px 6px; border: 1px solid #777; border-radius: 3px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); font-size: 12px; line-height: 1.25; }
+.reference { display: block; margin-bottom: 4px; color: #2e7d32; font-size: 12px; font-weight: 700; }
 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
 .card-branding { display: flex; align-items: center; gap: 3px; }
 .network-logo { width: 19px; height: auto; }
-.amount { display: inline-block; color: #0078d7; font-size: 12px; font-weight: 700; white-space: nowrap; }
-.card-detail { margin: 1px 0; color: #333; font-size: 9px; overflow-wrap: anywhere; }
-.pin { margin: 1px 0; padding: 3px 2px; color: #d32f2f; background: #e0e0e0; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: .5px; overflow-wrap: anywhere; }
+.amount { display: inline-block; color: #0078d7; font-size: 14px; font-weight: 700; white-space: nowrap; }
+.card-detail { margin: 1px 0; color: #333; font-size: 12px; overflow-wrap: anywhere; }
+.pin { display: block; width: 100%; box-sizing: border-box; margin: 1px 0; padding: 3px 2px; color: #d32f2f; background: #e0e0e0; border-radius: 3px; font-size: 40px; line-height: 1.25; font-weight: 700; letter-spacing: .5px; overflow-wrap: anywhere; }
 .empty-batch { color: var(--muted); font-size: 13px; }
 .page-footer { padding: 0 0 36px; }
 
@@ -69,10 +69,10 @@ h1 { margin-bottom: 6px; font-size: clamp(28px, 4vw, 42px); }
 .history-container .report-container h1 { margin: 0 0 2px; text-align: center; font-size: 13px; color: #0078d7; }
 .history-container .report-container > p { margin: 1px 0; font-size: 9px; }
 .history-container .report-container .cards-container { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 15px; }
-.history-container .report-container .recharge-card { padding: 4px 6px; font-size: 9px; line-height: 1; }
-.history-container .report-container .reference { margin-bottom: 0; font-size: 9px; }
-.history-container .report-container .card-detail { margin: 1px 0; font-size: 9px; }
-.history-container .report-container .pin { margin: 1px 0; padding: 3px 2px; font-size: 11px; letter-spacing: .5px; }
+.history-container .report-container .recharge-card { padding: 4px 6px; font-size: 12px; line-height: 1.25; }
+.history-container .report-container .reference { margin-bottom: 0; font-size: 12px; }
+.history-container .report-container .card-detail { margin: 1px 0; font-size: 12px; }
+.history-container .report-container .pin { display: block; width: 100%; box-sizing: border-box; margin: 1px 0; padding: 3px 2px; font-size: 40px; line-height: 1.25; letter-spacing: .5px; }
 .report-actions { margin-top: 15px; text-align: center; }
 .report-actions .print-btn { border: 0; padding: 10px 20px; border-radius: 6px; color: #0a4f9c; background: #e8f4ff; border: 1px solid #b7d9ff; font-size: .9rem; font-weight: 600; cursor: pointer; }
 
