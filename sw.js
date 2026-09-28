@@ -6,17 +6,28 @@ const ASSETS = [
   "/css/index.css",
   "/javascript/index.js",
 
+  // Login Pages & Assets
+  "/login.html",
+  "/css/login.css",
+  "/javascript/login.js",
+
+  // Account Creation Pages & Assets
+  "/create-account.html",
+  "/css/create-account.css",
+  "/javascript/create-account.js",
+
+  // Static Auxiliary Pages
   "/contact.html",
   "/css/contact.css",
-  
 
   "/terms.html",
   "/css/terms.css",
-  
 
   "/privacy.html",
   "/css/privacy.css",
-  
+
+  // Shared JS & Images
+  "/javascript/notifications.js",
   "/img/pesky4.png",
   "/manifest.json"
 ];
