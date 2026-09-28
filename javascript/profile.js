@@ -285,3 +285,45 @@ document.getElementById("notificationToggle").addEventListener("change", event =
 document.getElementById("loginNotificationToggle").addEventListener("change", event => requestNotifications(event.target));
 document.getElementById("signOutBtn").addEventListener("click", async event => { const button = event.currentTarget; setButtonLoading(button, "Signing out..."); const { error } = await supabaseClient.auth.signOut({ scope: "global" }); if (error) { setStatus(error.message, true); resetButton(button); return; } window.location.href = "index.html"; });
 loadProfile();
+
+
+// Fetch only the User ID
+async function loadUserId() {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
+
+  const { data, error } = await supabaseClient
+    .from("customers")
+    .select("user_id")
+    .eq("auth_id", user.id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching user ID:", error);
+    return;
+  }
+
+  document.getElementById("profileUserId").textContent = data.user_id || "Not assigned";
+}
+
+// Copy User ID to clipboard
+document.getElementById("copyUserIdBtn").addEventListener("click", () => {
+  const userId = document.getElementById("profileUserId").textContent;
+  if (userId && userId !== "Loading..." && userId !== "Not assigned") {
+    navigator.clipboard.writeText(userId).then(() => {
+      // Show "Copied!" on screen instead of alert
+      const status = document.getElementById("statusMessage");
+      status.textContent = "Copied!";
+      status.style.color = "#0d6b57";
+
+      // Clear message after 2 seconds
+      setTimeout(() => {
+        status.textContent = "";
+      }, 2000);
+    }).catch(err => {
+      console.error("Failed to copy ID:", err);
+    });
+  }
+});
+
+loadUserId();

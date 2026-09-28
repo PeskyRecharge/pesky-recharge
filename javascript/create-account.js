@@ -26,6 +26,11 @@ function normalizePhone(value) {
   return digits.startsWith("234") ? `0${digits.slice(3)}` : digits;
 }
 
+// Helper: generate unique user ID
+function generateUserId() {
+  return Math.random().toString(36).substring(2, 9).toUpperCase(); 
+}
+
 //  Step 1: Handle form submit → send OTP
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
@@ -101,31 +106,35 @@ verifyBtn.addEventListener("click", async function () {
         return;
       }
 
-    // Collect extra fields
-    const surname = document.getElementById("surname").value.trim();
-    const othername = document.getElementById("othername").value.trim();
-    const phone = normalizePhone(document.getElementById("phone").value.trim());
-    const gender = document.getElementById("gender").value.trim();
+      // Collect extra fields
+      const surname = document.getElementById("surname").value.trim();
+      const othername = document.getElementById("othername").value.trim();
+      const phone = normalizePhone(document.getElementById("phone").value.trim());
+      const gender = document.getElementById("gender").value.trim();
 
-    //  Update customers row with extra details
-    const { error: updateError } = await supabaseClient
-      .from("customers")
-      .update({
-        surname: surname,
-        other_name: othername,
-        phone_number: phone,
-        gender: gender
-      })
-      .eq("auth_id", user.id);
+      // Generate unique user ID
+      const userId = generateUserId();
 
-    if (updateError) {
-      console.error("Update error:", updateError.message);
-      alert("Error saving customer details: " + updateError.message);
-      return;
-    }
+      //  Update customers row with extra details + user_id
+      const { error: updateError } = await supabaseClient
+        .from("customers")
+        .update({
+          surname: surname,
+          other_name: othername,
+          phone_number: phone,
+          gender: gender,
+          user_id: userId
+        })
+        .eq("auth_id", user.id);
 
-    successMessage.classList.remove("hidden");
-    otpSection.classList.add("hidden");
+      if (updateError) {
+        console.error("Update error:", updateError.message);
+        alert("Error saving customer details: " + updateError.message);
+        return;
+      }
+
+      successMessage.classList.remove("hidden");
+      otpSection.classList.add("hidden");
 
       window.location.href = "dashboard.html";
     } else {
@@ -138,3 +147,13 @@ verifyBtn.addEventListener("click", async function () {
     resetButton(verifyBtn, "Verify");
   }
 });
+
+
+JavaScript
+function showNetworkModal() {
+document.getElementById("networkModal").style.display = "flex";
+}
+ 
+function closeNetworkModal() {
+document.getElementById("networkModal").style.display = "none";
+}

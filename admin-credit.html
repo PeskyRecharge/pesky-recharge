@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Credit - PESKY RECHARGE</title>
+  <link rel="stylesheet" href="css/admin-credit.css">
+</head>
+<body>
+  <header class="admin-header">
+    <h1>Admin Credit Panel</h1>
+  </header>
+
+  <main class="admin-shell">
+    <!-- Login Section -->
+    <section id="loginSection" class="panel">
+      <h2>Admin Login</h2>
+      <form id="loginForm" class="login-form">
+        <label>Email
+          <input id="emailInput" type="email" required placeholder="Enter email">
+        </label>
+        <label>Password
+          <input id="passwordInput" type="password" required placeholder="Enter password">
+        </label>
+        <button class="primary-button" type="submit">Login</button>
+      </form>
+      <p id="loginStatus" class="status"></p>
+    </section>
+
+    <!-- Credit Panel (hidden until login) -->
+    <section id="creditPanel" hidden>
+      <section class="panel">
+        <h2>Find User</h2>
+        <form id="lookupForm" class="lookup-form">
+          <label>User ID
+            <input id="userIdInput" type="text" required placeholder="Enter User ID">
+          </label>
+          <button class="primary-button" type="submit">Lookup User</button>
+        </form>
+        <div id="userDetails" class="user-details" hidden>
+          <p><strong>Name:</strong> <span id="detailName"></span></p>
+          <p><strong>Email:</strong> <span id="detailEmail"></span></p>
+          <p><strong>Current Balance:</strong> ₦<span id="detailBalance"></span></p>
+        </div>
+      </section>
+
+      <section id="creditSection" class="panel" hidden>
+        <h2>Send Credit</h2>
+        <form id="creditForm" class="credit-form">
+          <label>Amount
+            <input id="amountInput" type="number" min="1" required placeholder="Enter amount">
+          </label>
+          <button class="primary-button" type="submit">Send Credit</button>
+        </form>
+        <p id="statusMessage" class="status"></p>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="javascript/admin-credit.js"></script>
+</body>
+</html>

@@ -192,3 +192,13 @@ form.addEventListener("submit", async function(e) {
     setButtonLoading(false)
   }
 })
+
+
+JavaScript
+function showNetworkModal() {
+document.getElementById("networkModal").style.display = "flex";
+}
+ 
+function closeNetworkModal() {
+document.getElementById("networkModal").style.display = "none";
+}

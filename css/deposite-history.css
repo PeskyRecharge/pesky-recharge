@@ -61,7 +61,7 @@ header h2 {
   margin-top: 6px;
 }
 
-/* ✅ Responsive adjustments */
+/*  Responsive adjustments */
 @media (max-width: 768px) {
   .container { padding: 15px; }
   header h2 { font-size: 2rem; }
