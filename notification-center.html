@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Notifications</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Custom Notifications Page Styles -->
+  <link rel="stylesheet" href="css/notification-center.css" />
+
+  <!-- Supabase JS CDN (v2) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div class="notifications-container">
+    
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="header-left">
+        <a href="dashboard.html" class="back-btn" title="Back to Dashboard">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div>
+          <h1>Notifications</h1>
+          <p class="subtitle">Stay updated with latest announcements and alerts</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="markAllReadBtn" class="btn-secondary">
+          <i class="fa-solid fa-check-double"></i> Mark all as read
+        </button>
+      </div>
+    </div>
+
+    <!-- TABS & FILTER BAR -->
+    <div class="filter-bar">
+      <div class="filter-tabs">
+        <button class="tab-btn active" data-filter="all">
+          All <span id="totalBadge" class="count-badge">0</span>
+        </button>
+        <button class="tab-btn" data-filter="unread">
+          Unread <span id="unreadBadge" class="count-badge unread-badge">0</span>
+        </button>
+      </div>
+
+      <div class="live-status">
+        <span class="pulse-dot"></span> Live updates
+      </div>
+    </div>
+
+    <!-- NOTIFICATION CARDS LIST -->
+    <div id="notificationsList" class="notifications-list">
+      <!-- Loading Skeleton Placeholder -->
+      <div class="skeleton-card">
+        <div class="skeleton-avatar"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-line title"></div>
+          <div class="skeleton-line message"></div>
+          <div class="skeleton-line date"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Main Notification Page Logic -->
+   <script src="javascript/notification-center.js"></script>
+</body>
+</html>

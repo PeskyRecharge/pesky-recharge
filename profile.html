@@ -107,6 +107,17 @@
       </form>
     </section>
 
+    <section class="panel passkey-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">Quick sign-in</p><h2>Fingerprint sign-in</h2></div>
+      </div>
+      <p class="helper-text">Set up a passkey on this device to sign in with your fingerprint, face, or device screen lock. Your biometric data stays on your device.</p>
+      <div class="passkey-actions">
+        <button id="setupPasskeyBtn" class="primary-button" type="button">Set up fingerprint</button>
+      </div>
+      <p id="passkeyStatus" class="helper-text passkey-status" role="status" aria-live="polite">Checking passkey availability...</p>
+    </section>
+
     <section class="settings-list panel">
       <div class="section-heading"><div><p class="eyebrow">Preferences</p><h2>Notifications</h2></div></div>
       <label class="setting-row"><span><strong>Purchase and deposit alerts</strong><small>Allow this device to show account activity notifications.</small></span><input id="notificationToggle" type="checkbox"></label>
@@ -138,6 +149,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="javascript/notifications.js"></script>
+  <script src="javascript/passkeys.js"></script>
   <script src="javascript/profile.js"></script>
 </body>
 </html>

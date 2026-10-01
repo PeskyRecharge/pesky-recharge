@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deposit History & Wallet Receipts</title>
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <link rel="stylesheet" href="css/user-deposit.css" />
+</head>
+<body>
+
+  <div class="app-viewport">
+    
+    <!-- Header Area -->
+    <header class="app-header">
+      <div class="brand-group">
+        <div class="brand-avatar">
+          <i class="fa-solid fa-building-columns"></i>
+        </div>
+        <div>
+          <h1>Deposit History</h1>
+          <p>Fundings, wallet top-ups & digital receipts</p>
+        </div>
+      </div>
+      <div class="user-badge">
+        <span class="user-dot"></span>
+        <span id="userPillId">Authenticating...</span>
+      </div>
+    </header>
+
+    <main class="app-content">
+      
+      <!-- Search & Filters -->
+      <section class="filter-bar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="depositSearchInput" placeholder="Search reference, method, or ID..." />
+          <button id="clearSearchBtn" class="btn-icon hidden" title="Clear search">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="filter-actions">
+          <div class="custom-select">
+            <select id="methodFilter">
+              <option value="all">All Methods</option>
+              <option value="bank_transfer">Bank Transfer</option>
+              <option value="card">Card Payment</option>
+              <option value="ussd">USSD Code</option>
+            </select>
+            <i class="fa-solid fa-chevron-down select-arrow"></i>
+          </div>
+
+          <button id="refreshDepositBtn" class="btn-action" title="Refresh">
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- Deposit Activity Feed -->
+      <section id="depositFeed" class="deposit-feed">
+        <!-- Dynamically Rendered Cards -->
+      </section>
+
+      <!-- Pagination Navigation -->
+      <footer class="pagination-bar">
+        <span id="recordCountInfo" class="record-count">Loading deposits...</span>
+        <div class="pagination-buttons">
+          <button id="prevPageBtn" class="btn-page" disabled><i class="fa-solid fa-chevron-left"></i></button>
+          <span id="currentPageDisplay" class="page-indicator">Page 1</span>
+          <button id="nextPageBtn" class="btn-page" disabled><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- OPay-Style Digital Deposit Receipt Modal -->
+  <div id="depositModal" class="modal-overlay hidden">
+    <div class="receipt-card-wrapper">
+      
+      <button id="closeModalBtn" class="close-modal-btn">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div id="printableReceiptArea" class="opay-receipt">
+        
+        <!-- Header & Status Badge -->
+        <div class="opay-header">
+          <div class="opay-icon-badge" id="depositIconBadge">
+            <i class="fa-solid fa-arrow-down-left"></i>
+          </div>
+          <span class="opay-status-label" id="depositStatusText">Deposit Successful</span>
+          <h2 class="opay-amount" id="depositAmount">+₦0.00</h2>
+          <span class="opay-timestamp" id="depositTimestamp">Oct 1, 2026 • 15:02:10</span>
+        </div>
+
+        <!-- OPay Natural Language Summary Banner -->
+        <div class="summary-box">
+          <i class="fa-solid fa-circle-check summary-icon"></i>
+          <p id="depositSummaryText">Your wallet funding of ₦5,000.00 via Bank Transfer was completed successfully.</p>
+        </div>
+
+        <!-- Cutout Divider -->
+        <div class="serrated-divider">
+          <div class="cutout cutout-left"></div>
+          <div class="cutout cutout-right"></div>
+        </div>
+
+        <!-- Detail Breakdown Fields -->
+        <div class="opay-details">
+          <div class="opay-row">
+            <span class="row-label">Transaction Type</span>
+            <span class="row-val bold text-green">Wallet Deposit</span>
+          </div>
+          <div class="opay-row">
+            <span class="row-label">Payment Method</span>
+            <span class="row-val" id="depositMethod">--</span>
+          </div>
+          <div class="opay-row">
+            <span class="row-label">Amount Credited</span>
+            <span class="row-val bold text-green" id="depositCreditedAmt">--</span>
+          </div>
+          <div class="opay-row">
+            <span class="row-label">Initiated Time</span>
+            <span class="row-val" id="depositCreatedAt">--</span>
+          </div>
+          <div class="opay-row">
+            <span class="row-label">Completion Time</span>
+            <span class="row-val" id="depositCompletedAt">--</span>
+          </div>
+        </div>
+
+        <div class="solid-divider"></div>
+
+        <!-- Identifiers -->
+        <div class="opay-meta">
+          <div class="meta-row">
+            <span class="row-label">Deposit Ref:</span>
+            <div class="copy-pill" onclick="copyToClipboard('depositRefCode')">
+              <span id="depositRefCode" class="mono">--</span>
+              <i class="fa-regular fa-copy"></i>
+            </div>
+          </div>
+          <div class="meta-row">
+            <span class="row-label">Record ID:</span>
+            <span id="depositId" class="mono text-muted">--</span>
+          </div>
+        </div>
+
+        <!-- Verified Footer -->
+        <div class="opay-watermark">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Official Verified Electronic Deposit Receipt</span>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button id="printReceiptBtn" class="btn-opay-green">
+          <i class="fa-solid fa-download"></i> Download / Print Receipt
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="javascript/user-deposit.js"></script>
+</body>
+</html>

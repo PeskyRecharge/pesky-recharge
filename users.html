@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PESKY RECHARGE | User Directory & Analytics</title>
+  <link rel="icon" href="data:,">
+  
+  <!-- Modern Font & Vector Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/users.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="user-module-body">
+
+  <div class="app-viewport">
+    
+    <!-- STANDALONE TOP NAVIGATION HEADER -->
+    <header class="app-header">
+      <div class="brand-area">
+        <div class="brand-badge"><i class="fa-solid fa-bolt"></i></div>
+        <div class="brand-meta">
+          <h2>PESKY RECHARGE</h2>
+          <span class="sub-badge">User Management System v2.4</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="refreshDataBtn" class="btn-action btn-secondary">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          <span>Sync Database</span>
+        </button>
+        <a href="admin.html" class="btn-action btn-primary">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Back to Admin Panel</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- MAIN VIEWPORT CONTENT -->
+    <main class="content-container">
+      
+      <!-- TOP METRICS & STATS PANEL -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon icon-blue">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div class="metric-data">
+            <span class="metric-title">Total Users</span>
+            <h3 id="metricTotalUsers" class="metric-value">--</h3>
+            <span class="metric-sub text-muted"><i class="fa-solid fa-database"></i> Registered Accounts</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-green">
+            <i class="fa-solid fa-user-check"></i>
+          </div>
+          <div class="metric-data">
+            <span class="metric-title">Active Accounts</span>
+            <h3 id="metricActiveUsers" class="metric-value">--</h3>
+            <span class="metric-sub text-green"><i class="fa-solid fa-circle-check"></i> Operational</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-amber">
+            <i class="fa-solid fa-wallet"></i>
+          </div>
+          <div class="metric-data">
+            <span class="metric-title">Total User Wallet Balance</span>
+            <h3 id="metricTotalBalance" class="metric-value">₦0.00</h3>
+            <span class="metric-sub text-amber"><i class="fa-solid fa-vault"></i> System Liquidity Pool</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-red">
+            <i class="fa-solid fa-user-slash"></i>
+          </div>
+          <div class="metric-data">
+            <span class="metric-title">Suspended Accounts</span>
+            <h3 id="metricSuspendedUsers" class="metric-value">--</h3>
+            <span class="metric-sub text-red"><i class="fa-solid fa-shield-exclamation"></i> Flagged / Inactive</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- DATA CONTROL BAR & TABLE WORKSPACE -->
+      <section class="table-card">
+        <div class="table-toolbar">
+          <div class="toolbar-left">
+            <div class="search-input-group">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="userSearchInput" placeholder="Filter by Name, Email, Phone, or UID..." autocomplete="off">
+              <button id="clearSearchBtn" class="clear-btn hidden"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+
+          <div class="toolbar-right">
+            <div class="filter-group">
+              <label for="statusFilter"><i class="fa-solid fa-filter"></i> Status:</label>
+              <select id="statusFilter" class="custom-select">
+                <option value="all">All Records</option>
+                <option value="active">Active Only</option>
+                <option value="suspended">Suspended Only</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="sortBy"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By:</label>
+              <select id="sortBy" class="custom-select">
+                <option value="newest">Newest Joined</option>
+                <option value="oldest">Oldest Joined</option>
+                <option value="balance_high">Highest Balance</option>
+                <option value="balance_low">Lowest Balance</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAIN USERS DATA TABLE -->
+        <div class="table-wrapper">
+          <table class="user-data-table">
+            <thead>
+              <tr>
+                <th>User / Identity</th>
+                <th>Contact Phone</th>
+                <th>Wallet Balance</th>
+                <th>Account Status</th>
+                <th>Registration Date</th>
+                <th class="text-right">Manage</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <tr>
+                <td colspan="6" class="state-container">
+                  <div class="loading-spinner">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <span>Connecting to Supabase and building user registry...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TABLE FOOTER & PAGINATION CONTROLS -->
+        <div class="table-footer">
+          <div id="recordCountInfo" class="record-info">
+            Showing <strong>0</strong> of <strong>0</strong> user accounts
+          </div>
+          <div class="pagination-actions">
+            <button id="prevPageBtn" class="page-btn" disabled><i class="fa-solid fa-chevron-left"></i> Previous</button>
+            <span id="currentPageDisplay" class="page-indicator">Page 1</span>
+            <button id="nextPageBtn" class="page-btn" disabled>Next <i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="javascript/users.js"></script>
+</body>
+</html>

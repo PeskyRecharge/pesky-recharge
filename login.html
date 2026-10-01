@@ -18,8 +18,16 @@
 
     <h1 class="title">Welcome Back</h1>
     <p class="subtitle">Sign in to your PESKY RECHARGE account</p>
+    <p id="loginMethodStatus" class="login-method-status" role="status" aria-live="polite">Checking saved fingerprint sign-in...</p>
 
-    <form id="loginForm" class="form">
+    <section id="passkeyLoginSection" class="passkey-login hidden" aria-label="Fingerprint sign-in">
+      <p class="passkey-login-label">QUICK SIGN-IN</p>
+      <button id="passkeyLoginBtn" type="button" class="btn btn-primary">Sign in with fingerprint</button>
+      <p class="passkey-login-hint">Use the fingerprint, face, or screen lock saved for this account.</p>
+      <button id="showPasswordLoginBtn" type="button" class="password-fallback">Use password instead</button>
+    </section>
+
+    <form id="loginForm" class="form hidden">
       <div class="form-group">
         <label for="phone">Phone Number</label>
         <div class="input-wrapper">
@@ -38,9 +46,10 @@
       <button type="submit" class="btn btn-primary">Sign In</button>
     </form>
 
-    <button type="button" id="forgotPasswordLink" class="forgot-password-link">
+    <button type="button" id="forgotPasswordLink" class="forgot-password-link hidden">
       Forgot your password?
     </button>
+    <button type="button" id="usePasskeyLoginBtn" class="password-fallback hidden">Use fingerprint sign-in</button>
 
     <section id="passwordResetSection" class="otp-section hidden" aria-labelledby="resetTitle">
       <h2 id="resetTitle" class="reset-title">Reset your password</h2>
@@ -100,10 +109,19 @@
     </div>
   </div>
 
+  <div id="networkModal" class="network-modal" aria-hidden="true">
+    <section class="network-box" role="alertdialog" aria-modal="true" aria-labelledby="networkModalTitle" aria-describedby="networkModalMessage">
+      <div class="network-icon" aria-hidden="true">!</div>
+      <h2 id="networkModalTitle">Connection unavailable</h2>
+      <p id="networkModalMessage">Please check your internet connection and try again.</p>
+      <button type="button" id="networkOkayBtn" class="network-okay-btn">Okay</button>
+    </section>
+  </div>
 
   <!-- ✅ Load Supabase library first -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="javascript/notifications.js"></script>
+  <script src="javascript/passkeys.js"></script>
   <!-- ✅ Then load your login script -->
   <script src="javascript/login.js"></script>
 

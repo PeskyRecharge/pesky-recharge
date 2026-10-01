@@ -1,98 +1,397 @@
-const CACHE_NAME = "pesky-v1";
+const CACHE_NAME = "pesky-v3";
 
 const ASSETS = [
+  // ==========================================
+  // HOME
+  // ==========================================
+
   "/",
   "/index.html",
   "/css/index.css",
   "/javascript/index.js",
 
-  // Login Pages & Assets
+
+  // ==========================================
+  // LOGIN
+  // ==========================================
+
   "/login.html",
   "/css/login.css",
   "/javascript/login.js",
 
-  // Account Creation Pages & Assets
+
+  // ==========================================
+  // CREATE ACCOUNT
+  // ==========================================
+
   "/create-account.html",
   "/css/create-account.css",
   "/javascript/create-account.js",
 
-  // Static Auxiliary Pages
+
+  // ==========================================
+  // DEPOSIT
+  // ==========================================
+
+  "/user-deposit.html",
+  "/css/user-deposit.css",
+  "/javascript/user-deposit.js",
+
+
+  // ==========================================
+  // PURCHASE HISTORY
+  // ==========================================
+
+  "/purchase-history.html",
+  "/css/history.css",
+  "/javascript/history.js",
+
+
+  // ==========================================
+  // PURCHASE
+  // ==========================================
+
+  "/purchase.html",
+  "/css/purchase.css",
+  "/javascript/purchase.js",
+
+
+  // ==========================================
+  // DATA
+  // ==========================================
+
+  "/data.html",
+  "/css/data.css",
+  "/javascript/data.js",
+
+
+  // ==========================================
+  // AIRTIME
+  // ==========================================
+
+  "/airtime.html",
+  "/css/airtime.css",
+  "/javascript/airtime.js",
+
+
+  // ==========================================
+  // PROFILE
+  // ==========================================
+
+  "/profile.html",
+  "/css/profile.css",
+  "/javascript/profile.js",
+
+
+  // ==========================================
+  // ABOUT
+  // ==========================================
+
+  "/about.html",
+  "/css/about.css",
+  
+
+
+  // ==========================================
+  // LIVE CHARGE
+  // ==========================================
+
+  "/live-chat.html",
+  "/css/live-chat.css",
+  "/javascript/live-chat.js",
+
+
+  // ==========================================
+  // HELP
+  // ==========================================
+
+  "/help.html",
+  "/css/help.css",
+  
+
+
+  // ==========================================
+  // DASHBOARD
+  // ==========================================
+
+  "/dashboard.html",
+  "/css/dashboard.css",
+  "/javascript/dashboard.js",
+
+
+  // ==========================================
+  // USER TRANSACTION
+  // ==========================================
+
+  "/user-transaction.html",
+  "/css/user-transaction.css",
+  "/javascript/user-transaction.js",
+
+
+  // ==========================================
+  // NOTIFICATION CENTER
+  // ==========================================
+
+  "/notification-center.html",
+  "/css/notification-center.css",
+  "/javascript/notification-center.js",
+
+
+  // ==========================================
+  // FAQ
+  // ==========================================
+
+  "/faq.html",
+  "/css/faq.css",
+  "/javascript/faq.js",
+
+
+  // ==========================================
+  // CONTACT
+  // ==========================================
+
   "/contact.html",
   "/css/contact.css",
+
+
+  // ==========================================
+  // TERMS
+  // ==========================================
 
   "/terms.html",
   "/css/terms.css",
 
+
+  // ==========================================
+  // PRIVACY
+  // ==========================================
+
   "/privacy.html",
   "/css/privacy.css",
 
-  // Shared JS & Images
+
+  // ==========================================
+  // SHARED JAVASCRIPT
+  // ==========================================
+
   "/javascript/notifications.js",
+  "/javascript/passkeys.js",
+
+
+  // ==========================================
+  // IMAGES & PWA
+  // ==========================================
+
   "/img/pesky4.png",
   "/manifest.json"
 ];
 
-// 1. Install Event: Cache files safely
+
+// ==========================================
+// INSTALL
+// ==========================================
+
 self.addEventListener("install", (event) => {
+
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("[Service Worker] Caching all static assets...");
-      return Promise.all(
-        ASSETS.map((url) => {
-          return cache.add(url).catch((err) => {
-            console.error(`[Service Worker] Failed to cache: ${url}`, err);
-          });
-        })
-      );
-    })
+
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+
+        console.log(
+          "[Service Worker] Caching static assets..."
+        );
+
+        return Promise.all(
+
+          ASSETS.map((url) => {
+
+            return cache.add(url)
+              .catch((error) => {
+
+                console.error(
+                  `[Service Worker] Failed to cache: ${url}`,
+                  error
+                );
+
+              });
+
+          })
+
+        );
+
+      })
+
   );
+
   self.skipWaiting();
 });
 
-// 2. Activate Event: Clean up old caches
+
+// ==========================================
+// ACTIVATE
+// ==========================================
+
 self.addEventListener("activate", (event) => {
+
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            console.log("[Service Worker] Deleting old cache:", key);
-            return caches.delete(key);
-          }
-        })
-      )
-    )
+
+    caches.keys()
+      .then((keys) => {
+
+        return Promise.all(
+
+          keys.map((key) => {
+
+            if (key !== CACHE_NAME) {
+
+              console.log(
+                "[Service Worker] Removing old cache:",
+                key
+              );
+
+              return caches.delete(key);
+
+            }
+
+          })
+
+        );
+
+      })
+
   );
+
   self.clients.claim();
 });
 
-// 3. Fetch Event: Serve cached static assets, allow live network for APIs
-self.addEventListener("fetch", (event) => {
-  const requestUrl = new URL(event.request.url);
 
-  // Bypass cache for POST requests or external APIs (like Supabase)
+// ==========================================
+// FETCH
+// ==========================================
+
+self.addEventListener("fetch", (event) => {
+
+  const requestUrl =
+    new URL(event.request.url);
+
+
+  // ========================================
+  // DON'T CACHE POST REQUESTS
+  // ========================================
+
+  if (event.request.method !== "GET") {
+    return;
+  }
+
+
+  // ========================================
+  // DON'T CACHE SUPABASE
+  // ========================================
+
   if (
-    event.request.method !== "GET" ||
-    requestUrl.hostname.includes("supabase.co")
+    requestUrl.hostname.includes(
+      "supabase.co"
+    )
   ) {
     return;
   }
 
+
+  // ========================================
+  // DON'T CACHE PAYSTACK
+  // ========================================
+
+  if (
+    requestUrl.hostname.includes(
+      "paystack.co"
+    )
+  ) {
+    return;
+  }
+
+
+  // ========================================
+  // CACHE FIRST
+  // ========================================
+
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return (
-        cachedResponse ||
-        fetch(event.request).then((networkResponse) => {
-          // Dynamically cache valid HTTP GET requests
-          if (networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
-            });
-          }
-          return networkResponse;
-        })
-      );
+
+    caches.match(event.request)
+      .then((cachedResponse) => {
+
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+
+        return fetch(event.request)
+          .then((networkResponse) => {
+
+            // Only cache successful responses
+            if (
+              networkResponse &&
+              networkResponse.status === 200 &&
+              networkResponse.type !== "opaque"
+            ) {
+
+              const responseClone =
+                networkResponse.clone();
+
+              caches.open(CACHE_NAME)
+                .then((cache) => {
+
+                  cache.put(
+                    event.request,
+                    responseClone
+                  );
+
+                });
+
+            }
+
+            return networkResponse;
+
+          });
+
+      })
+
+  );
+
+});
+
+
+// ====================================================
+// SERVICE WORKER: Service Worker for Status Bar Notifications
+// ====================================================
+
+self.addEventListener("install", (event) => {
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(clients.claim());
+});
+
+// When user taps/clicks the notification on phone bar or lock screen
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  // Target page when notification is tapped
+  const targetUrl = "/notification-center.html";
+
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+      // Focus existing tab if open
+      for (const client of clientList) {
+        if (client.url.includes("notification-center.html") && "focus" in client) {
+          return client.focus();
+        }
+      }
+      // Otherwise open new window
+      if (clients.openWindow) {
+        return clients.openWindow(targetUrl);
+      }
     })
   );
 });
