@@ -33,7 +33,13 @@ function formatCurrency(value) {
 
 function normalizePhone(value) {
   const digits = value.replace(/\D/g, "");
-  return digits.startsWith("234") ? `0${digits.slice(3)}` : digits;
+  if (digits.startsWith("234")) {
+    const nationalNumber = digits.slice(3);
+    return nationalNumber.startsWith("0")
+      ? nationalNumber
+      : `0${nationalNumber}`;
+  }
+  return /^[789][01]\d{8}$/.test(digits) ? `0${digits}` : digits;
 }
 
 function detectNetwork(phone) {
@@ -208,7 +214,7 @@ function updateNetworkState() {
 
   if (!network) {
     detectedNetwork.textContent = "Waiting for number";
-    phoneHint.textContent = "Enter an 11-digit Nigerian number.";
+    phoneHint.textContent = "Enter 10 digits after +234, or an 11-digit local number.";
     loadPlans(null);
     return;
   }
@@ -269,7 +275,7 @@ form.addEventListener("submit", async (event) => {
   const detected = detectNetwork(phone);
 
   if (!/^0[789][01]\d{8}$/.test(phone)) {
-    phoneHint.textContent = "Enter a valid 11-digit Nigerian number.";
+    phoneHint.textContent = "Enter a valid Nigerian phone number.";
     phoneHint.classList.add("error");
     return;
   }

@@ -8,6 +8,46 @@ const createBtn = form.querySelector('button[type="submit"]');
 const otpSection = document.getElementById("otpSection");
 const verifyBtn = document.getElementById("verifyBtn");
 const successMessage = document.getElementById("successMessage");
+const networkModal = document.getElementById("networkModal");
+const networkModalTitle = document.getElementById("networkModalTitle");
+const networkModalMessage = document.getElementById("networkModalMessage");
+const networkOkayBtn = document.getElementById("networkOkayBtn");
+
+let networkReturnFocus = null;
+
+function isNetworkError(error) {
+  return !navigator.onLine || /failed to fetch|network error|network request failed|load failed/i.test(error?.message || "");
+}
+
+function showFeedbackModal(title, message, returnFocusTarget = document.activeElement) {
+  networkReturnFocus = returnFocusTarget instanceof HTMLElement && returnFocusTarget !== document.body
+    ? returnFocusTarget
+    : createBtn;
+  networkModalTitle.textContent = title;
+  networkModalMessage.textContent = message;
+  networkModal.classList.add("open");
+  networkModal.setAttribute("aria-hidden", "false");
+  networkOkayBtn.focus();
+}
+
+function showNetworkModal(returnFocusTarget = document.activeElement) {
+  showFeedbackModal(
+    "Connection unavailable",
+    "Please check your internet connection and try again.",
+    returnFocusTarget
+  );
+}
+
+function closeNetworkModal() {
+  networkModal.classList.remove("open");
+  networkModal.setAttribute("aria-hidden", "true");
+  if (networkReturnFocus instanceof HTMLElement) networkReturnFocus.focus();
+}
+
+networkOkayBtn.addEventListener("click", closeNetworkModal);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && networkModal.classList.contains("open")) closeNetworkModal();
+});
 
 function setButtonLoading(button, text) {
   button.disabled = true;
@@ -36,17 +76,22 @@ form.addEventListener("submit", async function (e) {
   e.preventDefault();
   console.log("Form submitted");
 
+  if (!navigator.onLine) {
+    showNetworkModal(e.submitter || createBtn);
+    return;
+  }
+
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
 
   if (password.length < 8) {
-    alert("Password must be at least 8 characters.");
+    showFeedbackModal("Check your password", "Your password must be at least 8 characters.", createBtn);
     return;
   }
 
   if (password !== confirmPassword) {
-    alert("Passwords do not match.");
+    showFeedbackModal("Passwords do not match", "Enter the same password in both fields.", createBtn);
     return;
   }
 
@@ -60,7 +105,11 @@ form.addEventListener("submit", async function (e) {
     });
 
     if (error) {
-      alert("Error sending OTP: " + error.message);
+      if (isNetworkError(error)) {
+        showNetworkModal(createBtn);
+      } else {
+        showFeedbackModal("Unable to send code", error.message || "Please check your email address and try again.", createBtn);
+      }
       return;
     }
 
@@ -68,16 +117,26 @@ form.addEventListener("submit", async function (e) {
     otpSection.classList.remove("hidden");
   } catch (err) {
     console.error("Error creating account:", err);
-    alert("Unable to create account. Please try again.");
+    if (isNetworkError(err)) {
+      showNetworkModal(createBtn);
+    } else {
+      showFeedbackModal("Unable to create account", "Please review your details and try again.", createBtn);
+    }
   } finally {
     resetButton(createBtn, "Create Account");
   }
 });
 
-//  Step 2: Verify OTP → trigger inserts row, then update details
+// Step 2: Verify OTP, then update the new user's details.
 verifyBtn.addEventListener("click", async function () {
   const code = document.getElementById("code").value.trim();
   const email = document.getElementById("email").value.trim();
+
+  if (!navigator.onLine) {
+    showNetworkModal(verifyBtn);
+    return;
+  }
+
   setButtonLoading(verifyBtn, "Verifying...");
 
   try {
@@ -89,7 +148,11 @@ verifyBtn.addEventListener("click", async function () {
     });
 
     if (error) {
-      alert("Error verifying: " + error.message);
+      if (isNetworkError(error)) {
+        showNetworkModal(verifyBtn);
+      } else {
+        showFeedbackModal("Code not accepted", error.message || "Check the verification code and try again.", verifyBtn);
+      }
       return;
     }
 
@@ -102,7 +165,11 @@ verifyBtn.addEventListener("click", async function () {
       });
 
       if (passwordError) {
-        alert("Error saving password: " + passwordError.message);
+        if (isNetworkError(passwordError)) {
+          showNetworkModal(verifyBtn);
+        } else {
+          showFeedbackModal("Unable to save password", passwordError.message, verifyBtn);
+        }
         return;
       }
 
@@ -129,7 +196,11 @@ verifyBtn.addEventListener("click", async function () {
 
       if (updateError) {
         console.error("Update error:", updateError.message);
-        alert("Error saving customer details: " + updateError.message);
+        if (isNetworkError(updateError)) {
+          showNetworkModal(verifyBtn);
+        } else {
+          showFeedbackModal("Unable to save details", updateError.message, verifyBtn);
+        }
         return;
       }
 
@@ -138,22 +209,16 @@ verifyBtn.addEventListener("click", async function () {
 
       window.location.href = "dashboard.html";
     } else {
-      alert("Invalid code. Please try again.");
+      showFeedbackModal("Code not accepted", "That verification code is invalid. Please try again.", verifyBtn);
     }
   } catch (err) {
     console.error("Error verifying account:", err);
-    alert("Unable to verify account. Please try again.");
+    if (isNetworkError(err)) {
+      showNetworkModal(verifyBtn);
+    } else {
+      showFeedbackModal("Unable to verify account", "Please check the code and try again.", verifyBtn);
+    }
   } finally {
     resetButton(verifyBtn, "Verify");
   }
 });
-
-
-JavaScript
-function showNetworkModal() {
-document.getElementById("networkModal").style.display = "flex";
-}
- 
-function closeNetworkModal() {
-document.getElementById("networkModal").style.display = "none";
-}

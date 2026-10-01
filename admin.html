@@ -2,77 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PESKY RECHARGE Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PESKY RECHARGE | Admin Portal</title>
+  <link rel="icon" href="data:,">
+  
+  <!-- Font Awesome Icons & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="css/admin.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
-  <!-- Login Section -->
-  <div id="loginSection">
-    <h2>Admin Login</h2>
-    <input type="email" id="loginEmail" placeholder="Email">
-    <input type="password" id="loginPassword" placeholder="Password">
-    <button id="loginBtn">Login</button>
-    <p id="loginError" style="color:red;"></p>
+<body class="admin-body">
+
+  <!-- =========================================================
+       1. LOGIN CONTAINER (SHOWS FIRST)
+       ========================================================= -->
+  <div id="loginSection" class="login-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="brand-badge"><i class="fa-solid fa-shield-halved"></i></div>
+        <h2>Admin Authentication</h2>
+        <p>Sign in with your administrative account to continue</p>
+      </div>
+      
+      <form id="loginForm" class="login-form">
+        <div class="input-group">
+          <label for="loginEmail">Email Address</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="admin@peskyrecharge.com" required autocomplete="email">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="loginPassword">Password</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="••••••••••••" required autocomplete="current-password">
+          </div>
+        </div>
+
+        <p id="loginError" class="error-msg"></p>
+
+        <button type="submit" id="loginBtn" class="btn-primary">
+          <span id="loginBtnText">Log In</span>
+          <i class="fa-solid fa-spinner fa-spin hidden" id="loginSpinner"></i>
+        </button>
+      </form>
+    </div>
   </div>
 
-  <!-- Dashboard (hidden until login) -->
-  <div id="dashboardWrapper" class="hidden">
-    <!-- Top Bar -->
-    <header class="admin-header">
-      <h1>Admin Dashboard</h1>
-      <button id="logoutBtn" class="logout-btn">Logout</button>
-    </header>
-
-    <!-- Sidebar -->
+  <!-- =========================================================
+       2. MAIN DASHBOARD (HIDDEN UNTIL LOGIN SUCCESS)
+       ========================================================= -->
+  <div id="dashboardWrapper" class="dashboard-layout hidden">
+    
+    <!-- SIDEBAR WITH INDEPENDENT SCROLLING -->
     <aside class="sidebar">
-      <h2>Menu</h2>
-      <ul>
-        <li><a href="#" id="usersLink">Users</a></li>
-        <li><a href="#" id="depositsLink">Deposits</a></li>
-        <li><a href="#" id="purchasesLink">Purchases</a></li>
-        <li><a href="#" id="settingsLink">Settings</a></li>
-        <li><a href="admin-chat.html">Admin Chat</a></li>
-        <li><a href="customers.html">Customers</a></li>
-         <li><a href="purchase-history.html">Retrieve User Purchase</a></li>
-          <li><a href="admin-credit.html">Admin Credit</a></li>
-        <li><a href="admin-email.html">Email Users</a></li>
-      </ul>
+      <div class="sidebar-brand">
+        <i class="fa-solid fa-bolt brand-icon"></i>
+        <span>PESKY RECHARGE</span>
+      </div>
+
+      <nav class="sidebar-scrollable">
+        <div class="nav-section-title">CORE MENU</div>
+        <ul class="nav-list">
+          <li><a href="users.html" class="nav-item"><i class="fa-solid fa-users"></i><span>All Users</span></a></li>
+           <li><a href="transaction.html" class="nav-item"><i class="fa-solid fa-users"></i><span>All Data & Airtime Transactions</span></a></li>
+          <li><a href="admin-user-purchases.html" class="nav-item"><i class="fa-solid fa-receipt"></i><span>All Purchases</span></a></li>
+          <li><a href="customers.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+          <li><a href="purchase-history.html" class="nav-item"><i class="fa-solid fa-magnifying-glass-dollar"></i><span>Retrieve Purchases</span></a></li>
+        </ul>
+
+        <div class="nav-section-title">MANAGEMENT</div>
+        <ul class="nav-list">
+          <li><a href="admin-credit.html" class="nav-item"><i class="fa-solid fa-wallet"></i><span>Admin Credit</span></a></li>
+           <li><a href="all-deposit.html" class="nav-item"><i class="fa-solid fa-users"></i><span>All Deposite</span></a></li>
+          <li><a href="admin-notification.html" class="nav-item"><i class="fa-solid fa-bell"></i><span>Notify Users</span></a></li>
+          <li><a href="admin-email.html" class="nav-item"><i class="fa-solid fa-paper-plane"></i><span>Email Users</span></a></li>
+          <li><a href="admin-chat.html" class="nav-item"><i class="fa-solid fa-comments"></i><span>Admin Chat</span></a></li>
+        </ul>
+
+        <div class="nav-section-title">SYSTEM</div>
+        <ul class="nav-list">
+          <li><a href="#" id="settingsLink" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="avatar"><i class="fa-solid fa-user-shield"></i></div>
+          <div class="user-details">
+            <span class="user-role">Administrator</span>
+            <span id="userEmailDisplay" class="user-email">admin@peskyrecharge.com</span>
+          </div>
+        </div>
+      </div>
     </aside>
 
-    <!-- Main Content -->
-    <main class="main-content">
-      <section id="dashboardSection">
-        <h2>Welcome, Admin</h2>
-        <p>Use the menu to manage PESKY RECHARGE.</p>
-      </section>
+    <!-- MAIN CONTENT WINDOW -->
+    <div class="main-wrapper">
+      <header class="admin-header">
+        <div class="header-title">
+          <h1>Admin Control Panel</h1>
+        </div>
+        <div class="header-actions">
+          <button id="logoutBtn" class="btn-logout">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+        </div>
+      </header>
 
-      <section id="usersSection" class="hidden">
-        <h2>Registered Users</h2>
-        <table id="usersTable">
-          <thead>
-            <tr><th>Surname</th><th>Other Name</th><th>Email</th><th>Balance</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </section>
+      <main class="main-content">
+        <section id="dashboardSection" class="content-section">
+          <div class="welcome-banner">
+            <h2>Welcome Back, Administrator 👋</h2>
+            <p>Select an option from the sidebar to manage transactions, users, and system settings.</p>
+          </div>
+        </section>
+      </main>
+    </div>
 
-      <section id="depositsSection" class="hidden">
-        <h2>Deposit Records</h2>
-        <ul id="depositsList"></ul>
-      </section>
-
-      <section id="purchasesSection" class="hidden">
-        <h2>Purchase Records</h2>
-        <ul id="purchasesList"></ul>
-      </section>
-
-      <section id="settingsSection" class="hidden">
-        <h2>System Settings</h2>
-        <p>Configure admin options here.</p>
-      </section>
-    </main>
   </div>
 
   <script src="javascript/admin.js"></script>

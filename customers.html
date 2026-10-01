@@ -2,35 +2,189 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Customers - PESKY RECHARGE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PESKY RECHARGE | Customer Directory</title>
+  <link rel="icon" href="data:,">
+  
+  <!-- Font & Icon Assets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="css/customers.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
-  <header class="page-header">
-    <h1>All Customers</h1>
-    <input type="text" id="searchInput" placeholder="Search by name, phone, or email...">
-  </header>
+<body class="customer-module-body">
 
-  <main class="main-content">
-    <table id="customersTable">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>ID</th>
-          <th>Auth ID</th>
-          <th>Surname</th>
-          <th>Other Name</th>
-          <th>Phone</th>
-          <th>Gender</th>
-          <th>Email</th>
-          <th>Balance</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </main>
+  <div class="app-viewport">
+    
+    <!-- HEADER NAVBAR -->
+    <header class="app-header">
+      <div class="brand-area">
+        <div class="brand-badge"><i class="fa-solid fa-users"></i></div>
+        <div class="brand-meta">
+          <h2>PESKY RECHARGE</h2>
+          <span class="sub-badge">Customer Management Portal v2.4</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="refreshDataBtn" class="btn-action btn-secondary">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          <span>Sync Customers</span>
+        </button>
+        <a href="deposit.html" class="btn-action btn-secondary">
+          <i class="fa-solid fa-building-columns"></i>
+          <span>Deposits Ledger</span>
+        </a>
+        <a href="admin.html" class="btn-action btn-primary">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Admin Panel</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="content-container">
+      
+      <!-- TOP METRICS STATS -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon icon-blue">
+            <i class="fa-solid fa-user-group"></i>
+          </div>
+          <div class="metric-data">
+            <span class="metric-title">Total Customers</span>
+            <h3 id="metricTotalCustomers" class="metric-value">--</h3>
+            <span class="metric-sub text-muted"><i class="fa-solid fa-database"></i> Registered Accounts</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-green">
+            <i class="fa-solid fa-wallet"></i>
+          </div>
+          <div class="metric-data">
+            <span class="metric-title">Aggregated Customer Balances</span>
+            <h3 id="metricTotalBalance" class="metric-value">₦0.00</h3>
+            <span class="metric-sub text-green"><i class="fa-solid fa-vault"></i> Total Circulating Liquidity</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-cyan">
+            <i class="fa-solid fa-mars-female"></i>
+          </div>
+          <div class="metric-data">
+            <span class="metric-title">Male / Female Ratio</span>
+            <h3 id="metricGenderRatio" class="metric-value">-- / --</h3>
+            <span class="metric-sub text-muted"><i class="fa-solid fa-venus-mars"></i> Demographic Spread</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-purple">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+          </div>
+          <div class="metric-data">
+            <span class="metric-title">Active Transactors</span>
+            <h3 id="metricActiveTransactors" class="metric-value">--</h3>
+            <span class="metric-sub text-purple"><i class="fa-solid fa-clock-rotate-left"></i> Accounts with Logged History</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTROL TOOLBAR & DATA TABLE -->
+      <section class="table-card">
+        <div class="table-toolbar">
+          <div class="toolbar-left">
+            <div class="search-input-group">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="customerSearchInput" placeholder="Search by Name, Email, Phone, Custom User ID or UUID..." autocomplete="off">
+              <button id="clearSearchBtn" class="clear-btn hidden"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+
+          <div class="toolbar-right">
+            <div class="filter-group">
+              <label for="genderFilter"><i class="fa-solid fa-filter"></i> Gender:</label>
+              <select id="genderFilter" class="custom-select">
+                <option value="all">All Genders</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="sortBy"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort:</label>
+              <select id="sortBy" class="custom-select">
+                <option value="newest">Newest Joined</option>
+                <option value="oldest">Oldest Joined</option>
+                <option value="balance_high">Highest Balance</option>
+                <option value="balance_low">Lowest Balance</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAIN CUSTOMERS TABLE -->
+        <div class="table-wrapper">
+          <table class="customer-data-table">
+            <thead>
+              <tr>
+                <th>Customer Name & Email</th>
+                <th>Phone Number</th>
+                <th>Gender</th>
+                <th>Wallet Balance</th>
+                <th>Custom User ID</th>
+                <th>Joined Date</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="customerTableBody">
+              <tr>
+                <td colspan="7" class="state-container">
+                  <div class="loading-spinner">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <span>Establishing secure connection to 'customers'...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- FOOTER PAGINATION CONTROLS -->
+        <div class="table-footer">
+          <div id="recordCountInfo" class="record-info">
+            Showing <strong>0</strong> of <strong>0</strong> customer records
+          </div>
+          <div class="pagination-actions">
+            <button id="prevPageBtn" class="page-btn" disabled><i class="fa-solid fa-chevron-left"></i> Previous</button>
+            <span id="currentPageDisplay" class="page-indicator">Page 1</span>
+            <button id="nextPageBtn" class="page-btn" disabled>Next <i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- CUSTOMER DETAILS & JSON TRANSACTIONS MODAL -->
+  <div id="customerModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <header class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-address-card"></i>
+          <h3>Customer Details & Audit Ledger</h3>
+        </div>
+        <button id="closeModalBtn" class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+
+      <div class="modal-body" id="modalContent">
+        <!-- Content dynamically rendered via JS -->
+      </div>
+    </div>
+  </div>
 
   <script src="javascript/customers.js"></script>
 </body>

@@ -145,3 +145,214 @@ function nextSlide() {
 
 // Change slide every 4 seconds
 setInterval(nextSlide, 4000);
+
+
+
+// ====================================================
+// 1. REGISTER SERVICE WORKER & REQUEST PERMISSION
+// ====================================================
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js")
+    .then(() => console.log("Service Worker registered"))
+    .catch((err) => console.error("SW registration error:", err));
+}
+
+// Call this when user signs up or logs into dashboard
+async function requestNotificationPermissionOnLogin() {
+  if (!("Notification" in window)) return;
+
+  if (Notification.permission === "default") {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      // Show confirmation alert on status bar
+      showStatusBarAlert(
+        "Notifications Enabled!",
+        "You will now receive updates on your phone status bar."
+      );
+    }
+  }
+}
+
+
+
+// ====================================================
+// 1. REGISTER SERVICE WORKER & REQUEST PERMISSION
+// ====================================================
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js")
+    .then(() => console.log("Service Worker registered"))
+    .catch((err) => console.error("SW registration error:", err));
+}
+
+// Call this when user signs up or logs into dashboard
+async function requestNotificationPermissionOnLogin() {
+  if (!("Notification" in window)) return;
+
+  if (Notification.permission === "default") {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      // Show confirmation alert on status bar
+      showStatusBarAlert(
+        "Notifications Enabled!",
+        "You will now receive updates on your phone status bar."
+      );
+    }
+  }
+}
+
+// ====================================================
+// 2. TRIGGER PHONE STATUS BAR ALERT
+// ====================================================
+
+function showStatusBarAlert(title, message) {
+  if ("Notification" in window && Notification.permission === "granted") {
+    if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.ready.then((reg) => {
+        reg.showNotification(title || "New Alert", {
+          body: message || "Tap to read full notification",
+          icon: "/icon.png",          // Replace with your icon path
+          badge: "/badge.png",        // Replace with small status bar icon path
+          vibrate: [200, 100, 200],
+          tag: "supabase-notif"
+        });
+      });
+    } else {
+      new Notification(title || "New Alert", {
+        body: message || "Tap to read full notification"
+      });
+    }
+  }
+}
+
+// ====================================================
+// 3. LISTEN FOR NEW NOTIFICATIONS FROM SUPABASE
+// ====================================================
+
+const notificationReadStorageKey = "user_read_notifications_ids";
+const notificationCountBadge = document.getElementById("notificationCountBadge");
+
+async function updateNotificationCount() {
+  if (!notificationCountBadge) return;
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("notifications")
+      .select("title, created_at");
+
+    if (error) throw error;
+
+    const readIds = JSON.parse(localStorage.getItem(notificationReadStorageKey) || "[]");
+    const unreadCount = (data || []).filter((item) =>
+      !readIds.includes(`${item.title}_${item.created_at}`)
+    ).length;
+
+    notificationCountBadge.textContent = unreadCount > 99 ? "99+" : String(unreadCount);
+    notificationCountBadge.hidden = unreadCount === 0;
+  } catch (error) {
+    console.error("Unable to update notification count:", error);
+  }
+}
+
+function listenForNewNotifications() {
+  supabaseClient
+    .channel("public:notifications")
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "notifications" },
+      (payload) => {
+        const newNotif = payload.new;
+        // Post directly to phone status bar / lock screen
+        showStatusBarAlert(newNotif.title, newNotif.message);
+        updateNotificationCount();
+      }
+    )
+    .subscribe();
+}
+
+window.addEventListener("storage", (event) => {
+  if (event.key === notificationReadStorageKey) {
+    updateNotificationCount();
+  }
+});
+
+// Initialize on Dashboard Load
+document.addEventListener("DOMContentLoaded", () => {
+  requestNotificationPermissionOnLogin();
+  listenForNewNotifications();
+  updateNotificationCount();
+});
+
+
+
+// ============================================
+// PWA INSTALL BANNER CONTROLLER (WITH SKIP/DISMISS)
+// ============================================
+
+let deferredPrompt;
+const pwaBanner = document.getElementById("pwaBannerContainer");
+const installBtn = document.getElementById("pwaInstallBtn");
+const closeBtn = document.getElementById("pwaCloseBtn");
+
+// Check if running inside installed standalone PWA
+const isInstalled = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+
+if (pwaBanner && isInstalled) {
+  pwaBanner.style.display = "none";
+}
+
+// 1. Listen for browser PWA prompt event
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Don't show if already installed OR if user clicked Skip previously
+  const userSkipped = localStorage.getItem("pwaBannerSkipped");
+
+  if (pwaBanner && !isInstalled && !userSkipped) {
+    pwaBanner.style.display = "flex";
+  }
+});
+
+// 2. Handle Install Button Click
+if (installBtn) {
+  installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) {
+      window.alert("To install PESKY RECHARGE, open your browser menu and choose Install app or Add to Home Screen.");
+      return;
+    }
+
+    // Show native browser install prompt
+    deferredPrompt.prompt();
+
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`PWA Install Choice: ${outcome}`);
+
+    deferredPrompt = null;
+
+    // Hide banner on completion
+    if (pwaBanner) {
+      pwaBanner.style.display = "none";
+    }
+  });
+}
+
+// 3. Handle Skip / Dismiss Click
+if (closeBtn) {
+  closeBtn.addEventListener("click", () => {
+    if (pwaBanner) {
+      pwaBanner.style.display = "none";
+      // Remember that the user skipped it so it won't keep annoying them
+      localStorage.setItem("pwaBannerSkipped", "true");
+    }
+  });
+}
+
+// 4. Automatically hide if app is installed
+window.addEventListener("appinstalled", () => {
+  console.log("App was successfully installed!");
+  if (pwaBanner) {
+    pwaBanner.style.display = "none";
+  }
+});

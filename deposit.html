@@ -1,33 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
+
   <title>Deposit - PESKY RECHARGE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/deposit.css">
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="javascript/notifications.js"></script>
-  <!-- Paystack Inline Script -->
-  <script src="https://js.paystack.co/v1/inline.js"></script>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+
+  <!-- ======================================
+       DEPOSIT CSS
+       ====================================== -->
+
+  <link
+    rel="stylesheet"
+    href="css/deposit.css"
+  >
+
+
+  <!-- ======================================
+       SUPABASE
+       ====================================== -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+  </script>
+
+
+  <!-- ======================================
+       NOTIFICATIONS
+       ====================================== -->
+
+  <script
+    src="javascript/notifications.js">
+  </script>
+
+
+  <!-- ======================================
+       PAYSTACK INLINE JS V2
+       ====================================== -->
+
+  <script
+    src="https://js.paystack.co/v2/inline.js">
+  </script>
+
 </head>
+
+
 <body>
+
+
+  <!-- ======================================
+       MAIN CONTAINER
+       ====================================== -->
+
   <div class="container">
+
+
+    <!-- ======================================
+         BALANCE SECTION
+         ====================================== -->
+
     <section class="balance-section">
-      <h2>My Balance (NGN)</h2>
-      <p id="balance">₦0.00</p>
 
-      <button id="depositBtn" class="btn">Deposit</button>
 
-      <div id="amountSection" class="hidden">
-        <p class="message">How much do you want to deposit?</p>
-        <input type="number" id="depositAmount" placeholder="Enter amount" min="100" />
-        <button id="confirmDepositBtn" class="btn">Confirm Deposit</button>
+      <h2>
+        My Balance (NGN)
+      </h2>
+
+
+      <!-- CURRENT BALANCE -->
+
+      <p id="balance">
+        ₦0.00
+      </p>
+
+
+      <!-- ====================================
+           DEPOSIT BUTTON
+           ==================================== -->
+
+      <button
+        id="depositBtn"
+        class="btn"
+        type="button"
+      >
+        Deposit
+      </button>
+
+
+      <!-- ====================================
+           DEPOSIT AMOUNT SECTION
+           ==================================== -->
+
+      <div
+        id="amountSection"
+        class="hidden"
+      >
+
+        <p class="message">
+          How much do you want to deposit?
+        </p>
+
+
+        <input
+          type="number"
+          id="depositAmount"
+          placeholder="Enter amount"
+          min="100"
+          step="1"
+        >
+
+
+        <button
+          id="confirmDepositBtn"
+          class="btn"
+          type="button"
+        >
+          Confirm Deposit
+        </button>
+
       </div>
+
+
     </section>
+
+    <section class="deposit-guide" aria-labelledby="depositGuideTitle">
+      <header class="guide-header">
+        <span class="guide-eyebrow">PAYSTACK PAYMENT GUIDE</span>
+        <h1 id="depositGuideTitle">How to Deposit</h1>
+        <p>Follow these steps to add funds to your PESKY RECHARGE wallet.</p>
+      </header>
+
+      <ol class="deposit-steps">
+        <li>Click <strong>Deposit</strong> to open the amount form.</li>
+        <li>Enter the amount you want to add to your wallet.</li>
+        <li>Click <strong>Confirm Deposit</strong> to continue to Paystack.</li>
+        <li>Choose a payment option shown by Paystack, such as bank transfer, card, or USSD.</li>
+        <li>For bank transfer, copy the account number displayed in the Paystack checkout.</li>
+        <li>Verify the account number and transfer the exact amount you entered.</li>
+        <li>Complete the payment. For card or USSD, follow the instructions shown by Paystack.</li>
+        <li>Return to PESKY RECHARGE and click <strong>I have sent the money</strong> if that option appears.</li>
+        <li>Paystack will verify the payment and credit your wallet. Allow a short time for your balance to update.</li>
+      </ol>
+
+      <p class="transfer-note">Only send money to the account details displayed in your active Paystack checkout. Card and USSD payments do not require a bank transfer.</p>
+
+      <div class="deposit-support">
+        <div>
+          <h2>Need help with your deposit?</h2>
+          <p>Thank you for using PESKY RECHARGE. If you have an issue during the process, contact customer care.</p>
+        </div>
+        <div class="support-contacts">
+          <a href="mailto:peskyrecharge1@gmail.com"><span>Email</span><strong>peskyrecharge1@gmail.com</strong></a>
+          <a href="https://wa.me/2348117831285" target="_blank" rel="noopener noreferrer"><span>WhatsApp</span><strong>08117831285</strong></a>
+        </div>
+      </div>
+
+      <p class="deposit-copyright">© 2026 PESKY RECHARGE</p>
+    </section>
+
+
   </div>
 
-  <!-- Load JS last so DOM is ready -->
-  <script src="javascript/deposit.js"></script>
+
+  <!-- ======================================
+       DEPOSIT JAVASCRIPT
+       ====================================== -->
+
+  <!--
+    This must come after:
+    1. Supabase
+    2. Paystack
+    3. DOM elements
+  -->
+
+  <script
+    src="javascript/deposit.js">
+  </script>
+
+
+<!-- PROFESSIONAL DEPOSIT SUCCESS MODAL -->
+<div id="depositSuccessModal" class="deposit-modal hidden">
+  <div class="deposit-modal-overlay"></div>
+
+  <div class="deposit-success-card">
+
+    <button id="closeDepositModal" class="modal-close" aria-label="Close">
+      &times;
+    </button>
+
+    <div class="success-icon">
+      <svg viewBox="0 0 52 52" aria-hidden="true">
+        <circle cx="26" cy="26" r="25"></circle>
+        <path d="M14 27l8 8 16-18"></path>
+      </svg>
+    </div>
+
+    <div class="success-content">
+      <span class="success-label">PAYMENT SUCCESSFUL</span>
+
+      <h2>Deposit Successful</h2>
+
+      <p class="success-message">
+        Your wallet has been credited successfully.
+      </p>
+
+      <div class="deposit-amount-box">
+        <span>Amount Deposited</span>
+        <strong id="successDepositAmount">₦0.00</strong>
+      </div>
+
+      <div class="deposit-reference">
+        <span>Transaction Reference</span>
+        <strong id="successDepositReference">---</strong>
+      </div>
+
+      <button id="successDoneBtn" class="success-done-btn">
+        Done
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
 </body>
+
 </html>

@@ -6,6 +6,7 @@
   <title>PESKY RECHARGE Dashboard</title>
    <!-- Favicon -->
   <link rel="icon" type="image/png" href="img/peskycc.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#008000">
@@ -30,6 +31,22 @@
       </div>
     </div>
   </header>
+
+  <div id="notificationPopup" class="notification-popup">
+  <div class="notification-box">
+
+    <button id="closeNotification">
+      ×
+    </button>
+
+    <h3 id="notificationTitle"></h3>
+
+    <p id="notificationMessage"></p>
+
+  </div>
+</div>
+
+
 <!-- Hero Section with Slider -->
 <section class="hero">
   <div class="hero-slider">
@@ -47,6 +64,7 @@
       <span class="card-network">MTN</span>
       <span class="card-action">Generate PIN</span>
     </a>
+
     <a href="purchase.html" class="card glo">
       <span class="card-icon" aria-hidden="true">▣</span>
       <span class="card-network">Glo</span>
@@ -90,6 +108,13 @@
       <span class="nav-icon">📊</span>
       <span class="nav-text">History</span>
     </a>
+    <a href="notification-center.html" class="nav-item nav-notifications" aria-label="Notifications">
+      <span class="nav-icon-wrap">
+        <span class="nav-icon" aria-hidden="true">🔔</span>
+        <span id="notificationCountBadge" class="nav-badge" aria-live="polite" hidden></span>
+      </span>
+      <span class="nav-text">Alerts</span>
+    </a>
     <a href="deposit.html" class="nav-item nav-right">
       <span class="nav-icon">💰</span>
       <span class="nav-text">Deposite</span>
@@ -101,20 +126,38 @@
     <div class="drawer-content">
       <h3>Menu</h3>
       <ul>
-        
-        <li><a href="purchase-report.html">Your Purchase History</a></li>
-        <li><a href="help.html">Help & Support</a></li>
-        <li><a href="deposite-history.html">Deposit History</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="live-chat.html">Live Chat</a></li>
-        <li><a href="profile.html">👤 My Profile</a></li>
-        <li><button id="logoutBtn" class="logout-btn">Logout</button></li>
+        <li><a class="drawer-link" href="purchase-report.html"><span class="drawer-link-icon"><i class="fa-solid fa-receipt" aria-hidden="true"></i></span><span>Your Purchase History</span></a></li>
+        <li><a class="drawer-link" href="user-transaction.html"><span class="drawer-link-icon"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i></span><span>Airtime &amp; Data History</span></a></li>
+        <li><a class="drawer-link" href="help.html"><span class="drawer-link-icon"><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span>Help &amp; Support</span></a></li>
+        <li><a class="drawer-link" href="user-deposit.html"><span class="drawer-link-icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></span><span>Deposit History</span></a></li>
+        <li><a class="drawer-link" href="about.html"><span class="drawer-link-icon"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></span><span>About Us</span></a></li>
+        <li><a class="drawer-link" href="contact.html"><span class="drawer-link-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></span><span>Contact Us</span></a></li>
+        <li><a class="drawer-link" href="live-chat.html"><span class="drawer-link-icon"><i class="fa-regular fa-comments" aria-hidden="true"></i></span><span>Live Chat</span></a></li>
+        <li><a class="drawer-link" href="profile.html"><span class="drawer-link-icon"><i class="fa-regular fa-user" aria-hidden="true"></i></span><span>My Profile</span></a></li>
+        <li class="drawer-logout-item"><button id="logoutBtn" class="logout-btn"><span class="drawer-link-icon"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i></span><span>Logout</span></button></li>
         <!-- you can add more links here -->
       </ul>
     </div>
   </div>
 
+
+  <!-- PWA INSTALL BANNER CONTAINER -->
+<div id="pwaBannerContainer" class="pwa-banner">
+  <div class="pwa-banner-content">
+    <div class="pwa-icon">
+      <span class="pwa-emoji">📲</span>
+    </div>
+    <div class="pwa-text">
+      <h3>Install PESKY RECHARGE</h3>
+      <p>Add PESKY RECHARGE to your home screen for faster access and seamless updates.</p>
+    </div>
+  </div>
+  <div class="pwa-actions">
+    <button id="pwaInstallBtn" class="pwa-install-btn shake-animation">
+      INSTALL APP
+    </button>
+  </div>
+</div>
 
   <!-- Footer Section -->
 <footer class="footer">
@@ -132,9 +175,9 @@
 </footer>
 
 
-  <!-- ✅ Load Supabase SDK first -->
+  <!--  Load Supabase SDK first -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- ✅ Then load your dashboard logic -->
+  <!--  Then load your dashboard logic -->
   <script src="javascript/dashboard.js"></script>
   <script>
   if ("serviceWorker" in navigator) {

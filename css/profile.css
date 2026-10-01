@@ -53,3 +53,24 @@ h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; } h1, h2, h3, p { margin-
 .copy-button:hover {
   background: #0b5947;
 }
+
+.passkey-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.passkey-status {
+  margin-bottom: 0;
+}
+
+.passkey-status.error {
+  color: var(--red);
+}
+
+@media (max-width: 620px) {
+  .passkey-actions .primary-button {
+    width: 100%;
+  }
+}

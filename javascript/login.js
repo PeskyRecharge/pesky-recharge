@@ -12,8 +12,52 @@ const resetCodeForm = document.getElementById("resetCodeForm")
 const newPasswordForm = document.getElementById("newPasswordForm")
 const resetMessage = document.getElementById("resetMessage")
 const cancelResetButton = document.getElementById("cancelResetButton")
+const networkModal = document.getElementById("networkModal")
+const networkModalTitle = document.getElementById("networkModalTitle")
+const networkModalMessage = document.getElementById("networkModalMessage")
+const networkOkayBtn = document.getElementById("networkOkayBtn")
+const passkeyLoginSection = document.getElementById("passkeyLoginSection")
+const passkeyLoginBtn = document.getElementById("passkeyLoginBtn")
+const showPasswordLoginBtn = document.getElementById("showPasswordLoginBtn")
+const usePasskeyLoginBtn = document.getElementById("usePasskeyLoginBtn")
+const loginMethodStatus = document.getElementById("loginMethodStatus")
 
 let resetEmail = ""
+let networkReturnFocus = null
+
+function isNetworkError(error) {
+  return !navigator.onLine || /failed to fetch|network error|network request failed|load failed/i.test(error?.message || "")
+}
+
+function showFeedbackModal(title, message, returnFocusTarget = document.activeElement) {
+  networkReturnFocus = returnFocusTarget instanceof HTMLElement && returnFocusTarget !== document.body
+    ? returnFocusTarget
+    : loginBtn
+  networkModalTitle.textContent = title
+  networkModalMessage.textContent = message
+  networkModal.classList.add("open")
+  networkModal.setAttribute("aria-hidden", "false")
+  networkOkayBtn.focus()
+}
+
+function showNetworkModal(returnFocusTarget = document.activeElement) {
+  showFeedbackModal(
+    "Connection unavailable",
+    "Please check your internet connection and try again.",
+    returnFocusTarget
+  )
+}
+
+function closeNetworkModal() {
+  networkModal.classList.remove("open")
+  networkModal.setAttribute("aria-hidden", "true")
+  if (networkReturnFocus instanceof HTMLElement) networkReturnFocus.focus()
+}
+
+networkOkayBtn.addEventListener("click", closeNetworkModal)
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && networkModal.classList.contains("open")) closeNetworkModal()
+})
 
 function setButtonLoading(isLoading) {
   loginBtn.disabled = isLoading
@@ -22,6 +66,78 @@ function setButtonLoading(isLoading) {
     ? '<span class="spinner" aria-hidden="true"></span>Signing in...'
     : "Sign In"
 }
+
+function showPasswordLogin(shouldFocus = true) {
+  loginMethodStatus.classList.add("hidden")
+  passkeyLoginSection.classList.add("hidden")
+  form.classList.remove("hidden")
+  forgotPasswordLink.classList.remove("hidden")
+  usePasskeyLoginBtn.classList.remove("hidden")
+  if (shouldFocus) document.getElementById("phone").focus()
+}
+
+function showPasskeyLogin(shouldFocus = true) {
+  loginMethodStatus.classList.add("hidden")
+  form.classList.add("hidden")
+  forgotPasswordLink.classList.add("hidden")
+  passwordResetSection.classList.add("hidden")
+  usePasskeyLoginBtn.classList.add("hidden")
+  passkeyLoginSection.classList.remove("hidden")
+  if (shouldFocus) passkeyLoginBtn.focus()
+}
+
+showPasswordLoginBtn.addEventListener("click", showPasswordLogin)
+usePasskeyLoginBtn.addEventListener("click", showPasskeyLogin)
+
+async function chooseLoginMethod() {
+  if (!navigator.onLine || !(await window.PeskyPasskeys.isPlatformAvailable())) {
+    showPasswordLogin(false)
+    return
+  }
+
+  try {
+    const hasPasskey = await window.PeskyPasskeys.hasPasskey(supabaseClient)
+    if (hasPasskey) {
+      showPasskeyLogin(false)
+    } else {
+      showPasswordLogin(false)
+    }
+  } catch (error) {
+    console.warn("Unable to check passkey availability:", error)
+    showPasswordLogin(false)
+  }
+}
+
+chooseLoginMethod()
+
+passkeyLoginBtn.addEventListener("click", async () => {
+  passkeyLoginBtn.disabled = true
+  passkeyLoginBtn.textContent = "Waiting for fingerprint..."
+  try {
+    if (!navigator.onLine) {
+      showNetworkModal(passkeyLoginBtn)
+      return
+    }
+    if (!(await window.PeskyPasskeys.isPlatformAvailable())) {
+      showFeedbackModal("Fingerprint sign-in unavailable", "Use a supported device over a secure HTTPS connection, or choose password sign-in.", passkeyLoginBtn)
+      return
+    }
+
+    await window.PeskyPasskeys.signIn(supabaseClient)
+    passkeyLoginSection.classList.add("hidden")
+    successMessage.classList.remove("hidden")
+    window.location.href = "dashboard.html"
+  } catch (error) {
+    if (!navigator.onLine || /network|fetch/i.test(error.message || "")) {
+      showNetworkModal(passkeyLoginBtn)
+    } else {
+      showFeedbackModal("Fingerprint sign-in unsuccessful", error.message || "Try again or use your password instead.", passkeyLoginBtn)
+    }
+  } finally {
+    passkeyLoginBtn.disabled = false
+    passkeyLoginBtn.textContent = "Sign in with fingerprint"
+  }
+})
 
 function normalizePhone(value) {
   const digits = value.replace(/\D/g, "")
@@ -75,7 +191,11 @@ resetEmailForm.addEventListener("submit", async function(event) {
     document.getElementById("resetCode").focus()
   } catch (error) {
     console.error("Password reset email error:", error)
-    alert("We could not send a code to that email. Check the address and try again.")
+    if (isNetworkError(error)) {
+      showNetworkModal(resetEmailForm.querySelector('button[type="submit"]'))
+    } else {
+      showFeedbackModal("Unable to send code", "We could not send a code to that email. Check the address and try again.", resetEmailForm.querySelector('button[type="submit"]'))
+    }
   } finally {
     setFormButtonLoading(resetEmailForm, false, "Sending...", "Send verification code")
   }
@@ -100,7 +220,11 @@ resetCodeForm.addEventListener("submit", async function(event) {
     document.getElementById("newPassword").focus()
   } catch (error) {
     console.error("Password reset code error:", error)
-    alert("That code is invalid or expired. Please request a new code.")
+    if (isNetworkError(error)) {
+      showNetworkModal(resetCodeForm.querySelector('button[type="submit"]'))
+    } else {
+      showFeedbackModal("Code not accepted", "That code is invalid or expired. Please request a new code.", resetCodeForm.querySelector('button[type="submit"]'))
+    }
   } finally {
     setFormButtonLoading(resetCodeForm, false, "Verifying...", "Verify code")
   }
@@ -112,12 +236,12 @@ newPasswordForm.addEventListener("submit", async function(event) {
   const confirmPassword = document.getElementById("confirmPassword").value
 
   if (newPassword.length < 6) {
-    alert("Your new password must be at least 6 characters.")
+    showFeedbackModal("Check your password", "Your new password must be at least 6 characters.", newPasswordForm.querySelector('button[type="submit"]'))
     return
   }
 
   if (newPassword !== confirmPassword) {
-    alert("The passwords do not match.")
+    showFeedbackModal("Passwords do not match", "Enter the same password in both fields.", newPasswordForm.querySelector('button[type="submit"]'))
     return
   }
 
@@ -133,7 +257,11 @@ newPasswordForm.addEventListener("submit", async function(event) {
     setTimeout(() => { window.location.href = "dashboard.html" }, 900)
   } catch (error) {
     console.error("Password update error:", error)
-    alert(error.message || "Unable to update your password. Please try again.")
+    if (isNetworkError(error)) {
+      showNetworkModal(newPasswordForm.querySelector('button[type="submit"]'))
+    } else {
+      showFeedbackModal("Unable to update password", error.message || "Please try again.", newPasswordForm.querySelector('button[type="submit"]'))
+    }
   } finally {
     setFormButtonLoading(newPasswordForm, false, "Saving...", "Save new password")
   }
@@ -142,16 +270,21 @@ newPasswordForm.addEventListener("submit", async function(event) {
 form.addEventListener("submit", async function(e) {
   e.preventDefault()
 
+  if (!navigator.onLine) {
+    showNetworkModal(e.submitter || loginBtn)
+    return
+  }
+
   const phone = normalizePhone(document.getElementById("phone").value.trim())
   const password = document.getElementById("password").value
 
   if (!/^0[789][01]\d{8}$/.test(phone)) {
-    alert("Enter a valid Nigerian phone number.")
+    showFeedbackModal("Check your phone number", "Enter a valid Nigerian phone number.", loginBtn)
     return
   }
 
   if (!password) {
-    alert("Enter your password.")
+    showFeedbackModal("Password required", "Enter your password to sign in.", loginBtn)
     return
   }
 
@@ -161,16 +294,22 @@ form.addEventListener("submit", async function(e) {
     const { data: lookup, error: lookupError } = await supabaseClient
       .rpc("get_login_email_by_phone", { phone_value: phone })
 
-    if (lookupError || !lookup) {
+    if (lookupError) {
+      if (isNetworkError(lookupError)) throw lookupError
       throw new Error("Phone number or password is incorrect.")
     }
+    if (!lookup) throw new Error("Phone number or password is incorrect.")
 
     const { data, error } = await supabaseClient.auth.signInWithPassword({
       email: lookup,
       password
     })
 
-    if (error || !data?.user) {
+    if (error) {
+      if (isNetworkError(error)) throw error
+      throw new Error("Phone number or password is incorrect.")
+    }
+    if (!data?.user) {
       throw new Error("Phone number or password is incorrect.")
     }
 
@@ -187,18 +326,13 @@ form.addEventListener("submit", async function(e) {
     window.location.href = "dashboard.html"
   } catch (err) {
     console.error("Login error:", err)
-    alert(err.message || "Unable to sign in. Please try again.")
+    if (isNetworkError(err)) {
+      showNetworkModal(loginBtn)
+    } else {
+      showFeedbackModal("Sign-in unsuccessful", err.message || "Unable to sign in. Please try again.", loginBtn)
+    }
   } finally {
     setButtonLoading(false)
   }
 })
 
-
-JavaScript
-function showNetworkModal() {
-document.getElementById("networkModal").style.display = "flex";
-}
- 
-function closeNetworkModal() {
-document.getElementById("networkModal").style.display = "none";
-}

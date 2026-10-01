@@ -1,132 +1,121 @@
+// =========================================================
+// 1. SUPABASE INITIALIZATION
+// =========================================================
 const supabaseUrl = "https://beyykzogvaemjvecbzkf.supabase.co";
 const supabaseKey = "sb_publishable_JDxS16gwlyg9SxF0T2owYg_KKZqE9Gy";
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
+// DOM References
 const loginSection = document.getElementById("loginSection");
 const dashboardWrapper = document.getElementById("dashboardWrapper");
+const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginError = document.getElementById("loginError");
+const loginBtn = document.getElementById("loginBtn");
+const loginBtnText = document.getElementById("loginBtnText");
+const loginSpinner = document.getElementById("loginSpinner");
+const logoutBtn = document.getElementById("logoutBtn");
+const userEmailDisplay = document.getElementById("userEmailDisplay");
 
-// Check session on page load
-(async () => {
-  const { data: { session } } = await supabaseClient.auth.getSession();
+// =========================================================
+// 2. CHECK EXISTING SESSION ON PAGE LOAD
+// =========================================================
+async function initAuthCheck() {
+  const { data: { session }, error } = await supabaseClient.auth.getSession();
 
   if (session && session.user) {
-    // Already logged in → show dashboard
-    loginSection.classList.add("hidden");
-    dashboardWrapper.classList.remove("hidden");
-
-    // Load data
-    loadUsers();
-    loadDeposits();
-    loadPurchases();
+    showDashboard(session.user);
   } else {
-    // No session → show login
-    loginSection.classList.remove("hidden");
-    dashboardWrapper.classList.add("hidden");
+    showLogin();
   }
-})();
+}
 
-//  Login
-document.getElementById("loginBtn").addEventListener("click", async () => {
-  const loginButton = document.getElementById("loginBtn");
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
+// Global state change listener
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' && session) {
+    showDashboard(session.user);
+  } else if (event === 'SIGNED_OUT') {
+    showLogin();
+  }
+});
 
-  loginButton.disabled = true;
-  loginButton.innerHTML = '<span class="login-spinner" aria-hidden="true"></span>Signing in...';
+// =========================================================
+// 3. LOGIN SUBMIT EVENT
+// =========================================================
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    loginError.innerText = "";
 
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value.trim();
+
+    if (!email || !password) {
+      loginError.innerText = "Please enter both email and password.";
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (error) throw error;
+
+      showDashboard(data.user);
+    } catch (err) {
+      console.error("Auth failed:", err.message);
+      loginError.innerText = err.message || "Invalid email or password.";
+    } finally {
+      setLoading(false);
+    }
   });
+}
 
-  if (error) {
-    document.getElementById("loginError").textContent = "Login failed: " + error.message;
-    loginButton.disabled = false;
-    loginButton.textContent = "Login";
-    return;
-  }
+// =========================================================
+// 4. LOGOUT EVENT
+// =========================================================
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    showLogin();
+  });
+}
 
-  // Success: show dashboard
+// =========================================================
+// 5. UI VIEW SWITCHERS
+// =========================================================
+function showDashboard(user) {
   loginSection.classList.add("hidden");
   dashboardWrapper.classList.remove("hidden");
 
-  loadUsers();
-  loadDeposits();
-  loadPurchases();
-});
+  if (userEmailDisplay && user) {
+    userEmailDisplay.innerText = user.email;
+  }
+}
 
-//  Logout
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await supabaseClient.auth.signOut();
+function showLogin() {
   dashboardWrapper.classList.add("hidden");
   loginSection.classList.remove("hidden");
-});
-
-//  Menu links
-document.getElementById("usersLink").addEventListener("click", () => showSection("usersSection"));
-document.getElementById("depositsLink").addEventListener("click", () => showSection("depositsSection"));
-document.getElementById("purchasesLink").addEventListener("click", () => showSection("purchasesSection"));
-document.getElementById("settingsLink").addEventListener("click", () => showSection("settingsSection"));
-
-function showSection(sectionId) {
-  ["dashboardSection","usersSection","depositsSection","purchasesSection","settingsSection"].forEach(id => {
-    document.getElementById(id).classList.add("hidden");
-  });
-  document.getElementById(sectionId).classList.remove("hidden");
+  loginError.innerText = "";
+  if (loginPassword) loginPassword.value = "";
 }
 
-// Load users
-async function loadUsers() {
-  const { data, error } = await supabaseClient.from("customers").select("surname, other_name, email, balance");
-  if (error) {
-    console.error("Error loading users:", error);
-    return;
+function setLoading(isLoading) {
+  if (isLoading) {
+    loginBtn.disabled = true;
+    loginBtnText.innerText = "Signing in...";
+    loginSpinner.classList.remove("hidden");
+  } else {
+    loginBtn.disabled = false;
+    loginBtnText.innerText = "Log In";
+    loginSpinner.classList.add("hidden");
   }
-  const tbody = document.querySelector("#usersTable tbody");
-  tbody.innerHTML = "";
-  data.forEach(user => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${user.surname}</td><td>${user.other_name}</td><td>${user.email}</td><td>₦${user.balance || 0}</td>`;
-    tbody.appendChild(tr);
-  });
 }
 
-// Load deposits
-async function loadDeposits() {
-  const { data, error } = await supabaseClient.from("customers").select("transactions, email");
-  if (error) {
-    console.error("Error loading deposits:", error);
-    return;
-  }
-  const list = document.getElementById("depositsList");
-  list.innerHTML = "";
-  data.forEach(user => {
-    if (user.transactions) {
-      user.transactions.filter(tx => tx.type === "deposit").forEach(tx => {
-        const li = document.createElement("li");
-        li.textContent = `${user.email} deposited ₦${tx.amount} on ${new Date(tx.date).toLocaleString()}`;
-        list.appendChild(li);
-      });
-    }
-  });
-}
-
-// Load purchases
-async function loadPurchases() {
-  const { data, error } = await supabaseClient.from("customers").select("transactions, email");
-  if (error) {
-    console.error("Error loading purchases:", error);
-    return;
-  }
-  const list = document.getElementById("purchasesList");
-  list.innerHTML = "";
-  data.forEach(user => {
-    if (user.transactions) {
-      user.transactions.filter(tx => tx.type === "deduct").forEach(tx => {
-        const li = document.createElement("li");
-        li.textContent = `${user.email} purchased ₦${tx.amount} on ${new Date(tx.date).toLocaleString()}`;
-        list.appendChild(li);
-      });
-    }
-  });
-}
+// Run auth check on DOM load
+document.addEventListener("DOMContentLoaded", initAuthCheck);

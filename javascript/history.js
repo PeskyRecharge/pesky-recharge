@@ -98,25 +98,42 @@ function printBatch(purchase, pins, email) {
     return;
   }
 
-  const cards = pins.length ? pins.map((pin) => `
-    <article class="card">
-      <strong>${escapeHtml(String(purchase.network || "N/A").toUpperCase())}</strong>
-      <b>${escapeHtml(formatCurrency(purchase.denomination))}</b>
-      <p>Serial number: ${escapeHtml(pin.serial || "N/A")}</p>
-      <p class="pin">PIN: ${escapeHtml(formatPin(pin.pin))}</p>
-      <p>Dial *311*PIN# | ${escapeHtml(new Date(purchase.created_at).toLocaleTimeString())}.</p>
-      <p>Date: ${escapeHtml(new Date(purchase.created_at).toLocaleDateString())}</p>
-    </article>
-  `).join("") : `<article class="card">
-    <strong>${escapeHtml(String(purchase.network || "RECHARGE").toUpperCase())}</strong>
-    <b>${escapeHtml(formatCurrency(purchase.total_cost || purchase.denomination))}</b>
-    <p>Purchase recorded from the customer transaction history.</p>
-    <p>Date: ${escapeHtml(formatDate(purchase.created_at))}</p>
-  </article>`;
+  const network = String(purchase.network || "N/A").toUpperCase();
+  const logoUrl = logos[network]
+    ? new URL(`img/${logos[network]}`, window.location.href).href
+    : "";
+  const formattedTime = new Date(purchase.created_at).toLocaleTimeString();
+  const formattedDate = new Date(purchase.created_at).toLocaleDateString();
+  const cardBranding = `
+    <div class="card-branding">
+      <span class="amount">₦${escapeHtml(String(purchase.denomination || "0"))}</span>
+      ${logoUrl ? `<img src="${escapeHtml(logoUrl)}" class="network-logo" alt="${escapeHtml(network)} logo">` : ""}
+    </div>`;
 
-  printWindow.document.write(`<!doctype html><html><head><title>Pesky Recharge - ${escapeHtml(formatDate(purchase.created_at))}</title><style>
-    @page{size:A4 landscape;margin:8mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#10243e;margin:0}h1{font-size:13px;color:#0078d7;text-align:center;margin:0 0 2px}p{margin:1px 0;font-size:9px;color:#333}.meta{margin-bottom:6px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.card{border:1px solid #777;border-radius:3px;padding:4px 6px;break-inside:avoid;font-size:9px;line-height:1}.card strong,.card b{display:block;margin-bottom:2px}.card b{color:#0078d7;font-size:12px}.pin{color:#d32f2f;font-weight:700;background:#e0e0e0;padding:3px 2px;border-radius:3px;letter-spacing:.5px}
-  </style></head><body><h1>PESKY RECHARGE</h1><div class="meta"><p>Purchase batch</p><p>Email: ${escapeHtml(email)}</p><p>Date: ${escapeHtml(formatDate(purchase.created_at))}</p><p>Quantity: ${escapeHtml(String(purchase.quantity || pins.length))} | Total: ${escapeHtml(formatCurrency(purchase.total_cost))}</p></div><div class="grid">${cards}</div><script>window.onload=()=>{window.print()}<\/script></body></html>`);
+  const cards = pins.length ? pins.map((pin) => `
+    <article class="recharge-card">
+      <div class="card-header">
+        <span class="reference">Ref: Pesky-Recharge</span>
+        ${cardBranding}
+      </div>
+      <p class="card-detail">S/N: ${escapeHtml(pin.serial || "N/A")}</p>
+      <p class="card-detail pin">PIN: ${escapeHtml(formatPin(pin.pin))}</p>
+      <p class="card-detail">Dial *311*PIN#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${escapeHtml(formattedTime)}.</p>
+      <p class="card-detail">Date: ${escapeHtml(formattedDate)}</p>
+    </article>
+  `).join("") : `
+    <article class="recharge-card">
+      <div class="card-header">
+        <span class="reference">Ref: Pesky-Recharge</span>
+        ${cardBranding}
+      </div>
+      <p class="card-detail">${escapeHtml(network)} purchase</p>
+      <p class="card-detail">Quantity: ${escapeHtml(String(purchase.quantity || 1))}</p>
+      <p class="card-detail">Date: ${escapeHtml(formatDate(purchase.created_at))}</p>
+    </article>`;
+
+  const reportCss = new URL("css/purchase-report.css", window.location.href).href;
+  printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Pesky Recharge - ${escapeHtml(formatDate(purchase.created_at))}</title><link rel="stylesheet" href="${escapeHtml(reportCss)}"></head><body><div class="report-container"><h1>PESKY RECHARGE - Purchase Report</h1><p>User: ${escapeHtml(email)}</p><p>Date: ${escapeHtml(formatDate(purchase.created_at))}</p><p>Quantity: ${escapeHtml(String(purchase.quantity || pins.length))} | Total: ${escapeHtml(formatCurrency(purchase.total_cost))}</p><div class="cards-container">${cards}</div></div><script>window.onload=()=>window.print()<\/script></body></html>`);
   printWindow.document.close();
 }
 

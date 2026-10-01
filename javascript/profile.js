@@ -3,6 +3,8 @@ const supabaseKey = "sb_publishable_JDxS16gwlyg9SxF0T2owYg_KKZqE9Gy";
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 const statusMessage = document.getElementById("statusMessage");
+const passkeyStatus = document.getElementById("passkeyStatus");
+const setupPasskeyBtn = document.getElementById("setupPasskeyBtn");
 let currentUser;
 let customer;
 let passwordEmailVerified = false;
@@ -71,7 +73,46 @@ async function loadProfile() {
   document.getElementById("passwordEmailInput").value = customer.email || currentUser.email || "";
   document.getElementById("loginActivity").textContent = `Current session active since ${new Date(currentUser.last_sign_in_at || Date.now()).toLocaleString()}.`;
   checkMfa();
+  updatePasskeyStatus();
 }
+
+async function updatePasskeyStatus() {
+  if (!(await window.PeskyPasskeys.isPlatformAvailable())) {
+    passkeyStatus.textContent = "Fingerprint sign-in needs a supported device and a secure HTTPS connection.";
+    setupPasskeyBtn.disabled = true;
+    return;
+  }
+
+  setupPasskeyBtn.disabled = false;
+  try {
+    const { count } = await window.PeskyPasskeys.getStatus(supabaseClient);
+    setupPasskeyBtn.textContent = count ? "Add another passkey" : "Set up fingerprint";
+    passkeyStatus.textContent = count
+      ? `${count} passkey${count === 1 ? " is" : "s are"} set up for this account.`
+      : "No fingerprint passkey is set up for this account yet.";
+  } catch (error) {
+    passkeyStatus.textContent = error.message || "Passkey status could not be checked.";
+    passkeyStatus.classList.add("error");
+  }
+}
+
+setupPasskeyBtn.addEventListener("click", async () => {
+  setButtonLoading(setupPasskeyBtn, "Setting up...");
+  passkeyStatus.classList.remove("error");
+  try {
+    await window.PeskyPasskeys.register(supabaseClient);
+    passkeyStatus.textContent = "Fingerprint sign-in is ready on this device.";
+    await updatePasskeyStatus();
+    setStatus("Passkey set up successfully.");
+  } catch (error) {
+    passkeyStatus.textContent = error.name === "NotAllowedError"
+      ? "Passkey setup was cancelled. You can try again when ready."
+      : error.message || "Unable to set up fingerprint sign-in.";
+    passkeyStatus.classList.add("error");
+  } finally {
+    resetButton(setupPasskeyBtn);
+  }
+});
 
 document.getElementById("editProfileBtn").addEventListener("click", () => { document.getElementById("profileForm").hidden = false; document.getElementById("detailsList").hidden = true; });
 document.getElementById("cancelEditBtn").addEventListener("click", () => { document.getElementById("profileForm").hidden = true; document.getElementById("detailsList").hidden = false; });

@@ -330,6 +330,79 @@ body {
   text-decoration: underline;
 }
 
+.network-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.68);
+}
+
+.network-modal.open {
+  display: flex;
+}
+
+.network-box {
+  width: min(100%, 420px);
+  padding: 28px 24px 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  text-align: center;
+}
+
+.network-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: #fff4e5;
+  color: #b45309;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.network-box h2 {
+  margin-bottom: 8px;
+  color: #0f172a;
+  font-size: 20px;
+}
+
+.network-box p {
+  margin-bottom: 22px;
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.network-okay-btn {
+  width: min(100%, 180px);
+  min-height: 46px;
+  border: 0;
+  border-radius: 8px;
+  background: #166534;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.network-okay-btn:hover {
+  background: #14532d;
+}
+
+.network-okay-btn:focus-visible {
+  outline: 3px solid #86efac;
+  outline-offset: 3px;
+}
+
 /* Responsive Design */
 @media (max-width: 480px) {
   .login-container {
@@ -355,6 +428,50 @@ body {
   }
 
   .btn {
+
+  .passkey-login {
+    display: grid;
+    gap: 12px;
+    margin: 0 0 1.5rem;
+  }
+
+  .login-method-status {
+    margin: 0 0 1.5rem;
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+
+  .passkey-login-label {
+    margin: 0;
+    color: #0d6b57;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .passkey-login-hint {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .password-fallback {
+    justify-self: center;
+    padding: 7px 10px;
+    border: 0;
+    background: transparent;
+    color: #0d6b57;
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .password-fallback:hover {
+    color: #094d3f;
+    text-decoration: underline;
+  }
     font-size: 0.95rem;
     padding: 0.9rem;
   }

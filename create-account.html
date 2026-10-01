@@ -102,16 +102,17 @@
     </div>
   </div>
 
+  <div id="networkModal" class="network-modal" aria-hidden="true">
+    <section class="network-box" role="alertdialog" aria-modal="true" aria-labelledby="networkModalTitle" aria-describedby="networkModalMessage">
+      <div class="network-icon" aria-hidden="true">!</div>
+      <h2 id="networkModalTitle">Connection unavailable</h2>
+      <p id="networkModalMessage">Please check your internet connection and try again.</p>
+      <button type="button" id="networkOkayBtn" class="network-okay-btn">Okay</button>
+    </section>
+  </div>
+
   <!-- Load Supabase library BEFORE your JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="javascript/create-account.js"></script>
-
-  <div id="networkModal" class="network-modal">
-<div class="network-box">
-<h3>Connection Error</h3>
-<p>Please check your internet connection and try again later.</p>
-<button onclick="closeNetworkModal()">OK</button>
-</div>
-</div>
 </body>
 </html>

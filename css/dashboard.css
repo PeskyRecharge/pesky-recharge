@@ -17,7 +17,7 @@ body {
   top: 0;
   z-index: 1000;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   background: #000;
   padding: 10px 0;
@@ -29,7 +29,8 @@ body {
 .header-right { display: flex; align-items: center; gap: 16px; justify-self: end; margin-right: 10px; }
 .menu-toggle { display: flex; flex-direction: column; justify-content: space-between; width: 25px; height: 18px; cursor: pointer; }
 .menu-toggle span { display: block; height: 3px; background: #fff; border-radius: 2px; }
-.balance-mini { font-size: 12px; color: white; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+.balance-mini { max-width: 88px; font-size: 12px; color: white; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+.balance-mini #dashboardBalance { display: block; max-width: 68px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .balance-mini .balance-icon { font-size: 12px; color: white; }
 
 /* Hero Slider */
@@ -93,7 +94,7 @@ body {
   width: 100%;
   background: #222;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: center;
   padding: 10px 20px;
   height: 70px;
@@ -105,9 +106,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-self: center;
+  min-width: 0;
+  width: 100%;
   cursor: pointer;
   color: white;
-  padding: 8px 12px;
+  padding: 8px 4px;
   border-radius: 6px;
   transition: background 0.3s, color 0.3s;
   text-decoration: none;
@@ -116,19 +120,95 @@ body {
 .nav-item:hover { background: rgba(255, 215, 0, 0.2); color: #ffd700; }
 .nav-icon { font-size: 22px; }
 .nav-text { font-size: 12px; font-weight: bold; }
-.nav-left { justify-self: start; }
-.nav-center { justify-self: center; }
-.nav-right { justify-self: end; }
+.nav-icon-wrap { position: relative; display: grid; place-items: center; line-height: 1; }
+.nav-badge {
+  position: absolute;
+  top: -7px;
+  right: -11px;
+  display: grid;
+  min-width: 18px;
+  height: 18px;
+  place-items: center;
+  padding: 0 4px;
+  border: 2px solid #222;
+  border-radius: 10px;
+  background: #e11d48;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+.nav-badge[hidden] { display: none; }
 
 /* Drawer */
-.drawer { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: #fff; box-shadow: -2px 0 5px rgba(0,0,0,0.3); transition: right 0.3s ease; z-index: 2000; }
-.drawer.open { right: 0; }
-.drawer-content { padding: 20px; }
-.drawer-content h3 { margin-top: 0; font-size: 18px; margin-bottom: 10px; }
-.drawer-content ul { list-style: none; padding: 0; }
-.drawer-content li { margin: 10px 0; }
-.drawer-content a { text-decoration: none; color: #0078d7; font-weight: 500; }
-.drawer-content a:hover { text-decoration: underline; }
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(360px, calc(100vw - 24px));
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  background: #fff;
+  box-shadow: -12px 0 36px rgba(0, 0, 0, 0.2);
+  transform: translateX(100%);
+  transition: transform 0.28s ease;
+  z-index: 2000;
+}
+.drawer.open { transform: translateX(0); }
+.drawer-content { padding: 28px 18px 24px; }
+.drawer-content h3 {
+  margin: 0;
+  padding: 0 8px 18px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #111827;
+  font-size: 20px;
+  font-weight: 700;
+}
+.drawer-content ul {
+  display: grid;
+  gap: 6px;
+  margin-top: 16px;
+  list-style: none;
+  padding: 0;
+}
+.drawer-content li { min-width: 0; }
+.drawer-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #293548;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+.drawer-link:hover,
+.drawer-link:focus-visible {
+  background: #f0fdf4;
+  color: #166534;
+  outline: none;
+}
+.drawer-link-icon {
+  display: grid;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #15803d;
+  font-size: 15px;
+}
+.drawer-logout-item {
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid #e5e7eb;
+}
 
 /* Footer */
 .footer {
@@ -157,29 +237,213 @@ body {
 
 /* Logout button styling */
 .logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   width: 100%;
-  padding: 10px 15px;
-  background: #ed1c24;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: bold;
+  min-height: 54px;
+  padding: 8px 10px;
+  background: #fff;
+  color: #b42318;
+  border: 1px solid #fee2e2;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
   text-align: left;
-  
 }
-.logout-btn:hover { background: #c8101e; }
+.logout-btn .drawer-link-icon { background: #fef2f2; color: #b42318; }
+.logout-btn:hover { background: #fef2f2; border-color: #fecaca; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer { transition: none; }
+}
 
 /* Responsive */
 @media (max-width: 600px) {
   .header-center h1 { font-size: 18px; }
   .logo-left { width: 50px; height: 50px; }
+  .header-right { gap: 8px; margin-right: 8px; }
+  .balance-mini { max-width: 60px; }
+  .balance-mini #dashboardBalance { max-width: 44px; }
   .menu-toggle { width: 22px; height: 16px; }
   .network-grid { row-gap: 6px; column-gap: 6px; padding: 8px; }
   .card { min-height: 112px; padding: 12px 6px; }
   .card-network { font-size: 14px; }
   .card-action { font-size: 10px; }
   .footer-links ul { grid-template-columns: repeat(2, auto); } /* 2 per row on mobile */
+}
+
+
+
+/* ============================================
+   PWA INSTALL BANNER CONTAINER & SHAKE BUTTON
+   ============================================ */
+
+.pwa-banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: calc(100% - 32px);
+  max-width: 1280px;
+  min-height: 300px;
+  margin: 32px auto;
+  padding: 40px;
+  background: #111914;
+  border: 1px solid rgba(0, 230, 118, 0.45);
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  color: #ffffff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pwa-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.pwa-icon {
+  background: rgba(0, 230, 118, 0.15);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pwa-emoji {
+  font-size: 36px;
+}
+
+.pwa-text {
+  flex: 1;
+}
+
+.pwa-text h3 {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.pwa-text p {
+  margin: 0;
+  font-size: 16px;
+  color: #a0a0b8;
+  line-height: 1.4;
+}
+
+.pwa-actions {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.pwa-install-btn {
+  background: #00c853;
+  color: #000000;
+  font-weight: 800;
+  font-size: 18px;
+  padding: 18px 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 200, 83, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 260px;
+  min-height: 64px;
+  max-width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .pwa-banner {
+    width: calc(100% - 20px);
+    min-height: 290px;
+    padding: 28px 20px;
+    gap: 24px;
+  }
+
+  .pwa-banner-content {
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .pwa-icon {
+    flex: 0 0 auto;
+    padding: 12px;
+  }
+
+  .pwa-emoji {
+    font-size: 30px;
+  }
+
+  .pwa-text h3 {
+    font-size: 20px;
+  }
+
+  .pwa-text p {
+    font-size: 15px;
+  }
+
+  .pwa-install-btn {
+    width: min(100%, 300px);
+    padding: 17px 24px;
+  }
+}
+
+.shake-animation {
+  animation: installShake 3.5s infinite ease-in-out;
+}
+
+@keyframes installShake {
+  0%, 86%, 100% { transform: translateX(0); }
+  88%, 92%, 96% { transform: translateX(-4px); }
+  90%, 94%, 98% { transform: translateX(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shake-animation { animation: none; }
+}
+
+.pwa-install-btn:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.pwa-install-btn:hover {
+  background: #00b248;
+  box-shadow: 0 6px 16px rgba(0, 200, 83, 0.3);
+}
+
+/* DISMISS / CLOSE BUTTON */
+.pwa-close-btn {
+  background: transparent;
+  border: none;
+  color: #6c757d;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.pwa-close-btn:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 360px) {
+  .header-center h1 { font-size: 15px; }
+  .header-right { gap: 6px; }
+  .balance-mini { max-width: 50px; }
+  .balance-mini #dashboardBalance { max-width: 34px; }
 }
