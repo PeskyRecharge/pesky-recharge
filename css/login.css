@@ -22,7 +22,7 @@ body {
   right: -10%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(13, 107, 87, 0.12) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
@@ -54,35 +54,22 @@ body {
   }
 }
 
-/* Padlock Circle */
+/* Padlock Badge */
 .padlock-circle {
+  display: flex;
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   margin: 0 auto 1.5rem;
-  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
-  animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-@keyframes bounceIn {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+  border-radius: 50%;
+  background: #0d6b57;
+  box-shadow: 0 8px 25px rgba(13, 107, 87, 0.3);
 }
 
 .padlock-icon {
-  font-size: 2.5rem;
   display: block;
+  font-size: 2.5rem;
 }
 
 /* Title */
@@ -141,11 +128,15 @@ body {
   background: #fafafa;
 }
 
+.form-group input.password-input {
+  padding-right: 4.5rem;
+}
+
 .form-group input:focus {
   outline: none;
-  border-color: #ffd700;
+  border-color: #0d6b57;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 0 3px rgba(13, 107, 87, 0.12);
 }
 
 .form-group input::placeholder {
@@ -158,6 +149,25 @@ body {
   color: #999;
   font-size: 1.2rem;
   pointer-events: none;
+}
+
+.password-visibility-toggle {
+  position: absolute;
+  right: 0.75rem;
+  padding: 0.35rem;
+  border: 0;
+  background: transparent;
+  color: #0d6b57;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.password-visibility-toggle:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid #0d6b57;
+  outline-offset: 2px;
 }
 
 /* Buttons */
@@ -176,14 +186,15 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  color: #0f172a;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  background: #0d6b57;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(13, 107, 87, 0.22);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  background: #094d3f;
+  box-shadow: 0 6px 20px rgba(13, 107, 87, 0.3);
 }
 
 .btn-primary:active {
@@ -203,7 +214,7 @@ body {
   margin: -0.5rem auto 0;
   padding: 0.25rem;
   border: 0;
-  color: #9a7400;
+  color: #0d6b57;
   background: transparent;
   font: inherit;
   font-size: 0.9rem;
@@ -212,7 +223,7 @@ body {
 }
 
 .forgot-password-link:hover {
-  color: #6f5400;
+  color: #094d3f;
   text-decoration: underline;
 }
 
@@ -242,15 +253,15 @@ body {
 }
 
 .btn-secondary {
-  background: rgba(255, 215, 0, 0.1);
-  color: #ffd700;
-  border: 2px solid rgba(255, 215, 0, 0.3);
+  background: rgba(13, 107, 87, 0.08);
+  color: #0d6b57;
+  border: 2px solid rgba(13, 107, 87, 0.24);
   margin-top: 0.5rem;
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 215, 0, 0.2);
-  border-color: rgba(255, 215, 0, 0.5);
+  background: rgba(13, 107, 87, 0.14);
+  border-color: rgba(13, 107, 87, 0.4);
   transform: translateY(-2px);
 }
 
@@ -291,6 +302,28 @@ body {
   display: none;
 }
 
+.password-fallback {
+  display: block;
+  margin: -1rem auto 1.5rem;
+  padding: 0.25rem;
+  border: 0;
+  background: transparent;
+  color: #0d6b57;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.password-fallback.hidden {
+  display: none;
+}
+
+.password-fallback:hover {
+  color: #094d3f;
+  text-decoration: underline;
+}
+
 .message {
   margin-bottom: 1.5rem;
   color: #333;
@@ -319,14 +352,14 @@ body {
 }
 
 .footer-link a {
-  color: #ffd700;
+  color: #0d6b57;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
 }
 
 .footer-link a:hover {
-  color: #ffed4e;
+  color: #094d3f;
   text-decoration: underline;
 }
 
@@ -410,15 +443,6 @@ body {
     border-radius: 12px;
   }
 
-  .padlock-circle {
-    width: 70px;
-    height: 70px;
-  }
-
-  .padlock-icon {
-    font-size: 2rem;
-  }
-
   .title {
     font-size: 1.6rem;
   }
@@ -428,50 +452,6 @@ body {
   }
 
   .btn {
-
-  .passkey-login {
-    display: grid;
-    gap: 12px;
-    margin: 0 0 1.5rem;
-  }
-
-  .login-method-status {
-    margin: 0 0 1.5rem;
-    color: #64748b;
-    font-size: 0.85rem;
-  }
-
-  .passkey-login-label {
-    margin: 0;
-    color: #0d6b57;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-
-  .passkey-login-hint {
-    margin: 0;
-    color: #64748b;
-    font-size: 0.82rem;
-    line-height: 1.45;
-  }
-
-  .password-fallback {
-    justify-self: center;
-    padding: 7px 10px;
-    border: 0;
-    background: transparent;
-    color: #0d6b57;
-    font: inherit;
-    font-size: 0.88rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .password-fallback:hover {
-    color: #094d3f;
-    text-decoration: underline;
-  }
     font-size: 0.95rem;
     padding: 0.9rem;
   }

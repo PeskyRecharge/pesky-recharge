@@ -158,47 +158,36 @@ if ("serviceWorker" in navigator) {
     .catch((err) => console.error("SW registration error:", err));
 }
 
-// Call this when user signs up or logs into dashboard
+let dashboardNotificationUserId = null;
+
 async function requestNotificationPermissionOnLogin() {
   if (!("Notification" in window)) return;
 
-  if (Notification.permission === "default") {
-    const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      // Show confirmation alert on status bar
-      showStatusBarAlert(
-        "Notifications Enabled!",
-        "You will now receive updates on your phone status bar."
-      );
+  try {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error) throw error;
+    if (!data?.user) return;
+    dashboardNotificationUserId = data.user.id;
+
+    const permissionWasNotSet = Notification.permission === "default";
+    const permission = permissionWasNotSet
+      ? await Notification.requestPermission()
+      : Notification.permission;
+    if (permission !== "granted") return;
+
+    const pushPreferenceIsSet = window.notificationPreferenceIsSet(data.user.id, "push");
+    if (!permissionWasNotSet && pushPreferenceIsSet && !window.notificationPreferenceEnabled(data.user.id, "push")) return;
+
+    await window.PeskyNotifications.subscribeDeviceToPush(supabaseClient, data.user.id);
+    if (!window.notificationPreferenceEnabled(data.user.id, "push")) {
+      window.setNotificationsEnabled(data.user.id, "push", true);
+      await window.PeskyNotifications.showAccountNotification("Notifications enabled", {
+        body: "This device is ready to receive PESKY RECHARGE alerts.",
+        tag: "notification-settings-confirmation",
+      });
     }
-  }
-}
-
-
-
-// ====================================================
-// 1. REGISTER SERVICE WORKER & REQUEST PERMISSION
-// ====================================================
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js")
-    .then(() => console.log("Service Worker registered"))
-    .catch((err) => console.error("SW registration error:", err));
-}
-
-// Call this when user signs up or logs into dashboard
-async function requestNotificationPermissionOnLogin() {
-  if (!("Notification" in window)) return;
-
-  if (Notification.permission === "default") {
-    const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      // Show confirmation alert on status bar
-      showStatusBarAlert(
-        "Notifications Enabled!",
-        "You will now receive updates on your phone status bar."
-      );
-    }
+  } catch (error) {
+    console.error("Unable to register this device for push notifications:", error);
   }
 }
 
@@ -207,23 +196,11 @@ async function requestNotificationPermissionOnLogin() {
 // ====================================================
 
 function showStatusBarAlert(title, message) {
-  if ("Notification" in window && Notification.permission === "granted") {
-    if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.ready.then((reg) => {
-        reg.showNotification(title || "New Alert", {
-          body: message || "Tap to read full notification",
-          icon: "/icon.png",          // Replace with your icon path
-          badge: "/badge.png",        // Replace with small status bar icon path
-          vibrate: [200, 100, 200],
-          tag: "supabase-notif"
-        });
-      });
-    } else {
-      new Notification(title || "New Alert", {
-        body: message || "Tap to read full notification"
-      });
-    }
-  }
+  if (!dashboardNotificationUserId || !notificationsEnabled(dashboardNotificationUserId, "activity")) return;
+  window.PeskyNotifications.showAccountNotification(title || "New Alert", {
+    body: message || "Tap to read full notification",
+    tag: "supabase-notif",
+  });
 }
 
 // ====================================================

@@ -67,8 +67,9 @@ async function loadProfile() {
   if (error) { setStatus("We could not load your profile details.", true); return; }
   customer = data;
   renderProfile();
-  document.getElementById("notificationToggle").checked = notificationsEnabled(currentUser.id, "activity");
-  document.getElementById("loginNotificationToggle").checked = notificationsEnabled(currentUser.id, "login");
+  document.getElementById("browserNotificationToggle").checked = notificationPreferenceEnabled(currentUser.id, "push");
+  document.getElementById("notificationToggle").checked = notificationPreferenceEnabled(currentUser.id, "activity");
+  document.getElementById("loginNotificationToggle").checked = notificationPreferenceEnabled(currentUser.id, "login");
   document.getElementById("currentEmailInput").value = customer.email || currentUser.email || "";
   document.getElementById("passwordEmailInput").value = customer.email || currentUser.email || "";
   document.getElementById("loginActivity").textContent = `Current session active since ${new Date(currentUser.last_sign_in_at || Date.now()).toLocaleString()}.`;
@@ -314,16 +315,58 @@ document.getElementById("verifyTotpBtn").addEventListener("click", async event =
   checkMfa(); resetButton(button);
 });
 
-async function requestNotifications(toggle) {
-  if (!("Notification" in window)) { toggle.checked = false; setStatus("This browser does not support notifications.", true); return; }
-  const type = toggle.id === "loginNotificationToggle" ? "login" : "activity";
-  if (!toggle.checked) { setNotificationsEnabled(currentUser.id, type, false); setStatus("Notifications disabled on this device."); return; }
-  const permission = await Notification.requestPermission();
-  if (permission !== "granted") { toggle.checked = false; setNotificationsEnabled(currentUser.id, type, false); setStatus("Notification permission was not granted.", true); return; }
-  setNotificationsEnabled(currentUser.id, type, true); setStatus("Notifications enabled on this device.");
+async function setDeviceNotificationsEnabled(toggle) {
+  if (!toggle.checked) {
+    try {
+      await window.PeskyNotifications.unsubscribeDeviceFromPush(supabaseClient);
+      setNotificationsEnabled(currentUser.id, "push", false);
+      setStatus("Browser notifications are off on this device.");
+    } catch (error) {
+      toggle.checked = true;
+      setStatus(error.message || "Unable to turn off notifications on this device.", true);
+    }
+    return;
+  }
+
+  if (!("Notification" in window)) {
+    toggle.checked = false;
+    setStatus("This browser does not support notifications.", true);
+    return;
+  }
+
+  const permission = Notification.permission === "default"
+    ? await Notification.requestPermission()
+    : Notification.permission;
+  if (permission !== "granted") {
+    toggle.checked = false;
+    setStatus("Notification permission was not granted. Check this browser's site settings.", true);
+    return;
+  }
+
+  try {
+    await window.PeskyNotifications.subscribeDeviceToPush(supabaseClient, currentUser.id);
+    setNotificationsEnabled(currentUser.id, "push", true);
+    setStatus("Browser notifications are enabled on this device.");
+    window.PeskyNotifications.showAccountNotification("Notifications enabled", {
+      body: "This device is ready to receive PESKY RECHARGE alerts.",
+      tag: "notification-settings-confirmation",
+    }).catch(error => console.warn("Notification confirmation could not be shown:", error));
+  } catch (error) {
+    toggle.checked = false;
+    setStatus(error.message || "Unable to register this device for push notifications.", true);
+  }
 }
-document.getElementById("notificationToggle").addEventListener("change", event => requestNotifications(event.target));
-document.getElementById("loginNotificationToggle").addEventListener("change", event => requestNotifications(event.target));
+
+function setNotificationCategory(toggle, type) {
+  setNotificationsEnabled(currentUser.id, type, toggle.checked);
+  setStatus(toggle.checked
+    ? "Alert preference saved. Enable browser notifications on this device to receive it."
+    : "Alert preference disabled.");
+}
+
+document.getElementById("browserNotificationToggle").addEventListener("change", event => setDeviceNotificationsEnabled(event.target));
+document.getElementById("notificationToggle").addEventListener("change", event => setNotificationCategory(event.target, "activity"));
+document.getElementById("loginNotificationToggle").addEventListener("change", event => setNotificationCategory(event.target, "login"));
 document.getElementById("signOutBtn").addEventListener("click", async event => { const button = event.currentTarget; setButtonLoading(button, "Signing out..."); const { error } = await supabaseClient.auth.signOut({ scope: "global" }); if (error) { setStatus(error.message, true); resetButton(button); return; } window.location.href = "index.html"; });
 loadProfile();
 

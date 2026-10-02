@@ -373,12 +373,29 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(clients.claim());
 });
 
+// Display messages sent through the Web Push service.
+self.addEventListener("push", (event) => {
+  let payload = {};
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch {
+    payload = { body: event.data?.text() || "" };
+  }
+
+  event.waitUntil(self.registration.showNotification(payload.title || "PESKY RECHARGE", {
+    body: payload.body || payload.message || "You have a new notification.",
+    icon: payload.icon || "/img/pesky4.png",
+    badge: payload.badge || "/img/pesky4.png",
+    data: { url: payload.url || "/notification-center.html" },
+  }));
+});
+
 // When user taps/clicks the notification on phone bar or lock screen
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   // Target page when notification is tapped
-  const targetUrl = "/notification-center.html";
+  const targetUrl = event.notification.data?.url || "/notification-center.html";
 
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {

@@ -10,22 +10,12 @@
   <div class="background-decoration"></div>
   
   <div class="login-container">
-    <!-- Padlock Icon in Circle -->
-    <div class="padlock-circle">
+    <div class="padlock-circle" aria-hidden="true">
       <span class="padlock-icon">🔒</span>
     </div>
-
-
     <h1 class="title">Welcome Back</h1>
     <p class="subtitle">Sign in to your PESKY RECHARGE account</p>
-    <p id="loginMethodStatus" class="login-method-status" role="status" aria-live="polite">Checking saved fingerprint sign-in...</p>
-
-    <section id="passkeyLoginSection" class="passkey-login hidden" aria-label="Fingerprint sign-in">
-      <p class="passkey-login-label">QUICK SIGN-IN</p>
-      <button id="passkeyLoginBtn" type="button" class="btn btn-primary">Sign in with fingerprint</button>
-      <p class="passkey-login-hint">Use the fingerprint, face, or screen lock saved for this account.</p>
-      <button id="showPasswordLoginBtn" type="button" class="password-fallback">Use password instead</button>
-    </section>
+    <button type="button" id="usePasswordLoginBtn" class="password-fallback hidden">Use password instead</button>
 
     <form id="loginForm" class="form hidden">
       <div class="form-group">
@@ -39,8 +29,8 @@
       <div class="form-group">
         <label for="password">Password</label>
         <div class="input-wrapper">
-          <input type="password" id="password" placeholder="Enter your password" required>
-          <span class="input-icon">🔒</span>
+          <input type="password" id="password" class="password-input" placeholder="Enter your password" autocomplete="current-password" required>
+          <button type="button" id="togglePasswordVisibility" class="password-visibility-toggle" aria-label="Show password" aria-controls="password" aria-pressed="false">Show</button>
         </div>
       </div>
       <button type="submit" class="btn btn-primary">Sign In</button>
@@ -49,8 +39,6 @@
     <button type="button" id="forgotPasswordLink" class="forgot-password-link hidden">
       Forgot your password?
     </button>
-    <button type="button" id="usePasskeyLoginBtn" class="password-fallback hidden">Use fingerprint sign-in</button>
-
     <section id="passwordResetSection" class="otp-section hidden" aria-labelledby="resetTitle">
       <h2 id="resetTitle" class="reset-title">Reset your password</h2>
       <p id="resetMessage" class="message">Enter your account email and we will send you a verification code.</p>
@@ -81,15 +69,15 @@
         <div class="form-group">
           <label for="newPassword">New password</label>
           <div class="input-wrapper">
-            <input type="password" id="newPassword" placeholder="Create a new password" autocomplete="new-password" minlength="6" required>
-            <span class="input-icon">🔒</span>
+            <input type="password" id="newPassword" class="password-input" placeholder="Create a new password" autocomplete="new-password" minlength="6" required>
+            <button type="button" class="password-visibility-toggle" aria-label="Show password" aria-controls="newPassword" aria-pressed="false">Show</button>
           </div>
         </div>
         <div class="form-group">
           <label for="confirmPassword">Confirm new password</label>
           <div class="input-wrapper">
-            <input type="password" id="confirmPassword" placeholder="Repeat your new password" autocomplete="new-password" minlength="6" required>
-            <span class="input-icon">🔒</span>
+            <input type="password" id="confirmPassword" class="password-input" placeholder="Repeat your new password" autocomplete="new-password" minlength="6" required>
+            <button type="button" class="password-visibility-toggle" aria-label="Show password" aria-controls="confirmPassword" aria-pressed="false">Show</button>
           </div>
         </div>
         <button type="submit" class="btn btn-primary">Save new password</button>

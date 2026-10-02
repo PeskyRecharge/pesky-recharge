@@ -16,14 +16,22 @@ const networkModal = document.getElementById("networkModal")
 const networkModalTitle = document.getElementById("networkModalTitle")
 const networkModalMessage = document.getElementById("networkModalMessage")
 const networkOkayBtn = document.getElementById("networkOkayBtn")
-const passkeyLoginSection = document.getElementById("passkeyLoginSection")
-const passkeyLoginBtn = document.getElementById("passkeyLoginBtn")
-const showPasswordLoginBtn = document.getElementById("showPasswordLoginBtn")
-const usePasskeyLoginBtn = document.getElementById("usePasskeyLoginBtn")
-const loginMethodStatus = document.getElementById("loginMethodStatus")
+const usePasswordLoginBtn = document.getElementById("usePasswordLoginBtn")
 
 let resetEmail = ""
 let networkReturnFocus = null
+let passkeyLoginAbortController = null
+
+document.querySelectorAll(".password-visibility-toggle").forEach((toggleButton) => {
+  const passwordField = document.getElementById(toggleButton.getAttribute("aria-controls"))
+  toggleButton.addEventListener("click", () => {
+    const isVisible = passwordField.type === "text"
+    passwordField.type = isVisible ? "password" : "text"
+    toggleButton.textContent = isVisible ? "Show" : "Hide"
+    toggleButton.setAttribute("aria-label", isVisible ? "Show password" : "Hide password")
+    toggleButton.setAttribute("aria-pressed", String(!isVisible))
+  })
+})
 
 function isNetworkError(error) {
   return !navigator.onLine || /failed to fetch|network error|network request failed|load failed/i.test(error?.message || "")
@@ -68,26 +76,16 @@ function setButtonLoading(isLoading) {
 }
 
 function showPasswordLogin(shouldFocus = true) {
-  loginMethodStatus.classList.add("hidden")
-  passkeyLoginSection.classList.add("hidden")
+  usePasswordLoginBtn.classList.add("hidden")
   form.classList.remove("hidden")
   forgotPasswordLink.classList.remove("hidden")
-  usePasskeyLoginBtn.classList.remove("hidden")
   if (shouldFocus) document.getElementById("phone").focus()
 }
 
-function showPasskeyLogin(shouldFocus = true) {
-  loginMethodStatus.classList.add("hidden")
-  form.classList.add("hidden")
-  forgotPasswordLink.classList.add("hidden")
-  passwordResetSection.classList.add("hidden")
-  usePasskeyLoginBtn.classList.add("hidden")
-  passkeyLoginSection.classList.remove("hidden")
-  if (shouldFocus) passkeyLoginBtn.focus()
-}
-
-showPasswordLoginBtn.addEventListener("click", showPasswordLogin)
-usePasskeyLoginBtn.addEventListener("click", showPasskeyLogin)
+usePasswordLoginBtn.addEventListener("click", () => {
+  passkeyLoginAbortController?.abort()
+  showPasswordLogin()
+})
 
 async function chooseLoginMethod() {
   if (!navigator.onLine || !(await window.PeskyPasskeys.isPlatformAvailable())) {
@@ -98,7 +96,24 @@ async function chooseLoginMethod() {
   try {
     const hasPasskey = await window.PeskyPasskeys.hasPasskey(supabaseClient)
     if (hasPasskey) {
-      showPasskeyLogin(false)
+      usePasswordLoginBtn.classList.remove("hidden")
+      passkeyLoginAbortController = new AbortController()
+      try {
+        await window.PeskyPasskeys.signIn(supabaseClient, passkeyLoginAbortController.signal)
+        successMessage.classList.remove("hidden")
+        window.location.href = "dashboard.html"
+      } catch (error) {
+        if (error.name === "AbortError") return
+        if (error.name === "NotAllowedError") {
+          showPasswordLogin(false)
+        } else if (isNetworkError(error)) {
+          showNetworkModal(usePasswordLoginBtn)
+        } else {
+          showFeedbackModal("Fingerprint sign-in unsuccessful", error.message || "Use your password to sign in.", usePasswordLoginBtn)
+        }
+      } finally {
+        passkeyLoginAbortController = null
+      }
     } else {
       showPasswordLogin(false)
     }
@@ -109,35 +124,6 @@ async function chooseLoginMethod() {
 }
 
 chooseLoginMethod()
-
-passkeyLoginBtn.addEventListener("click", async () => {
-  passkeyLoginBtn.disabled = true
-  passkeyLoginBtn.textContent = "Waiting for fingerprint..."
-  try {
-    if (!navigator.onLine) {
-      showNetworkModal(passkeyLoginBtn)
-      return
-    }
-    if (!(await window.PeskyPasskeys.isPlatformAvailable())) {
-      showFeedbackModal("Fingerprint sign-in unavailable", "Use a supported device over a secure HTTPS connection, or choose password sign-in.", passkeyLoginBtn)
-      return
-    }
-
-    await window.PeskyPasskeys.signIn(supabaseClient)
-    passkeyLoginSection.classList.add("hidden")
-    successMessage.classList.remove("hidden")
-    window.location.href = "dashboard.html"
-  } catch (error) {
-    if (!navigator.onLine || /network|fetch/i.test(error.message || "")) {
-      showNetworkModal(passkeyLoginBtn)
-    } else {
-      showFeedbackModal("Fingerprint sign-in unsuccessful", error.message || "Try again or use your password instead.", passkeyLoginBtn)
-    }
-  } finally {
-    passkeyLoginBtn.disabled = false
-    passkeyLoginBtn.textContent = "Sign in with fingerprint"
-  }
-})
 
 function normalizePhone(value) {
   const digits = value.replace(/\D/g, "")

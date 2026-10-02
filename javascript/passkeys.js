@@ -114,7 +114,7 @@
     return Boolean(result.hasPasskey);
   }
 
-  async function signIn(supabaseClient) {
+  async function signIn(supabaseClient, signal) {
     const cachedOptions = pendingLoginOptions?.client === supabaseClient &&
       Date.now() - pendingLoginOptions.createdAt < 4 * 60 * 1000
       ? pendingLoginOptions.result
@@ -125,7 +125,7 @@
       await invoke(supabaseClient, { action: "login-options" });
     if (!hasPasskey) throw new Error(message || "No fingerprint sign-in is set up yet. Use your password or set up a passkey from Profile.");
 
-    const credential = await navigator.credentials.get({ publicKey: decodeRequestOptions(options) });
+    const credential = await navigator.credentials.get({ publicKey: decodeRequestOptions(options), signal });
     if (!credential) throw new Error("Fingerprint sign-in was cancelled. Try again or use your password.");
 
     const result = await invoke(supabaseClient, {
