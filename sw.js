@@ -1,4 +1,4 @@
-const CACHE_NAME = "pesky-v3";
+const CACHE_NAME = "pesky-v5";
 
 const ASSETS = [
   // ==========================================
@@ -394,8 +394,8 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
-  // Target page when notification is tapped
-  const targetUrl = event.notification.data?.url || "/notification-center.html";
+  // Always route notification taps through the authenticated notification center.
+  const targetUrl = new URL("/notification-center.html", self.location.origin).href;
 
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
