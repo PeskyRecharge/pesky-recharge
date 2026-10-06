@@ -1,0 +1,187 @@
+:root {
+  --primary-color: #0d6b57;
+  --primary-dark: #0a5243;
+  --whatsapp-color: #25d366;
+  --whatsapp-dark: #1eb956;
+  --bg-color: #f8faf9;
+  --card-bg: #ffffff;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --border-color: #e5e7eb;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
+  padding: 20px 16px;
+  line-height: 1.5;
+}
+
+.referral-container {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.dashboard-header h1 {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin: 0 0 6px 0;
+  font-weight: 700;
+}
+
+.dashboard-header p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  margin-bottom: 16px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.metric-card {
+  text-align: center;
+  padding: 16px;
+  margin-bottom: 0;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.metric-card h2 {
+  margin: 6px 0 0 0;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.credential-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.code-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f3f4f6;
+  border: 1px dashed var(--primary-color);
+  border-radius: 8px;
+  padding: 8px 12px 8px 16px;
+}
+
+#userCodeDisplay {
+  font-family: monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--primary-color);
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 20px 0;
+}
+
+.input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background-color: #f9fafb;
+  color: var(--text-main);
+  outline: none;
+}
+
+.share-actions {
+  margin-top: 16px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary { background-color: var(--primary-color); color: #fff; }
+.btn-primary:hover { background-color: var(--primary-dark); }
+
+.btn-secondary { background-color: #e5e7eb; color: var(--text-main); }
+.btn-secondary:hover { background-color: #d1d5db; }
+
+.btn-whatsapp { width: 100%; background-color: var(--whatsapp-color); color: #fff; }
+.btn-whatsapp:hover { background-color: var(--whatsapp-dark); }
+
+.instructions-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+.steps-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.steps-list li {
+  margin-bottom: 8px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #111827;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
+  z-index: 1000;
+}
+
+.toast.show { display: block; }

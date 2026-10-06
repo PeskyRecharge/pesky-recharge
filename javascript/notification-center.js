@@ -24,10 +24,30 @@ const tabButtons = document.querySelectorAll(".tab-btn");
 // INITIALIZATION
 // ============================================
 document.addEventListener("DOMContentLoaded", () => {
-  fetchNotifications();
-  setupRealtimeSubscription();
-  setupEventListeners();
+  requireAuthenticatedUser();
 });
+
+async function requireAuthenticatedUser() {
+  try {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error || !data?.user) {
+      redirectToLogin();
+      return;
+    }
+
+    fetchNotifications();
+    setupRealtimeSubscription();
+    setupEventListeners();
+  } catch (error) {
+    console.error("Unable to verify notification access:", error);
+    redirectToLogin();
+  }
+}
+
+function redirectToLogin() {
+  const returnPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  window.location.replace(`login.html?redirect=${encodeURIComponent(returnPath)}`);
+}
 
 // ============================================
 // FETCH FROM SUPABASE

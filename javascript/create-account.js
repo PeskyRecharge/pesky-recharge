@@ -7,13 +7,24 @@ const form = document.getElementById("createForm");
 const createBtn = form.querySelector('button[type="submit"]');
 const otpSection = document.getElementById("otpSection");
 const verifyBtn = document.getElementById("verifyBtn");
+const resendBtn = document.getElementById("resendBtn");
 const successMessage = document.getElementById("successMessage");
 const networkModal = document.getElementById("networkModal");
 const networkModalTitle = document.getElementById("networkModalTitle");
 const networkModalMessage = document.getElementById("networkModalMessage");
 const networkOkayBtn = document.getElementById("networkOkayBtn");
+const referralCodeInput = document.getElementById("referralCode");
 
 let networkReturnFocus = null;
+const referralCodeFromLink = new URLSearchParams(window.location.search).get("ref")?.trim().toUpperCase() || "";
+if (/^[A-Z0-9]{7}$/.test(referralCodeFromLink)) {
+  referralCodeInput.value = referralCodeFromLink;
+}
+
+function getReferralCode() {
+  const value = referralCodeInput.value.trim().toUpperCase();
+  return value && /^[A-Z0-9]{7}$/.test(value) ? value : null;
+}
 
 function isNetworkError(error) {
   return !navigator.onLine || /failed to fetch|network error|network request failed|load failed/i.test(error?.message || "");
@@ -84,6 +95,13 @@ form.addEventListener("submit", async function (e) {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
+  const enteredReferralCode = referralCodeInput.value.trim();
+  const referralCode = getReferralCode();
+
+  if (enteredReferralCode && !referralCode) {
+    showFeedbackModal("Check referral code", "Enter a valid 7-character referral code, or leave the field blank to continue without one.", referralCodeInput);
+    return;
+  }
 
   if (password.length < 8) {
     showFeedbackModal("Check your password", "Your password must be at least 8 characters.", createBtn);
@@ -101,7 +119,10 @@ form.addEventListener("submit", async function (e) {
     // Ask Supabase Auth to send the OTP code.
     const { error } = await supabaseClient.auth.signInWithOtp({
       email: email,
-      options: { shouldCreateUser: true }
+      options: {
+        shouldCreateUser: true,
+        data: referralCode ? { referral_code: referralCode } : {},
+      }
     });
 
     if (error) {
@@ -190,7 +211,8 @@ verifyBtn.addEventListener("click", async function () {
           other_name: othername,
           phone_number: phone,
           gender: gender,
-          user_id: userId
+          user_id: userId,
+          referred_by: getReferralCode() || user.user_metadata?.referral_code || null,
         })
         .eq("auth_id", user.id);
 
@@ -220,5 +242,48 @@ verifyBtn.addEventListener("click", async function () {
     }
   } finally {
     resetButton(verifyBtn, "Verify");
+  }
+});
+
+resendBtn.addEventListener("click", async function () {
+  const email = document.getElementById("email").value.trim();
+
+  if (!email) {
+    showFeedbackModal("Email required", "Enter your email address before requesting another code.", resendBtn);
+    return;
+  }
+
+  if (!navigator.onLine) {
+    showNetworkModal(resendBtn);
+    return;
+  }
+
+  setButtonLoading(resendBtn, "Sending...");
+
+  try {
+    const { error } = await supabaseClient.auth.resend({
+      type: "signup",
+      email,
+    });
+
+    if (error) {
+      if (isNetworkError(error)) {
+        showNetworkModal(resendBtn);
+      } else {
+        showFeedbackModal("Unable to resend code", error.message || "Please wait a moment and try again.", resendBtn);
+      }
+      return;
+    }
+
+    showFeedbackModal("Code sent", `A new verification code was sent to ${email}.`, resendBtn);
+  } catch (error) {
+    console.error("Resend verification code error:", error);
+    if (isNetworkError(error)) {
+      showNetworkModal(resendBtn);
+    } else {
+      showFeedbackModal("Unable to resend code", error.message || "Please try again.", resendBtn);
+    }
+  } finally {
+    resetButton(resendBtn, "Resend Code");
   }
 });

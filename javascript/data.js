@@ -15,6 +15,7 @@ const buyButton = document.getElementById("buyDataBtn");
 const successPanel = document.getElementById("successPanel");
 const successDetails = document.getElementById("successDetails");
 const successOkButton = document.getElementById("successOkButton");
+const categoryTabs = [...document.querySelectorAll(".category-tab")];
 
 const prefixNetworks = {
   MTN: ["0803", "0806", "0810", "0813", "0814", "0816", "0703", "0706", "0903", "0906", "0913", "0916"],
@@ -26,6 +27,8 @@ const prefixNetworks = {
 let currentBalance = 0;
 let currentPlans = [];
 let visiblePlans = [];
+let currentNetwork = null;
+let selectedCategory = "hot";
 
 function formatCurrency(value) {
   return `₦${Number(value).toLocaleString("en-NG", { minimumFractionDigits: 2 })}`;
@@ -75,39 +78,68 @@ function planGroup(plan) {
   return text.includes("awoof") ? 1 : 0;
 }
 
+function hasDuration(text, count, unit) {
+  const units = unit === "day" ? "days?" : "months?";
+  return new RegExp(`\\b${count}\\s*${units}\\b`).test(text);
+}
+
+function planCategory(plan) {
+  const text = `${plan.name || ""} ${plan.data_type || ""} ${plan.validity || ""}`.toLowerCase();
+  if (/\b(tv|dstv|gotv|startimes|showmax)\b/.test(text)) return "tv";
+  if (/\b(social|whatsapp|whats\s*app|facebook|instagram|tiktok|youtube|telegram|twitter|snapchat|messenger)\b/.test(text)) return "social";
+  if (/\b(unlimited|uncapped)\b/.test(text)) return "unlimited";
+  if (planSizeInMb(plan) >= 100 * 1024) return "mega";
+  if (/\b(weekend|saturday|sunday)\b/.test(text)) return "weekend";
+  if (hasDuration(text, 30, "day") || /\b\d+\s*months?\b/.test(text)) return "monthly";
+  if (hasDuration(text, 7, "day") || /\b\d+\s*weeks?\b/.test(text)) return "weekly";
+  if (hasDuration(text, 1, "day") || /\b24\s*hours?\b/.test(text)) return "daily";
+  return null;
+}
+
 function featuredPlanRank(plan, network) {
   const text = String(plan.name || "").toLowerCase();
   const type = String(plan.data_type || "").toLowerCase();
-  const validity = `${text} ${String(plan.validity || "").toLowerCase()}`;
+  const validity = `${text} ${String(plan.validity || "").toLowerCase()} ${type}`;
+  const size = planSizeInMb(plan);
+  const isGifting = /gift/.test(validity);
+  const isAwoof = /awoof/.test(validity);
+  const isSme = /\bsme\b/.test(validity);
+  const isSize = (mb) => Math.abs(size - mb) <= 16;
+  const isGb = (gb) => isSize(gb * 1024);
 
   if (network === "MTN") {
-    if (text.includes("2gb") && validity.includes("7") && type.includes("sme")) return 0;
-    if (text.includes("3gb") && validity.includes("30") && type.includes("sme")) return 1;
-    if (text.includes("5gb") && validity.includes("30") && type.includes("sme")) return 2;
-    if (text.includes("2gb") && validity.includes("30")) return 3;
-    return 5;
+    if (isGb(2) && hasDuration(validity, 1, "day") && isGifting) return 0;
+    if (isGb(2) && hasDuration(validity, 7, "day") && isSme) return 1;
+    if (isGb(2) && hasDuration(validity, 2, "day") && isGifting) return 2;
+    if (isGb(2) && hasDuration(validity, 30, "day") && isSme) return 3;
+    if (isGb(2.5) && hasDuration(validity, 1, "day") && isAwoof) return 4;
+    return Number.POSITIVE_INFINITY;
   }
 
   if (network === "AIRTEL") {
-    if (text.includes("1.5gb") && validity.includes("1") && type.includes("sme")) return 0;
-    if (text.includes("3gb") && validity.includes("1")) return 1;
-    if (text.includes("1.5gb") && validity.includes("2") && type.includes("sme")) return 2;
-    return 5;
+    if (isGb(1.5) && hasDuration(validity, 1, "day") && isSme) return 0;
+    if (isGb(1) && hasDuration(validity, 7, "day")) return 1;
+    if (isGb(3) && hasDuration(validity, 2, "day") && isSme) return 2;
+    if (isGb(9) && hasDuration(validity, 7, "day") && isSme) return 3;
+    return Number.POSITIVE_INFINITY;
   }
 
-  if (text.includes("750mb") && text.includes("sme")) return 0;
-  if (text.includes("1.5gb") || text.includes("1.6gb")) return 1;
-  if (text.includes("2.5gb")) return 2;
-  return 5;
+  if (isGb(3) && hasDuration(validity, 1, "day") && isGifting) return 0;
+  if (isGb(2.5) && hasDuration(validity, 2, "day") && isAwoof) return 1;
+  if (isGb(9) && hasDuration(validity, 7, "day") && isGifting) return 2;
+  if (isGb(10) && hasDuration(validity, 7, "day") && isAwoof) return 3;
+  if (isSize(875) && hasDuration(validity, 2, "day") && isGifting) return 4;
+  if (isGb(1) && hasDuration(validity, 1, "day") && isGifting) return 5;
+  return Number.POSITIVE_INFINITY;
 }
 
 function displayPlanRank(plan, network) {
   const featuredRank = featuredPlanRank(plan, network);
-  if (featuredRank < 5) return featuredRank;
-  return planGroup(plan) === 1 ? 4 : 5;
+  if (Number.isFinite(featuredRank)) return featuredRank;
+  return 100 + planGroup(plan);
 }
 
-function renderPlans(plans, network) {
+function renderPlans(plans = currentPlans, network = currentNetwork) {
   currentPlans = plans
     .filter((plan) => String(plan.data_type || "").toLowerCase() !== "corporate")
     .sort((left, right) => {
@@ -118,11 +150,14 @@ function renderPlans(plans, network) {
     return String(left.name || "").localeCompare(String(right.name || ""));
   });
   const query = planSearch.value.trim().toLowerCase();
-  visiblePlans = currentPlans.filter((plan) => {
+  const categorizedPlans = selectedCategory === "hot"
+    ? currentPlans.filter((plan) => Number.isFinite(featuredPlanRank(plan, network)))
+    : currentPlans.filter((plan) => planCategory(plan) === selectedCategory);
+  visiblePlans = categorizedPlans.filter((plan) => {
     const text = `${plan.name} ${plan.validity || ""} ${plan.data_type || ""}`.toLowerCase();
     return !query || text.includes(query);
   });
-  planCount.textContent = `${visiblePlans.length} of ${currentPlans.length} plans`;
+  planCount.textContent = `${visiblePlans.length} plans`;
 
   if (!currentPlans.length) {
     bundleGrid.innerHTML = '<p class="field-hint">No data plans are available for this network.</p>';
@@ -130,7 +165,7 @@ function renderPlans(plans, network) {
   }
 
   if (!visiblePlans.length) {
-    bundleGrid.innerHTML = '<p class="field-hint">No plans match your search.</p>';
+    bundleGrid.innerHTML = `<p class="field-hint">${query ? "No plans match your search in this category." : "No plans are available in this category for this network."}</p>`;
     return;
   }
 
@@ -146,6 +181,7 @@ function renderPlans(plans, network) {
 }
 
 async function loadPlans(network) {
+  currentNetwork = network;
   if (!network) {
     currentPlans = [];
     visiblePlans = [];
@@ -219,6 +255,8 @@ function updateNetworkState() {
     return;
   }
 
+  selectedCategory = "hot";
+  updateCategoryTabs();
   detectedNetwork.textContent = `${network} detected`;
 
   if (selected && selected !== network) {
@@ -232,6 +270,13 @@ function updateNetworkState() {
 
   phoneHint.textContent = "Network detected from the number prefix.";
   loadPlans(network);
+}
+
+function updateCategoryTabs() {
+  categoryTabs.forEach((tab) => {
+    const isSelected = tab.dataset.category === selectedCategory;
+    tab.setAttribute("aria-pressed", String(isSelected));
+  });
 }
 
 async function loadAccount() {
@@ -259,8 +304,18 @@ phoneInput.addEventListener("input", updateNetworkState);
 document.querySelectorAll('input[name="network"]').forEach((input) => {
   input.addEventListener("change", () => {
     const network = input.value;
+    selectedCategory = "hot";
+    updateCategoryTabs();
     detectedNetwork.textContent = `${network} selected`;
     loadPlans(network);
+  });
+});
+
+categoryTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    selectedCategory = tab.dataset.category;
+    updateCategoryTabs();
+    renderPlans();
   });
 });
 
@@ -346,4 +401,5 @@ bundleGrid.innerHTML = `
     <small>Available data plans will appear here.</small>
   </div>`;
 planSearch.addEventListener("input", () => renderPlans(currentPlans));
+updateCategoryTabs();
 loadAccount();

@@ -22,6 +22,22 @@ let resetEmail = ""
 let networkReturnFocus = null
 let passkeyLoginAbortController = null
 
+function getPostLoginDestination() {
+  const redirect = new URLSearchParams(window.location.search).get("redirect")
+  if (!redirect) return "dashboard.html"
+
+  try {
+    const destination = new URL(redirect, window.location.origin)
+    if (destination.origin === window.location.origin && destination.pathname === "/notification-center.html") {
+      return `${destination.pathname}${destination.search}${destination.hash}`
+    }
+  } catch (error) {
+    console.warn("Ignoring invalid post-login destination:", error)
+  }
+
+  return "dashboard.html"
+}
+
 document.querySelectorAll(".password-visibility-toggle").forEach((toggleButton) => {
   const passwordField = document.getElementById(toggleButton.getAttribute("aria-controls"))
   toggleButton.addEventListener("click", () => {
@@ -101,7 +117,7 @@ async function chooseLoginMethod() {
       try {
         await window.PeskyPasskeys.signIn(supabaseClient, passkeyLoginAbortController.signal)
         successMessage.classList.remove("hidden")
-        window.location.href = "dashboard.html"
+        window.location.href = getPostLoginDestination()
       } catch (error) {
         if (error.name === "AbortError") return
         if (error.name === "NotAllowedError") {
@@ -309,7 +325,7 @@ form.addEventListener("submit", async function(e) {
 
     successMessage.classList.remove("hidden")
     form.classList.add("hidden")
-    window.location.href = "dashboard.html"
+    window.location.href = getPostLoginDestination()
   } catch (err) {
     console.error("Login error:", err)
     if (isNetworkError(err)) {

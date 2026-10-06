@@ -204,6 +204,59 @@ body {
   color: #15803d;
   font-size: 15px;
 }
+.drawer-referral-card {
+  padding: 14px;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  background: #f0fdf4;
+}
+.drawer-referral-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #14532d;
+}
+.drawer-referral-icon {
+  display: grid;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 8px;
+  background: #dcfce7;
+  color: #15803d;
+}
+.drawer-referral-heading div {
+  display: grid;
+  gap: 2px;
+}
+.drawer-referral-heading strong { font-size: 14px; }
+.drawer-referral-heading div span { color: #15803d; font-size: 13px; font-weight: 700; }
+.drawer-referral-card p {
+  margin: 10px 0 12px;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.drawer-referral-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 11px;
+  border-radius: 6px;
+  background: #15803d;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.18s ease;
+}
+.drawer-referral-cta:hover, .drawer-referral-cta:focus-visible {
+  background: #166534;
+  outline: none;
+}
 .drawer-logout-item {
   margin-top: 8px;
   padding-top: 14px;

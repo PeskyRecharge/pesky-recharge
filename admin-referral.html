@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Referral Management | Pesky Recharge</title>
+  <link rel="stylesheet" href="/css/admin-referral.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-wrapper">
+    
+    <header class="admin-header">
+      <div class="header-content">
+        <h1>Referral Program Management</h1>
+        <p>Monitor customer referral metrics, attribution, and payout status.</p>
+      </div>
+      <button id="refreshDataBtn" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6M1 20v-6h6"></path>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+        Refresh Data
+      </button>
+    </header>
+
+    <!-- Global Referral System Metrics -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <span class="metric-title">Total Registered Customers</span>
+        <h2 id="metricTotalCustomers">0</h2>
+      </div>
+      <div class="metric-card">
+        <span class="metric-title">Referred Accounts</span>
+        <h2 id="metricReferredAccounts">0</h2>
+      </div>
+      <div class="metric-card">
+        <span class="metric-title">Successful Referral Payouts</span>
+        <h2 id="metricTotalPayouts">0</h2>
+      </div>
+      <div class="metric-card highlight">
+        <span class="metric-title">Total Referral Capital Paid</span>
+        <h2 id="metricTotalPayoutValue">₦0.00</h2>
+      </div>
+    </section>
+
+    <!-- Table Management Controls -->
+    <section class="table-container">
+      <div class="table-actions">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search by name, email, phone, or User ID..." />
+        </div>
+        <div class="filter-box">
+          <select id="statusFilter">
+            <option value="ALL">All Records</option>
+            <option value="REFERRED">Only Referred Customers</option>
+            <option value="PAID">Paid Referrals</option>
+            <option value="UNPAID">Pending/Unpaid Referrals</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Customers Referral Data Table -->
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>User ID / Customer</th>
+              <th>Contact Info</th>
+              <th>Wallet Balance</th>
+              <th>Referred By</th>
+              <th>Total Referrals</th>
+              <th>Payout Status</th>
+              <th>Rewarded At</th>
+            </tr>
+          </thead>
+          <tbody id="customersTableBody">
+            <tr>
+              <td colspan="7" class="loading-state">Loading customer records...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div id="toastNotification" class="toast"></div>
+
+  </div>
+
+  <script src="/javascript/admin-referral.js"></script>
+</body>
+</html>
