@@ -78,6 +78,16 @@ function planGroup(plan) {
   return text.includes("awoof") ? 1 : 0;
 }
 
+function isHiddenPlan(plan, network) {
+  if (network !== "AIRTEL") return false;
+
+  const text = `${plan.name || ""} ${plan.data_type || ""} ${plan.validity || ""}`.toLowerCase();
+  return Math.abs(planSizeInMb(plan) - 1.5 * 1024) <= 16 &&
+    hasDuration(text, 1, "day") &&
+    /\bsme\b/.test(text) &&
+    Number(plan.price) === 495;
+}
+
 function hasDuration(text, count, unit) {
   const units = unit === "day" ? "days?" : "months?";
   return new RegExp(`\\b${count}\\s*${units}\\b`).test(text);
@@ -141,6 +151,7 @@ function displayPlanRank(plan, network) {
 
 function renderPlans(plans = currentPlans, network = currentNetwork) {
   currentPlans = plans
+    .filter((plan) => !isHiddenPlan(plan, network))
     .filter((plan) => String(plan.data_type || "").toLowerCase() !== "corporate")
     .sort((left, right) => {
     const displayDifference = displayPlanRank(left, network) - displayPlanRank(right, network);
