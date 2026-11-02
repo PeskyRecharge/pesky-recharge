@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - User PIN Purchases</title>
+  
+  <!-- Font Awesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/admin-user-purchases.css">
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-title">
+        <h1><i class="fa-solid fa-receipt" style="color: var(--accent-primary);"></i> User PIN Purchases</h1>
+        <p>Monitor real-time card and PIN code transactions</p>
+      </div>
+      <div class="live-badge">
+        <span class="pulse-dot"></span> Live Sync Enabled
+      </div>
+    </header>
+
+    <!-- METRICS -->
+    <section class="metrics-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="title">Total Revenue</div>
+          <div class="value" id="totalRevenue">₦0.00</div>
+        </div>
+        <div class="stat-icon" style="color: var(--accent-green);"><i class="fa-solid fa-wallet"></i></div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="title">Total Purchases</div>
+          <div class="value" id="totalOrders">0</div>
+        </div>
+        <div class="stat-icon" style="color: var(--accent-primary);"><i class="fa-solid fa-cart-shopping"></i></div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="title">PINs Dispensed</div>
+          <div class="value" id="totalPins">0</div>
+        </div>
+        <div class="stat-icon" style="color: var(--accent-yellow);"><i class="fa-solid fa-key"></i></div>
+      </div>
+    </section>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search Auth ID, Purchase ID, or Batch ID...">
+      </div>
+      <div class="filters">
+        <select id="networkFilter" class="filter-select">
+          <option value="ALL">All Networks</option>
+          <option value="MTN">MTN</option>
+          <option value="GLO">GLO</option>
+          <option value="AIRTEL">AIRTEL</option>
+          <option value="9MOBILE">9MOBILE</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DATA TABLE -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Date & Time</th>
+            <th>Network</th>
+            <th>Denomination</th>
+            <th>Qty</th>
+            <th>Total Cost</th>
+            <th>Auth ID</th>
+            <th>PIN Data</th>
+          </tr>
+        </thead>
+        <tbody id="purchasesTableBody">
+          <tr>
+            <td colspan="7" class="state-box">
+              <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+              <p style="margin-top: 8px;">Loading transactions...</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PIN INSPECTION SLIDE-OVER MODAL -->
+  <div id="pinModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-microchip"></i> Decoded PIN Details</h3>
+        <button class="close-btn" id="modalCloseBtn">&times;</button>
+      </div>
+      <div id="modalBody">
+        <!-- Rendered PIN cards insert here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application Logic -->
+  <script src="javascript/admin-user-purchases.js"></script>
+</body>
+</html>

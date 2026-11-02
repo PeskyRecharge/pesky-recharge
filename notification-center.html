@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Notifications</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Custom Notifications Page Styles -->
+  <link rel="stylesheet" href="css/notification-center.css?v=community-v8" />
+
+  <!-- Supabase JS CDN (v2) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div class="notifications-container">
+    
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="header-left">
+        <a href="dashboard.html" class="back-btn" title="Back to Dashboard">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div>
+          <h1>Notifications</h1>
+          <p class="subtitle">Stay updated with latest announcements and alerts</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="markAllReadBtn" class="btn-secondary">
+          <i class="fa-solid fa-check-double"></i> Mark all as read
+        </button>
+      </div>
+    </div>
+
+    <!-- TABS & FILTER BAR -->
+    <div class="filter-bar">
+      <div class="filter-tabs">
+        <button class="tab-btn active" data-filter="all">
+          All <span id="totalBadge" class="count-badge">0</span>
+        </button>
+        <button class="tab-btn" data-filter="unread">
+          Unread <span id="unreadBadge" class="count-badge unread-badge">0</span>
+        </button>
+      </div>
+
+      <div class="live-status">
+        <span class="pulse-dot"></span> Live updates
+      </div>
+    </div>
+
+    <!-- NOTIFICATION CARDS LIST -->
+    <div id="notificationsList" class="notifications-list">
+      <!-- Loading Skeleton Placeholder -->
+      <div class="skeleton-card">
+        <div class="skeleton-avatar"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-line title"></div>
+          <div class="skeleton-line message"></div>
+          <div class="skeleton-line date"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- Sleek Dark-Theme Community Container -->
+<section class="community-card-dark">
+  <div class="community-header-dark">
+    <span class="community-badge-dark pulse-badge">UPDATES</span>
+    <h3>Join Pesky Recharge Hub</h3>
+  </div>
+
+  <div class="community-actions-dark">
+    <!-- WhatsApp Community (Sway Shake) -->
+    <a href="https://chat.whatsapp.com/C3d5q4oXNQPJPXrjsGLvTb" target="_blank" rel="noopener noreferrer" class="comm-btn-dark wa-group shake-sway">
+      <span class="comm-icon">💬</span>
+      <span class="comm-text">WhatsApp Group</span>
+    </a>
+
+    <!-- WhatsApp Channel (Pulse Bounce Shake) -->
+    <a href="https://whatsapp.com/channel/0029VbDOdI6KgsO0SrYYSR3q" target="_blank" rel="noopener noreferrer" class="comm-btn-dark wa-channel shake-pulse">
+      <span class="comm-icon">📢</span>
+      <span class="comm-text">Official Channel</span>
+    </a>
+  </div>
+
+  <!-- Social Handles Footer -->
+  <div class="social-row-dark">
+    <span class="social-label-dark">Follow Us:</span>
+    <div class="social-pills-dark">
+      <!-- Facebook Tag with Brand Colors & Hover -->
+      <a href="https://facebook.com/peskyrecharge" target="_blank" rel="noopener noreferrer" class="soc-pill-dark fb shake-tilt">
+        <span class="soc-icon">f</span> @peskyrecharge
+      </a>
+      <!-- TikTok Tag with Brand Colors & Hover -->
+      <a href="https://tiktok.com/@peskyrecharge" target="_blank" rel="noopener noreferrer" class="soc-pill-dark tt shake-float">
+        <span class="soc-icon">🎵</span> @peskyrecharge
+      </a>
+    </div>
+  </div>
+</section>
+
+  <!-- Main Notification Page Logic -->
+   <script src="javascript/notification-center.js"></script>
+</body>
+</html>
