@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy Electricity - Pesky Recharge</title>
+  <link rel="stylesheet" href="/css/electricity.css?v=opay-flow-v1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="electricity-wrapper">
+    
+    <header class="page-header">
+      <a class="back-link" href="dashboard.html" aria-label="Back to dashboard"><i class="fa-solid fa-arrow-left"></i></a>
+      <div>
+        <h1>Pay Electricity Bill</h1>
+        <p>Fast, secure and reliable electricity payment</p>
+      </div>
+      <span class="secure-badge"><i class="fa-solid fa-shield-halved"></i></span>
+    </header>
+
+    <div class="flow-progress" id="flowProgress" aria-label="Payment progress">
+      <div class="flow-step active" data-step="1"><span>1</span><small>Meter</small></div>
+      <div class="flow-line"></div>
+      <div class="flow-step" data-step="2"><span>2</span><small>Amount</small></div>
+      <div class="flow-line"></div>
+      <div class="flow-step" data-step="3"><span>3</span><small>Receipt</small></div>
+    </div>
+
+    <!-- Meter Verification Form -->
+    <section class="card form-card" id="meterSection">
+      <form id="verifyForm">
+        <div class="form-group">
+          <label for="discoSelect">Select DisCo Provider</label>
+          <select id="discoSelect" required>
+            <option value="" disabled selected>-- Choose Distribution Company --</option>
+            <option value="ikeja-electric">Ikeja Electric (IKEDC)</option>
+            <option value="eko-electric">Eko Electric (EKEDC)</option>
+            <option value="abuja-electric">Abuja Electric (AEDC)</option>
+            <option value="kano-electric">Kano Electric (KEDCO)</option>
+            <option value="portharcourt-electric">Port Harcourt Electric (PHED)</option>
+            <option value="ibadan-electric">Ibadan Electric (IBEDC)</option>
+            <option value="kaduna-electric">Kaduna Electric (KAEDCO)</option>
+            <option value="jos-electric">Jos Electric (JED)</option>
+            <option value="enugu-electric">Enugu Electric (EEDC)</option>
+            <option value="benin-electric">Benin Electric (BEDC)</option>
+            <option value="aba-electric">Aba Electric (ABA)</option>
+            <option value="yola-electric">Yola Electric (YEDC)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Meter Type</label>
+          <div class="radio-group">
+            <label><input type="radio" name="meterType" value="prepaid" checked /> Prepaid</label>
+            <label><input type="radio" name="meterType" value="postpaid" /> Postpaid</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="meterNumberInput">Meter Number / Customer ID</label>
+          <div class="input-with-button">
+            <input type="text" id="meterNumberInput" placeholder="Enter meter number" required />
+            <button type="submit" id="verifyBtn" class="btn btn-secondary">Verify Meter</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Meter Verification Result -->
+      <div id="verifiedBox" class="verified-box" hidden>
+        <div class="verified-header">
+          <span class="status-dot"></span> Meter Verified
+        </div>
+        <p><strong>Customer Name:</strong> <span id="custName">---</span></p>
+        <p><strong>Address:</strong> <span id="custAddress">---</span></p>
+      </div>
+    </section>
+
+    <!-- Amount Selection -->
+    <section id="amountSection" class="card amount-card" hidden>
+      <h3>Select Amount</h3>
+      <div class="preset-grid">
+        <button type="button" class="preset-btn" data-amount="1000">₦1,000</button>
+        <button type="button" class="preset-btn" data-amount="2000">₦2,000</button>
+        <button type="button" class="preset-btn" data-amount="3000">₦3,000</button>
+        <button type="button" class="preset-btn" data-amount="5000">₦5,000</button>
+        <button type="button" class="preset-btn" data-amount="6000">₦6,000</button>
+        <button type="button" class="preset-btn" data-amount="7000">₦7,000</button>
+        <button type="button" class="preset-btn" data-amount="10000">₦10,000</button>
+        <button type="button" class="preset-btn" data-amount="20000">₦20,000</button>
+        <button type="button" class="preset-btn" data-amount="50000">₦50,000</button>
+      </div>
+
+      <div class="form-group custom-amount-group">
+        <label for="customAmountInput">Or Enter Custom Amount (₦1,000 - ₦50,000)</label>
+        <input type="number" id="customAmountInput" min="1000" max="50000" placeholder="e.g. 2500" />
+      </div>
+
+      <button type="button" id="purchaseBtn" class="btn btn-primary btn-block">Purchase Token Now</button>
+    </section>
+
+    <!-- Success Token Modal -->
+    <section id="receiptModal" class="receipt-card" hidden>
+      <div class="success-mark"><i class="fa-solid fa-check"></i></div>
+      <div class="receipt-header">
+        <span class="receipt-status">PAYMENT SUCCESSFUL</span>
+        <h2>Electricity Token</h2>
+      </div>
+      <div class="token-display-box">
+        <span class="token-label">Meter token</span>
+        <h1 id="receiptToken">0000 0000 0000 0000 0000</h1>
+        <button type="button" id="copyTokenBtn" class="copy-token-btn"><i class="fa-solid fa-copy"></i> Copy token</button>
+      </div>
+      <div class="receipt-details">
+        <div><span>Units</span><strong id="receiptUnits">0.0 kWh</strong></div>
+        <div><span>Tariff band</span><strong id="receiptBand">--</strong></div>
+        <div><span>Amount paid</span><strong>₦<span id="receiptAmount">0.00</span></strong></div>
+        <div><span>Customer</span><strong id="receiptCustomer">--</strong></div>
+        <div><span>Order ID</span><strong id="receiptOrderId">--</strong></div>
+      </div>
+      <button type="button" id="closeReceiptBtn" class="btn btn-primary btn-block"><i class="fa-solid fa-house"></i> Done</button>
+    </section>
+
+    <div id="toast" class="toast"></div>
+
+  </div>
+
+  <script src="/javascript/electricity.js"></script>
+</body>
+</html>

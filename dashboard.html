@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PESKY RECHARGE Dashboard</title>
+   <!-- Favicon -->
+  <link rel="icon" type="image/png" href="img/peskycc.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css?v=mini-chat-card">
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#008000">
+
+</head>
+<body>
+  <!-- Sticky Top Bar -->
+  <header class="header">
+    <div class="header-left">
+      <img src="img/pesky4.png" alt="Pesky Logo" class="logo-left">
+    </div>
+   <div class="header-center">
+  <h1>PESKY RECHARGE</h1>
+  
+  <!-- Glowing Infinite Marquee -->
+  <div class="marquee-wrapper">
+    <div class="marquee-content">
+      <span>✨ Welcome to Pesky Recharge — Your trusted platform for instant airtime, cheap data bundles, cable TV subscriptions, and automated electricity token delivery. Fast, secure, and reliable 24/7. Thank you for using Pesky Recharge! ✨</span>
+      <span aria-hidden="true">✨ Welcome to Pesky Recharge — Your trusted platform for instant airtime, cheap data bundles, cable TV subscriptions, and automated electricity token delivery. Fast, secure, and reliable 24/7. Thank you for using Pesky Recharge! ✨</span>
+    </div>
+  </div>
+</div>
+    <div class="header-right">
+      <div class="balance-mini" id="balanceMini">
+        <span id="dashboardBalance">₦0</span>
+        <span class="balance-icon">👤</span>
+      </div>
+      <div class="menu-toggle" id="menuToggle">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+
+  <div id="notificationPopup" class="notification-popup">
+  <div class="notification-box">
+
+    
+    <h3 id="notificationTitle"></h3>
+
+    <p id="notificationMessage"></p>
+
+  </div>
+</div>
+
+
+<!-- Hero Section with Slider -->
+<section class="hero">
+  <div class="hero-slider">
+    <img src="img/peskya.jpg" alt="Pesky Hero 1" class="slide active">
+    <img src="img/pesky2.png" alt="Pesky Hero 2" class="slide">
+    <img src="img/peskyd.jpg" alt="Pesky Hero 3" class="slide">
+    <img src="img/peskyc.jpg" alt="Pesky Hero 4" class="slide">
+  </div>
+</section>
+
+  <!-- Recharge Services -->
+  <main class="network-grid" aria-label="Recharge services">
+    <a href="purchase.html" class="card mtn">
+      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></span>
+      <span class="card-network">MTN</span>
+      <span class="card-action">Generate PIN</span>
+    </a>
+
+    <a href="purchase.html" class="card glo">
+      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></span>
+      <span class="card-network">Glo</span>
+      <span class="card-action">Generate PIN</span>
+    </a>
+
+    <a href="purchase.html" class="card airtel">
+      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></span>
+      <span class="card-network">Airtel</span>
+      <span class="card-action">Generate PIN</span>
+    </a>
+
+    <a href="purchase.html" class="card nmobile">
+      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></span>
+      <span class="card-network">9mobile</span>
+      <span class="card-action">Generate PIN</span>
+    </a>
+
+    <a href="airtime.html" class="card airtime">
+      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-mobile-screen-button"></i></span>
+      <span class="card-network">Airtime</span>
+      <span class="card-action">Buy airtime</span>
+    </a>
+
+    <a href="data.html" class="card data" aria-label="Buy data">
+      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-wifi"></i></span>
+      <span class="card-network">Data</span>
+      <span class="card-action">Buy data</span>
+    </a>
+
+    <a href="electricity.html" class="card electricity">
+      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-bolt"></i></span>
+      <span class="card-network">Electricity</span>
+      <span class="card-action">Buy token</span>
+    </a>
+
+    <a href="cable.html" class="card cable coming-soon-card" aria-label="Cable TV - coming soon">
+      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-tv"></i></span>
+      <span class="card-network">Cable TV</span>
+      <span class="card-action coming-soon-label"><span class="coming-soon-spinner" aria-hidden="true"></span> Coming soon</span>
+    </a>
+
+    <div class="card convert-airtime">
+      <button type="button" class="convert-airtime-main" data-convert-airtime>
+        <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-money-bill-transfer"></i></span>
+        <span class="card-network">Convert Airtime</span>
+        <span class="card-action">To cash</span>
+      </button>
+      <a href="https://wa.me/2348117831285" target="_blank" rel="noopener noreferrer" class="chat-with-us-mini" aria-label="Chat with us on WhatsApp">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+        <span>Chat</span>
+      </a>
+    </div>
+  </main>
+
+  <!-- Static Image Section -->
+<section class="promo">
+  <img src="img/peskyb.jpg" alt="Pesky Promo" class="promo-img">
+</section>
+
+
+  <!-- Sticky Bottom Bar -->
+  <div class="bottom-bar">
+    <a href="dashboard.html" class="nav-item nav-left">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-text">Home</span>
+    </a>
+    <a href="purchase-report.html" class="nav-item nav-center">
+      <span class="nav-icon">📊</span>
+      <span class="nav-text">History</span>
+    </a>
+    <a href="notification-center.html" class="nav-item nav-notifications" aria-label="Notifications">
+      <span class="nav-icon-wrap">
+        <span class="nav-icon" aria-hidden="true">🔔</span>
+        <span id="notificationCountBadge" class="nav-badge" aria-live="polite" hidden></span>
+      </span>
+      <span class="nav-text">Alerts</span>
+    </a>
+    <a href="deposit.html" class="nav-item nav-right">
+      <span class="nav-icon">💰</span>
+      <span class="nav-text">Deposit</span>
+    </a>
+  </div>
+
+  <!--  Drawer -->
+  <div class="drawer" id="drawer">
+    <div class="drawer-content">
+      <h3>Menu</h3>
+      <ul>
+        <li><a class="drawer-link" href="purchase-report.html"><span class="drawer-link-icon"><i class="fa-solid fa-receipt" aria-hidden="true"></i></span><span>Your Purchase History</span></a></li>
+        <li><a class="drawer-link" href="user-transaction.html"><span class="drawer-link-icon"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i></span><span>Airtime &amp; Data History</span></a></li>
+        <li><a class="drawer-link" href="help.html"><span class="drawer-link-icon"><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span><span>Help &amp; Support</span></a></li>
+        <li><a class="drawer-link" href="user-deposit.html"><span class="drawer-link-icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></span><span>Deposit History</span></a></li>
+        <li><a class="drawer-link" href="about.html"><span class="drawer-link-icon"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></span><span>About Us</span></a></li>
+        <li><a class="drawer-link" href="contact.html"><span class="drawer-link-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></span><span>Contact Us</span></a></li>
+        <li><a class="drawer-link" href="live-chat.html"><span class="drawer-link-icon"><i class="fa-regular fa-comments" aria-hidden="true"></i></span><span>Live Chat</span></a></li>
+        <li><a class="drawer-link" href="profile.html"><span class="drawer-link-icon"><i class="fa-regular fa-user" aria-hidden="true"></i></span><span>My Profile</span></a></li>
+        <li class="drawer-referral-item">
+          <div class="drawer-referral-card">
+            <div class="drawer-referral-heading">
+              <span class="drawer-referral-icon"><i class="fa-solid fa-gift" aria-hidden="true"></i></span>
+              <div>
+                <strong>Refer &amp; Earn</strong>
+                <span>Earn ₦100</span>
+              </div>
+            </div>
+            <p>Get ₦100 in your wallet after your friend’s first successful airtime or data purchase.</p>
+            <a class="drawer-referral-cta" href="referral.html">Start referring <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </li>
+        <li class="drawer-logout-item"><button id="logoutBtn" class="logout-btn"><span class="drawer-link-icon"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i></span><span>Logout</span></button></li>
+        <!-- you can add more links here -->
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- PWA INSTALL BANNER CONTAINER -->
+<div id="pwaBannerContainer" class="pwa-banner">
+  <div class="pwa-banner-content">
+    <div class="pwa-icon">
+      <span class="pwa-emoji">📲</span>
+    </div>
+    <div class="pwa-text">
+      <h3>Install PESKY RECHARGE</h3>
+      <p>Add PESKY RECHARGE to your home screen for faster access and seamless updates.</p>
+    </div>
+  </div>
+  <div class="pwa-actions">
+    <button id="pwaInstallBtn" class="pwa-install-btn shake-animation">
+      INSTALL APP
+    </button>
+  </div>
+</div>
+
+
+<!-- Sleek Dark-Theme Community Container -->
+<section class="community-card-dark">
+  <div class="community-header-dark">
+    <span class="community-badge-dark pulse-badge">UPDATES</span>
+    <h3>Join Pesky Recharge Hub</h3>
+  </div>
+
+  <div class="community-actions-dark">
+    <!-- WhatsApp Community (Sway Shake) -->
+    <a href="https://chat.whatsapp.com/C3d5q4oXNQPJPXrjsGLvTb" target="_blank" rel="noopener noreferrer" class="comm-btn-dark wa-group shake-sway">
+      <span class="comm-icon">💬</span>
+      <span class="comm-text">WhatsApp Group</span>
+    </a>
+
+    <!-- WhatsApp Channel (Pulse Bounce Shake) -->
+    <a href="https://whatsapp.com/channel/0029VbDOdI6KgsO0SrYYSR3q" target="_blank" rel="noopener noreferrer" class="comm-btn-dark wa-channel shake-pulse">
+      <span class="comm-icon">📢</span>
+      <span class="comm-text">Official Channel</span>
+    </a>
+  </div>
+
+  <!-- Social Handles Footer -->
+  <div class="social-row-dark">
+    <span class="social-label-dark">Follow Us:</span>
+    <div class="social-pills-dark">
+      <!-- Facebook Tag with Brand Colors & Hover -->
+      <a href="https://facebook.com/peskyrecharge" target="_blank" rel="noopener noreferrer" class="soc-pill-dark fb shake-tilt">
+        <span class="soc-icon">f</span> @peskyrecharge
+      </a>
+      <!-- TikTok Tag with Brand Colors & Hover -->
+      <a href="https://tiktok.com/@peskyrecharge" target="_blank" rel="noopener noreferrer" class="soc-pill-dark tt shake-float">
+        <span class="soc-icon">🎵</span> @peskyrecharge
+      </a>
+    </div>
+  </div>
+</section>
+
+  <!-- Footer Section -->
+<footer class="footer">
+  <div class="footer-links">
+    <ul>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="disclaimer.html">Disclaimer</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="refund.html">Refund Policy</a></li>
+      <li><a href="terms.html">Terms & Conditions</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </div>
+  <p>©2026 PESKY RECHARGE</p>
+</footer>
+
+
+  <!--  Load Supabase SDK first -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="javascript/notifications.js"></script>
+  <!--  Then load your dashboard logic -->
+  <script src="javascript/dashboard.js"></script>
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
+  }
+</script>
+
+  <script>
+    document.querySelector('.coming-soon-card')?.addEventListener('click', function (event) {
+      event.preventDefault();
+      const action = this.querySelector('.card-action');
+      action.innerHTML = '<span class="coming-soon-spinner" aria-hidden="true"></span> Coming soon';
+    });
+
+    document.querySelector('[data-convert-airtime]')?.addEventListener('click', function () {
+      const message = encodeURIComponent('Hello PESKY RECHARGE, I want to convert airtime to cash.');
+      window.open('https://wa.me/2348117831285?text=' + message, '_blank', 'noopener,noreferrer');
+    });
+  </script>
+
+</body>
+</html>

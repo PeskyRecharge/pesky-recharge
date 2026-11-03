@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - PESKY RECHARGE</title>
+  <link rel="stylesheet" href="css/create-account.css">
+</head>
+<body>
+  <div class="background-decoration"></div>
+  
+  <div class="account-container">
+    <!-- User Icon in Circle -->
+    <div class="user-circle">
+      <span class="user-icon">👤</span>
+    </div>
+
+    <h1 class="title">Create Your Account</h1>
+    <p class="subtitle">Join PESKY RECHARGE today and manage your pins securely</p>
+
+    <!-- Create Account Form -->
+    <form id="createForm" class="form">
+      <div class="form-group">
+        <label for="surname">Surname</label>
+        <div class="input-wrapper">
+          <input type="text" id="surname" placeholder="Enter your surname" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="othername">Other Name</label>
+        <div class="input-wrapper">
+          <input type="text" id="othername" placeholder="Enter your other name" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-wrapper">
+          <input type="email" id="email" placeholder="Enter your email" required>
+          <span class="input-icon">✉️</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <div class="input-wrapper">
+          <input type="tel" id="phone" placeholder="Enter your phone number" required>
+          <span class="input-icon">📱</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" placeholder="Create a password" minlength="8" required>
+          <span class="input-icon">🔒</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="confirmPassword" placeholder="Repeat your password" minlength="8" required>
+          <span class="input-icon">🔒</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <div class="input-wrapper">
+          <select id="gender" required>
+            <option value="">Select your gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <span class="input-icon">👥</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="referralCode">Referral Code (optional)</label>
+        <div class="input-wrapper">
+          <input type="text" id="referralCode" placeholder="Enter a referral code" maxlength="7" autocomplete="off" autocapitalize="characters">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Create Account</button>
+    </form>
+
+    <!-- OTP Section -->
+    <div id="otpSection" class="otp-section hidden">
+      <p class="message">🔐 Verification code sent to your email</p>
+      <div class="form-group">
+        <label for="code">Enter Verification Code</label>
+        <input type="text" id="code" placeholder="Enter 6-digit code" maxlength="6">
+      </div>
+      <button id="verifyBtn" class="btn btn-primary">Verify Code</button>
+      <button id="resendBtn" class="btn btn-secondary" type="button">Resend Code</button>
+    </div>
+
+    <!-- Success Message -->
+    <p id="successMessage" class="success hidden">✓ Account created successfully!</p>
+
+    <!-- Footer Link -->
+    <div class="footer-link">
+      <p>Already have an account? <a href="login.html">Sign in here</a></p>
+    </div>
+  </div>
+
+  <div id="networkModal" class="network-modal" aria-hidden="true">
+    <section class="network-box" role="alertdialog" aria-modal="true" aria-labelledby="networkModalTitle" aria-describedby="networkModalMessage">
+      <div class="network-icon" aria-hidden="true">!</div>
+      <h2 id="networkModalTitle">Connection unavailable</h2>
+      <p id="networkModalMessage">Please check your internet connection and try again.</p>
+      <button type="button" id="networkOkayBtn" class="network-okay-btn">Okay</button>
+    </section>
+  </div>
+
+  <!-- Load Supabase library BEFORE your JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="javascript/create-account.js"></script>
+</body>
+</html>

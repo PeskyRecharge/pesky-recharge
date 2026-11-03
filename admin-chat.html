@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Chat - PESKY RECHARGE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/admin-chat.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-chat-container">
+    <aside class="user-list">
+      <h3>Users</h3>
+      <ul id="userList"></ul>
+    </aside>
+
+    <main class="chat-panel">
+      <header class="chat-header">
+        <h2 id="chatWith">Select a user</h2>
+      </header>
+      <section id="chatMessages" class="chat-messages"></section>
+      <footer class="chat-footer">
+        <input type="text" id="chatInput" placeholder="Type your reply...">
+        <button id="sendBtn">Send</button>
+      </footer>
+    </main>
+  </div>
+  <script src="javascript/admin-chat.js"></script>
+</body>
+</html>
