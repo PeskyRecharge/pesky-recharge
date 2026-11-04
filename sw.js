@@ -1,4 +1,4 @@
-const CACHE_NAME = "pesky-v8-community";
+const CACHE_NAME = "pesky-v23-login-hero-images";
 
 const ASSETS = [
   // ==========================================
@@ -116,6 +116,7 @@ const ASSETS = [
 
   "/dashboard.html",
   "/css/dashboard.css",
+  "/css/dashboard-phone-only.css",
   "/javascript/dashboard.js",
 
 
@@ -183,6 +184,9 @@ const ASSETS = [
   // ==========================================
 
   "/img/pesky4.png",
+  "/img/login-image.jpg",
+  "/img/hero1.jpg",
+  "/img/hero2.jpg",
   "/manifest.json"
 ];
 

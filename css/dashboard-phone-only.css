@@ -1,0 +1,171 @@
+/* Canonical dashboard: the phone design is used on every screen. */
+.marquee-wrapper,
+.marquee-content { display: none !important; }
+
+@media (min-width: 601px) {
+  html, body { width: 100%; overflow-x: hidden; }
+  body { background: #dfe3e7 !important; padding-bottom: 72px; }
+
+  .header {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    width: 430px !important;
+    height: 64px !important;
+    transform: translateX(-50%);
+    grid-template-columns: minmax(0, 1fr) 42px !important;
+    padding: 6px 8px !important;
+    background: #fff !important;
+    box-shadow: 0 1px 6px rgba(15, 23, 42, .06);
+  }
+  .header-left { width: auto !important; display: flex !important; align-items: center !important; padding-left: 0 !important; }
+  .logo-left { width: 132px !important; height: 52px !important; object-fit: contain !important; object-position: left center !important; }
+  .header-center { position: absolute !important; left: 132px !important; right: 48px !important; top: 0 !important; width: auto !important; height: 64px !important; display: flex !important; align-items: center !important; }
+  .header-center h1 { width: 100%; color: #008d45 !important; font-size: 15px !important; font-weight: 900 !important; line-height: 1 !important; text-align: left !important; top: 0 !important; white-space: nowrap !important; letter-spacing: .2px !important; }
+  .header-right { position: relative !important; right: auto !important; top: auto !important; width: 42px !important; height: 52px !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; margin-right: 0 !important; }
+  .menu-toggle { width: 23px !important; height: 19px !important; }
+  .menu-toggle span { height: 2px !important; background: #20262d !important; }
+
+  .dashboard-summary { margin-top: 64px !important; }
+  .dashboard-summary, .hero, .network-grid, .refer-card, .promo,
+  .pwa-banner, .community-card-dark, .footer {
+    width: 430px !important;
+    max-width: 430px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .bottom-bar {
+    left: 50% !important;
+    right: auto !important;
+    width: 430px !important;
+    height: 64px !important;
+    transform: translateX(-50%);
+    padding: 4px 10px !important;
+    background: #fff !important;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -2px 10px rgba(15, 23, 42, .08);
+  }
+  .nav-item { gap: 2px !important; color: #697386 !important; }
+  .nav-item:first-child { color: #1bb66f !important; }
+  .nav-icon { font-size: 19px !important; }
+  .nav-text { font-size: 10px !important; }
+
+  /* Desktop mirror of the proven phone layout */
+  .dashboard-summary {
+    width: 430px !important;
+    margin: 64px auto 0 !important;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(15,23,42,.04);
+  }
+  .wallet-card {
+    width: 420px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    margin: 8px 5px 5px !important;
+    padding: 0 7px 0 10px !important;
+    overflow: visible !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    background: linear-gradient(100deg,#092f27,#061f1b 58%,#063c32) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 16px rgba(5,58,43,.16);
+  }
+  .wallet-icon { flex: 0 0 38px !important; width: 38px !important; height: 38px !important; display: grid !important; place-items: center !important; border-radius: 50%; background: linear-gradient(145deg,#22db9d,#087d58); font-size: 18px; }
+  .wallet-copy { display: flex !important; flex-direction: column !important; min-width: 0; margin-left: 10px !important; }
+  .wallet-copy span { color: #fff; font-size: 10px; font-weight: 600; }
+  .wallet-copy strong { color: #fff; font-size: 19px; line-height: 1.05; }
+  .top-up-btn { height: 34px !important; margin-left: auto !important; padding: 0 12px !important; border-radius: 9px; display: inline-flex !important; align-items: center !important; gap: 6px; background: #16b68a; color: #fff !important; text-decoration: none !important; font-size: 11px; font-weight: 800; }
+
+  .welcome-card { position: relative !important; width: 420px !important; height: 91px !important; margin: 5px 5px 0 !important; overflow: hidden !important; border-radius: 10px; background: #fff; }
+  .welcome-art { position: absolute !important; inset: 0 !important; z-index: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center center !important; display: block !important; visibility: visible !important; opacity: 1 !important; }
+  .welcome-copy { position: absolute !important; inset: 0 auto 0 0 !important; z-index: 2 !important; width: 57% !important; height: 100% !important; padding: 12px 0 0 13px !important; background: linear-gradient(90deg,#fff 0 78%,rgba(255,255,255,.92) 92%,rgba(255,255,255,0) 100%) !important; }
+  .welcome-copy > span { display: block !important; font-size: 13px !important; line-height: 1 !important; }
+  .welcome-copy strong { display: block !important; margin-top: 2px !important; font-size: 18px !important; line-height: 1.05 !important; }
+  .welcome-copy p { margin-top: 4px !important; font-size: 10px !important; line-height: 1.15 !important; }
+
+  .hero { margin: 5px auto 0 !important; }
+  .hero-slider { height: 104px !important; border-radius: 10px; overflow: hidden !important; }
+  .hero-slider img.slide,
+  .hero-slider img.slide.active { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: fill !important; opacity: 1 !important; }
+
+  .network-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; gap: 5px !important; padding: 7px 5px !important; background: #eef1f4; }
+  .network-grid .card,
+  .convert-airtime-main { width: auto !important; height: 68px !important; min-height: 68px !important; padding: 5px 3px !important; gap: 1px !important; border: 0 !important; border-radius: 5px !important; background: #fff !important; color: #172033 !important; box-shadow: 0 1px 4px rgba(15,23,42,.05); }
+  .network-logo { height: 27px !important; display: grid !important; place-items: center !important; }
+  .network-logo img { width: 27px !important; height: 27px !important; max-width: 27px !important; max-height: 27px !important; border-radius: 50%; object-fit: cover !important; }
+  .card-icon { width: 27px !important; height: 27px !important; border: 0 !important; font-size: 17px !important; }
+  .card-network { font-size: 12px !important; line-height: 1.05 !important; }
+  .card-action { margin-top: 1px !important; font-size: 8px !important; opacity: 1 !important; }
+  .card.airtime .card-icon { color: #ef493a; }
+  .card.data .card-icon { color: #1878d4; }
+  .card.electricity .card-icon { color: #f5a400; }
+  .card.cable .card-icon { color: #172033; }
+  .card.convert-airtime .card-icon { color: #16b873; }
+
+  .refer-card { min-height: 54px !important; margin: 0 auto 6px !important; padding: 5px 8px !important; border-radius: 10px; display: flex !important; align-items: center; gap: 9px; background: #fff; color: #172033; text-decoration: none; }
+  .refer-icon { flex: 0 0 34px !important; width: 34px !important; height: 34px !important; display: grid !important; place-items: center !important; border-radius: 50%; background: #dff7ed; color: #14a87a; font-size: 19px; }
+  .refer-copy { display: flex !important; flex: 1; flex-direction: column; min-width: 0; }
+  .refer-copy strong { font-size: 13px; }
+  .refer-copy small { font-size: 9px; color: #687386; }
+  .refer-cta { min-height: 31px; padding: 0 9px; border-radius: 16px; display: inline-flex; align-items: center; gap: 4px; background: #17b786; color: #fff !important; font-size: 10px; font-weight: 800; white-space: nowrap; }
+
+  .promo { margin: 8px auto !important; }
+  .promo-img { width: 100% !important; max-width: 100% !important; border-radius: 10px; object-fit: cover; }
+  .pwa-banner { min-height: 290px; width: calc(100% - 10px) !important; margin: 8px auto !important; }
+  .community-card-dark { width: calc(100% - 10px) !important; margin: 8px auto !important; }
+  .footer { width: 430px !important; margin: 0 auto !important; }
+
+  .bottom-bar {
+    background: #fff !important;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -2px 10px rgba(15,23,42,.08);
+  }
+  .nav-item { gap: 2px !important; color: #697386 !important; }
+  .nav-item:first-child { color: #1bb66f !important; }
+  .nav-icon { font-size: 19px !important; }
+  .nav-text { font-size: 10px !important; }
+
+  .drawer { width: 300px !important; right: calc(50% - 215px) !important; }
+
+  /* Exact phone rendering duplicated for desktop */
+  .dashboard-summary {
+    height: 154px !important;
+    min-height: 154px !important;
+    overflow: hidden !important;
+    display: block !important;
+    margin-top: 64px !important;
+    background: #eef1f4 !important;
+  }
+  .wallet-card {
+    box-sizing: border-box !important;
+    width: 420px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    margin: 8px 5px 5px !important;
+    padding: 0 7px 0 10px !important;
+    overflow: visible !important;
+    border-radius: 10px !important;
+  }
+  .welcome-card {
+    box-sizing: border-box !important;
+    width: 420px !important;
+    height: 91px !important;
+    min-height: 91px !important;
+    margin: 5px 5px 0 !important;
+    overflow: hidden !important;
+    border-radius: 10px !important;
+  }
+  .welcome-art {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}

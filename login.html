@@ -4,108 +4,111 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - PESKY RECHARGE</title>
-  <link rel="stylesheet" href="css/login.css?v=phone-password-final-v2">
+  <link rel="stylesheet" href="css/login.css?v=local-image-v4">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <div class="background-decoration"></div>
-  
-  <div class="login-container">
-    <div class="login-header">
-      <div class="padlock-circle" aria-hidden="true">
-        <i class="fa-solid fa-lock" aria-hidden="true"></i>
-      </div>
-      <h1 class="title">Welcome Back</h1>
-      <p class="subtitle">Sign in to your PESKY RECHARGE account</p>
-    </div>
+  <main class="auth-page" aria-label="PESKY RECHARGE sign in">
+    <div class="background-decoration" aria-hidden="true"></div>
 
-    <form id="loginForm" class="form">
-      <div class="form-group">
-        <label for="phone">Phone Number</label>
-        <div class="input-wrapper">
-          <input type="tel" id="phone" placeholder="Enter your phone number" required>
-          <span class="input-icon">📱</span>
+    <section class="login-container" aria-labelledby="loginTitle">
+      <div class="login-header">
+        <div class="padlock-circle" aria-hidden="true">
+          <i class="fa-solid fa-lock" aria-hidden="true"></i>
         </div>
+        <h1 class="title" id="loginTitle">Welcome Back</h1>
+        <p class="subtitle">Sign in to your PESKY RECHARGE account</p>
       </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input-wrapper">
-          <input type="password" id="password" class="password-input" placeholder="Enter your password" autocomplete="current-password" required>
-          <button type="button" id="togglePasswordVisibility" class="password-visibility-toggle" aria-label="Show password" aria-controls="password" aria-pressed="false">Show</button>
+      <form id="loginForm" class="form">
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <div class="input-wrapper">
+            <input type="tel" id="phone" placeholder="Enter your phone number" required>
+            <span class="input-icon">📱</span>
+          </div>
         </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="password" class="password-input" placeholder="Enter your password" autocomplete="current-password" required>
+            <button type="button" id="togglePasswordVisibility" class="password-visibility-toggle" aria-label="Show password" aria-controls="password" aria-pressed="false">Show</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign In</button>
+      </form>
+
+      <button type="button" id="forgotPasswordLink" class="forgot-password-link">
+        Forgot your password?
+      </button>
+      <section id="passwordResetSection" class="otp-section hidden" aria-labelledby="resetTitle">
+        <h2 id="resetTitle" class="reset-title">Reset your password</h2>
+        <p id="resetMessage" class="message">Enter your account email and we will send you a verification code.</p>
+
+        <form id="resetEmailForm" class="form reset-form">
+          <div class="form-group">
+            <label for="resetEmail">Email address</label>
+            <div class="input-wrapper">
+              <input type="email" id="resetEmail" placeholder="you@example.com" autocomplete="email" required>
+              <span class="input-icon">✉️</span>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Send verification code</button>
+        </form>
+
+        <form id="resetCodeForm" class="form reset-form hidden">
+          <div class="form-group">
+            <label for="resetCode">Verification code</label>
+            <div class="input-wrapper">
+              <input type="text" id="resetCode" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter the 6-digit code" maxlength="6" required>
+              <span class="input-icon">🔢</span>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Verify code</button>
+        </form>
+
+        <form id="newPasswordForm" class="form reset-form hidden">
+          <div class="form-group">
+            <label for="newPassword">New password</label>
+            <div class="input-wrapper">
+              <input type="password" id="newPassword" class="password-input" placeholder="Create a new password" autocomplete="new-password" minlength="6" required>
+              <button type="button" class="password-visibility-toggle" aria-label="Show password" aria-controls="newPassword" aria-pressed="false">Show</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm new password</label>
+            <div class="input-wrapper">
+              <input type="password" id="confirmPassword" class="password-input" placeholder="Repeat your new password" autocomplete="new-password" minlength="6" required>
+              <button type="button" class="password-visibility-toggle" aria-label="Show password" aria-controls="confirmPassword" aria-pressed="false">Show</button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save new password</button>
+        </form>
+
+        <button type="button" id="cancelResetButton" class="reset-cancel">Back to sign in</button>
+      </section>
+
+      <div class="fingerprint-actions hidden" id="fingerprintActions">
+        <button type="button" id="fingerprintIconBtn" class="fingerprint-icon-btn" aria-label="Sign in with fingerprint">
+          <i class="fa-solid fa-fingerprint" aria-hidden="true"></i>
+        </button>
+        <button type="button" id="fingerprintLoginBtn" class="btn fingerprint-login-btn">
+          <i class="fa-solid fa-fingerprint" aria-hidden="true"></i>
+          <span>Login with Fingerprint</span>
+        </button>
       </div>
-      <button type="submit" class="btn btn-primary">Sign In</button>
-    </form>
+      <div class="login-footer-actions">
+        <p>Don't have an account? <a href="create-account.html">Sign up</a></p>
+        <button type="button" id="passwordLoginBtn" class="password-login-link">Login with Password</button>
+      </div>
 
-    <button type="button" id="forgotPasswordLink" class="forgot-password-link">
-      Forgot your password?
-    </button>
-    <section id="passwordResetSection" class="otp-section hidden" aria-labelledby="resetTitle">
-      <h2 id="resetTitle" class="reset-title">Reset your password</h2>
-      <p id="resetMessage" class="message">Enter your account email and we will send you a verification code.</p>
+      <!-- Success Message -->
+      <p id="successMessage" class="success hidden">✓ Login successful! Redirecting...</p>
 
-      <form id="resetEmailForm" class="form reset-form">
-        <div class="form-group">
-          <label for="resetEmail">Email address</label>
-          <div class="input-wrapper">
-            <input type="email" id="resetEmail" placeholder="you@example.com" autocomplete="email" required>
-            <span class="input-icon">✉️</span>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Send verification code</button>
-      </form>
-
-      <form id="resetCodeForm" class="form reset-form hidden">
-        <div class="form-group">
-          <label for="resetCode">Verification code</label>
-          <div class="input-wrapper">
-            <input type="text" id="resetCode" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter the 6-digit code" maxlength="6" required>
-            <span class="input-icon">🔢</span>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Verify code</button>
-      </form>
-
-      <form id="newPasswordForm" class="form reset-form hidden">
-        <div class="form-group">
-          <label for="newPassword">New password</label>
-          <div class="input-wrapper">
-            <input type="password" id="newPassword" class="password-input" placeholder="Create a new password" autocomplete="new-password" minlength="6" required>
-            <button type="button" class="password-visibility-toggle" aria-label="Show password" aria-controls="newPassword" aria-pressed="false">Show</button>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="confirmPassword">Confirm new password</label>
-          <div class="input-wrapper">
-            <input type="password" id="confirmPassword" class="password-input" placeholder="Repeat your new password" autocomplete="new-password" minlength="6" required>
-            <button type="button" class="password-visibility-toggle" aria-label="Show password" aria-controls="confirmPassword" aria-pressed="false">Show</button>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Save new password</button>
-      </form>
-
-      <button type="button" id="cancelResetButton" class="reset-cancel">Back to sign in</button>
     </section>
+  </main>
 
-    <div class="fingerprint-actions hidden" id="fingerprintActions">
-      <button type="button" id="fingerprintIconBtn" class="fingerprint-icon-btn" aria-label="Sign in with fingerprint">
-        <i class="fa-solid fa-fingerprint" aria-hidden="true"></i>
-      </button>
-      <button type="button" id="fingerprintLoginBtn" class="btn fingerprint-login-btn">
-        <i class="fa-solid fa-fingerprint" aria-hidden="true"></i>
-        <span>Login with Fingerprint</span>
-      </button>
-    </div>
-    <div class="login-footer-actions">
-      <p>Don't have an account? <a href="create-account.html">Sign up</a></p>
-      <button type="button" id="passwordLoginBtn" class="password-login-link">Login with Password</button>
-    </div>
-
-    <!-- Success Message -->
-    <p id="successMessage" class="success hidden">✓ Login successful! Redirecting...</p>
-
-  </div>
   <div id="networkModal" class="network-modal" aria-hidden="true">
     <section class="network-box" role="alertdialog" aria-modal="true" aria-labelledby="networkModalTitle" aria-describedby="networkModalMessage">
       <div class="network-icon" aria-hidden="true">!</div>
@@ -122,6 +125,5 @@
   <!-- ✅ Then load your login script -->
   <script src="javascript/login.js?v=phone-password-final-v2"></script>
 
-</div>
 </body>
 </html>

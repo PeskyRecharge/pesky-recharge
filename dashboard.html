@@ -7,7 +7,8 @@
    <!-- Favicon -->
   <link rel="icon" type="image/png" href="img/peskycc.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/dashboard.css?v=mini-chat-card">
+  <link rel="stylesheet" href="css/dashboard.css?v=phone-only-v22">
+  <link rel="stylesheet" href="css/dashboard-phone-only.css?v=phone-only-v22">
   <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#008000">
 
@@ -20,136 +21,134 @@
     </div>
    <div class="header-center">
   <h1>PESKY RECHARGE</h1>
-  
-  <!-- Glowing Infinite Marquee -->
-  <div class="marquee-wrapper">
-    <div class="marquee-content">
-      <span>✨ Welcome to Pesky Recharge — Your trusted platform for instant airtime, cheap data bundles, cable TV subscriptions, and automated electricity token delivery. Fast, secure, and reliable 24/7. Thank you for using Pesky Recharge! ✨</span>
-      <span aria-hidden="true">✨ Welcome to Pesky Recharge — Your trusted platform for instant airtime, cheap data bundles, cable TV subscriptions, and automated electricity token delivery. Fast, secure, and reliable 24/7. Thank you for using Pesky Recharge! ✨</span>
-    </div>
-  </div>
 </div>
     <div class="header-right">
-      <div class="balance-mini" id="balanceMini">
-        <span id="dashboardBalance">₦0</span>
-        <span class="balance-icon">👤</span>
-      </div>
-      <div class="menu-toggle" id="menuToggle">
+      <div class="menu-toggle" id="menuToggle" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </div>
     </div>
   </header>
 
   <div id="notificationPopup" class="notification-popup">
-  <div class="notification-box">
-
-    
-    <h3 id="notificationTitle"></h3>
-
-    <p id="notificationMessage"></p>
-
+    <div class="notification-box">
+      <h3 id="notificationTitle"></h3>
+      <p id="notificationMessage"></p>
+    </div>
   </div>
-</div>
 
+  <section class="dashboard-summary" aria-label="Wallet summary">
+    <div class="wallet-card">
+      <span class="wallet-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span>
+      <span class="wallet-copy"><span>Wallet Balance</span><strong id="walletBalance">₦0.00</strong></span>
+      <a href="deposit.html" class="top-up-btn"><i class="fa-solid fa-plus" aria-hidden="true"></i> Top Up</a>
+    </div>
+    <div class="welcome-card">
+      <img class="welcome-art" src="img/hero1.jpg" alt="Welcome to Pesky Recharge">
+      <div class="welcome-copy">
+        <span>Welcome back,</span>
+        <strong id="dashboardUserName">OGAH JOEL!</strong>
+        <p>Thank you for choosing Pesky Recharge</p>
+      </div>
+    </div>
+  </section>
 
-<!-- Hero Section with Slider -->
-<section class="hero">
-  <div class="hero-slider">
-    <img src="img/peskya.jpg" alt="Pesky Hero 1" class="slide active">
-    <img src="img/pesky2.png" alt="Pesky Hero 2" class="slide">
-    <img src="img/peskyd.jpg" alt="Pesky Hero 3" class="slide">
-    <img src="img/peskyc.jpg" alt="Pesky Hero 4" class="slide">
-  </div>
-</section>
+  <section class="hero" aria-label="Featured airtime offer">
+    <div class="hero-slider">
+      <img src="img/hero2.jpg" alt="Airtime discounts elevated" class="slide active">
+    </div>
+  </section>
 
   <!-- Recharge Services -->
   <main class="network-grid" aria-label="Recharge services">
-    <a href="purchase.html" class="card mtn">
-      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></span>
+    <a href="purchase.html?network=MTN" class="card mtn">
+      <span class="network-logo"><img src="img/mtn1.png" alt="MTN"></span>
       <span class="card-network">MTN</span>
-      <span class="card-action">Generate PIN</span>
+      <span class="card-action">Generate PIN <i class="fa-solid fa-chevron-right"></i></span>
     </a>
 
-    <a href="purchase.html" class="card glo">
-      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></span>
+    <a href="purchase.html?network=Glo" class="card glo">
+      <span class="network-logo"><img src="img/glo2.png" alt="Glo"></span>
       <span class="card-network">Glo</span>
-      <span class="card-action">Generate PIN</span>
+      <span class="card-action">Generate PIN <i class="fa-solid fa-chevron-right"></i></span>
     </a>
 
-    <a href="purchase.html" class="card airtel">
-      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></span>
+    <a href="purchase.html?network=Airtel" class="card airtel">
+      <span class="network-logo"><img src="img/airtel3.png" alt="Airtel"></span>
       <span class="card-network">Airtel</span>
-      <span class="card-action">Generate PIN</span>
+      <span class="card-action">Generate PIN <i class="fa-solid fa-chevron-right"></i></span>
     </a>
 
-    <a href="purchase.html" class="card nmobile">
-      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></span>
+    <a href="purchase.html?network=9mobile" class="card nmobile">
+      <span class="network-logo"><img src="img/9mobile4.png" alt="9mobile"></span>
       <span class="card-network">9mobile</span>
-      <span class="card-action">Generate PIN</span>
+      <span class="card-action">Generate PIN <i class="fa-solid fa-chevron-right"></i></span>
     </a>
 
     <a href="airtime.html" class="card airtime">
       <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-mobile-screen-button"></i></span>
       <span class="card-network">Airtime</span>
-      <span class="card-action">Buy airtime</span>
+      <span class="card-action">Buy Airtime <i class="fa-solid fa-chevron-right"></i></span>
     </a>
 
     <a href="data.html" class="card data" aria-label="Buy data">
-      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-wifi"></i></span>
+      <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-database"></i></span>
       <span class="card-network">Data</span>
-      <span class="card-action">Buy data</span>
+      <span class="card-action">Buy Data <i class="fa-solid fa-chevron-right"></i></span>
     </a>
 
     <a href="electricity.html" class="card electricity">
       <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-bolt"></i></span>
       <span class="card-network">Electricity</span>
-      <span class="card-action">Buy token</span>
+      <span class="card-action">Pay Bill <i class="fa-solid fa-chevron-right"></i></span>
     </a>
 
-    <a href="cable.html" class="card cable coming-soon-card" aria-label="Cable TV - coming soon">
+    <div class="card cable coming-soon-card" role="button" aria-disabled="true" aria-label="Cable TV coming soon">
       <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-tv"></i></span>
       <span class="card-network">Cable TV</span>
-      <span class="card-action coming-soon-label"><span class="coming-soon-spinner" aria-hidden="true"></span> Coming soon</span>
-    </a>
+      <span class="card-action"><span class="coming-soon-label">Coming Soon</span></span>
+    </div>
 
     <div class="card convert-airtime">
-      <button type="button" class="convert-airtime-main" data-convert-airtime>
+      <button type="button" class="convert-airtime-main" data-convert-airtime aria-label="Convert Airtime to Cash via WhatsApp">
         <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-money-bill-transfer"></i></span>
         <span class="card-network">Convert Airtime</span>
-        <span class="card-action">To cash</span>
+        <span class="card-action">Cash <i class="fa-solid fa-chevron-right"></i></span>
       </button>
-      <a href="https://wa.me/2348117831285" target="_blank" rel="noopener noreferrer" class="chat-with-us-mini" aria-label="Chat with us on WhatsApp">
-        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
-        <span>Chat</span>
+      <a href="https://wa.me/2348117831285?text=Hello%20PESKY%20RECHARGE%2C%20I%20want%20to%20convert%20airtime%20to%20cash." target="_blank" rel="noopener noreferrer" class="chat-with-us-mini" aria-label="Chat with us on WhatsApp">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Chat Us
       </a>
     </div>
   </main>
 
+  <a class="refer-card" href="referral.html">
+    <span class="refer-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></span>
+    <span class="refer-copy"><strong>Refer &amp; Earn</strong><small>Invite friends and earn rewards</small></span>
+    <span class="refer-cta">Invite Now <i class="fa-solid fa-arrow-right"></i></span>
+  </a>
+
   <!-- Static Image Section -->
-<section class="promo">
-  <img src="img/peskyb.jpg" alt="Pesky Promo" class="promo-img">
-</section>
+  <section class="promo"><img src="img/peskyb.jpg" alt="Pesky Promo" class="promo-img"></section>
 
 
   <!-- Sticky Bottom Bar -->
   <div class="bottom-bar">
     <a href="dashboard.html" class="nav-item nav-left">
-      <span class="nav-icon">🏠</span>
+      <span class="nav-icon"><i class="fa-solid fa-house" aria-hidden="true"></i></span>
       <span class="nav-text">Home</span>
     </a>
     <a href="purchase-report.html" class="nav-item nav-center">
-      <span class="nav-icon">📊</span>
+      <span class="nav-icon"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></span>
       <span class="nav-text">History</span>
     </a>
     <a href="notification-center.html" class="nav-item nav-notifications" aria-label="Notifications">
       <span class="nav-icon-wrap">
-        <span class="nav-icon" aria-hidden="true">🔔</span>
+        <span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-bell"></i></span>
         <span id="notificationCountBadge" class="nav-badge" aria-live="polite" hidden></span>
       </span>
       <span class="nav-text">Alerts</span>
     </a>
     <a href="deposit.html" class="nav-item nav-right">
-      <span class="nav-icon">💰</span>
+      <span class="nav-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span>
       <span class="nav-text">Deposit</span>
     </a>
   </div>
@@ -263,7 +262,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="javascript/notifications.js"></script>
   <!--  Then load your dashboard logic -->
-  <script src="javascript/dashboard.js"></script>
+  <script src="javascript/dashboard.js?v=dashboard-name-v21"></script>
   <script>
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js");
@@ -281,6 +280,25 @@
       const message = encodeURIComponent('Hello PESKY RECHARGE, I want to convert airtime to cash.');
       window.open('https://wa.me/2348117831285?text=' + message, '_blank', 'noopener,noreferrer');
     });
+  </script>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById("menuToggle");
+      var drawer = document.getElementById("drawer");
+      if (!toggle || !drawer) return;
+
+      toggle.onclick = function () {
+        var isOpen = drawer.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", String(isOpen));
+      };
+
+      document.addEventListener("click", function (event) {
+        if (!drawer.classList.contains("open") || toggle.contains(event.target) || drawer.contains(event.target)) return;
+        drawer.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      });
+    })();
   </script>
 
 </body>

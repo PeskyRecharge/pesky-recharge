@@ -1,7 +1,10 @@
 //  Redirect when clicking mini balance (top bar)
-document.getElementById("balanceMini").addEventListener("click", () => {
-  window.location.href = "deposit.html";
-});
+const balanceMini = document.getElementById("balanceMini");
+if (balanceMini) {
+  balanceMini.addEventListener("click", () => {
+    window.location.href = "deposit.html";
+  });
+}
 
 //  Supabase setup
 const supabaseUrl = "https://beyykzogvaemjvecbzkf.supabase.co";
@@ -36,78 +39,112 @@ function speak(text) {
   window.speechSynthesis.speak(msg);
 }
 
-//  Load balance and user info for dashboard
-async function loadDashboardData() {
-  try {
-    const { data: userData, error: userError } = await supabaseClient.auth.getUser();
-    if (userError || !userData?.user) {
-      console.error("User not logged in:", userError);
-      return;
-    }
+let currentDashboardUser = null;
+let dashboardBalance = 0;
 
-    const { data, error } = await supabaseClient
-      .from("customers")
-      .select("other_name, balance")
-      .eq("auth_id", userData.user.id)
-      .single();
+// Same authenticated account and balance flow used by deposit.js
+async function getDashboardUser() {
+  try {
+    const { data, error } = await supabaseClient.auth.getSession();
 
     if (error) {
-      console.error("Customer load error:", error.message, error.details);
+      console.error("Session error:", error);
+      window.location.href = "login.html";
       return;
     }
 
-    if (data) {
-      //  Update balance display
-      const balanceEl = document.getElementById("dashboardBalance");
-      if (balanceEl) {
-        balanceEl.textContent = `₦${data.balance || 0}`;
-      }
-
-      //  Speak greeting, sales pitch, and balance once per login session
-      const name = data.other_name || "Friend";
-      const balance = data.balance || 0;
-
-      if (!hasDashboardGreetingAlreadyPlayed()) {
-        // Greeting
-        speak(`Welcome to your dashboard, ${name}.`);
-
-        // Sales pitch
-        speak(
-          "We sell recharge card pins for all networks: MTN, Glo, Airtel, and 9mobile, at affordable prices. " +
-          "Our offers are: 100 naira recharge card for 98 point 50 kobo, 200 naira for 197  kobo, " +
-          "500 naira for 492 point 5 kobo, and 1000 naira for 985  kobo. " +
-          "Thank you for using Pesky Recharge. You can chat with us anytime for clarification."
-        );
-
-        // Current balance
-        speak(`Your current balance is ₦${balance}.`);
-
-        markDashboardGreetingPlayed();
-      }
+    if (!data || !data.session || !data.session.user) {
+      console.log("No active login session.");
+      window.location.href = "login.html";
+      return;
     }
-  } catch (err) {
-    console.error("Unexpected error loading dashboard data:", err);
+
+    currentDashboardUser = data.session.user;
+    await loadDashboardAccount();
+  } catch (error) {
+    console.error("Get user error:", error);
+    window.location.href = "login.html";
   }
+}
+
+async function loadDashboardProfileName() {
+  const { data, error } = await supabaseClient
+    .from("customers")
+    .select("first_name, other_name")
+    .eq("auth_id", currentDashboardUser.id)
+    .single();
+
+  if (error || !data) {
+    console.error("Dashboard name error:", error);
+    return;
+  }
+
+  const dashboardUserNameEl = document.getElementById("dashboardUserName");
+  const firstName = String(data.first_name || "").trim();
+  const otherName = String(data.other_name || "").trim();
+  const displayName = `${firstName} ${otherName}`.trim()
+    || currentDashboardUser.user_metadata?.full_name
+    || "Friend";
+
+  if (dashboardUserNameEl) {
+    dashboardUserNameEl.textContent = displayName.toUpperCase();
+  }
+}
+
+async function loadDashboardAccount() {
+  const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+  if (userError || !userData?.user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentDashboardUser = userData.user;
+
+  const { data, error } = await supabaseClient
+    .from("customers")
+    .select("balance")
+    .eq("auth_id", currentDashboardUser.id)
+    .single();
+
+  if (!error && data) {
+    dashboardBalance = Number(data.balance || 0);
+    updateDashboardBalance();
+    await loadDashboardProfileName();
+  } else {
+    dashboardBalance = 0;
+    updateDashboardBalance();
+    console.error("Dashboard balance error:", error);
+  }
+}
+
+function updateDashboardBalance() {
+  const formattedBalance = `₦${Number(dashboardBalance || 0).toFixed(2)}`;
+  const walletBalanceEl = document.getElementById("walletBalance");
+  const balanceEl = document.getElementById("dashboardBalance");
+  if (walletBalanceEl) walletBalanceEl.textContent = formattedBalance;
+  if (balanceEl) balanceEl.textContent = formattedBalance;
+}
+
+//  Load balance and user info for dashboard
+async function loadDashboardData() {
+  await loadDashboardAccount();
 }
 
 //  Initialize data load
 loadDashboardData();
 setInterval(loadDashboardData, 10000);
 
-//  Drawer toggle logic
+//  Drawer behavior is initialized by the page-level handler in dashboard.html.
 const menuToggle = document.getElementById("menuToggle");
 const drawer = document.getElementById("drawer");
 
-menuToggle.addEventListener("click", () => {
-  drawer.classList.toggle("open");
-});
-
 //  Close drawer when clicking outside
 document.addEventListener("click", (event) => {
-  if (drawer.classList.contains("open")) {
-    const isClickInside = drawer.contains(event.target) || menuToggle.contains(event.target);
+  if (drawer && drawer.classList.contains("open")) {
+    const isClickInside = drawer.contains(event.target) || (menuToggle && menuToggle.contains(event.target));
     if (!isClickInside) {
       drawer.classList.remove("open");
+      if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
     }
   }
 });
