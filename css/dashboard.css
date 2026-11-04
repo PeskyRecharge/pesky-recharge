@@ -24,7 +24,7 @@ body {
   padding: 10px 0;
 }
 .header-left { justify-self: start; padding-left: 6px; }
-.logo-left { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+.logo-left { width: 52px !important; height: 52px !important; border-radius: 50% !important; object-fit: cover !important; object-position: center !important; }
 .header-center {
   justify-self: center;
   align-self: center;
