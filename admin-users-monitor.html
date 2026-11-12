@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeskyRecharge - Senior Admin Telemetry & Customer Monitor</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/admin-users-monitor.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div>
+                <h1>PeskyRecharge Telemetry</h1>
+                <p>Enterprise customer monitor & live session tracker</p>
+            </div>
+            <div class="status-badge-container">
+                <span class="pulse-dot"></span>
+                <span id="connection-status">Connecting to Supabase...</span>
+            </div>
+        </header>
+
+        <!-- Metrics Overview Cards -->
+        <section class="metrics-grid">
+            <div class="card">
+                <h3>Total Customers</h3>
+                <p id="total-users-count">0</p>
+            </div>
+            <div class="card">
+                <h3>Online Right Now</h3>
+                <p id="online-users-count" class="text-green">0</p>
+            </div>
+            <div class="card">
+                <h3>Total System Balance</h3>
+                <p id="total-balance">₦0.00</p>
+            </div>
+            <div class="card">
+                <h3>Offline Customers</h3>
+                <p id="offline-users-count" class="text-gray">0</p>
+            </div>
+        </section>
+
+        <!-- Search & Filter Toolbar -->
+        <section class="toolbar">
+            <input type="text" id="search-input" placeholder="Search by name, email, or phone number..." />
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Records</button>
+                <button class="filter-btn" data-filter="online">Online Only</button>
+                <button class="filter-btn" data-filter="offline">Offline Only</button>
+            </div>
+        </section>
+
+        <!-- Full Database Table Section -->
+        <section class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Customer Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Gender</th>
+                        <th>Wallet Balance</th>
+                        <th>Last Login</th>
+                        <th>Joined Date</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                    <tr>
+                        <td colspan="8" class="loading-text">Synchronizing customer schema records...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Application Logic Script -->
+    <script src="javascript/admin-users-monitor.js"></script>
+</body>
+</html>
