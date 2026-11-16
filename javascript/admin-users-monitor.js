@@ -1,8 +1,3 @@
-/**
- * PeskyRecharge - Senior Admin Telemetry Controller
- * Connects to Supabase 'customers' table and formats all schema attributes.
- */
-
 const SUPABASE_URL = "https://beyykzogvaemjvecbzkf.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_JDxS16gwlyg9SxF0T2owYg_KKZqE9Gy";
 

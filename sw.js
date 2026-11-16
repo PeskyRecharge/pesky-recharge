@@ -1,4 +1,4 @@
-const CACHE_NAME = "pesky-v23-login-hero-images";
+const CACHE_NAME = "pesky-v24-login-hero-images";
 
 const ASSETS = [
   // ==========================================
@@ -187,6 +187,19 @@ const ASSETS = [
   "/img/login-image.jpg",
   "/img/hero1.jpg",
   "/img/hero2.jpg",
+  "/img/9mobile4.png",
+  "/img/airtel3.png",
+  "/img/App-icon.png",
+  "/img/dashboard.png",
+  "/img/glo2.png",
+  "/img/mtn1.png",
+  "/img/pesky2.png",
+  "/img/peskya.jpg",
+  "/img/peskyb.jpg",
+  "/img/peskyc.jpg",
+  "/img/peskycc.jpg",
+  "/img/peskyd.jpg",
+  "/img/peskydd.jpg",
   "/manifest.json"
 ];
 
