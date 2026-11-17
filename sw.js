@@ -197,9 +197,9 @@ const ASSETS = [
   "/img/peskya.jpg",
   "/img/peskyb.jpg",
   "/img/peskyc.jpg",
-  "/img/peskycc.jpg",
+  "/img/peskycc.png",
   "/img/peskyd.jpg",
-  "/img/peskydd.jpg",
+  "/img/peskydd.png",
   "/manifest.json"
 ];
 
